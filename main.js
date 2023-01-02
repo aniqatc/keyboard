@@ -1,13 +1,32 @@
 // Initial Theme
 document.querySelector('body').classList.add('theme-one');
 
-// Change Themes on Click or Keydown
+// Text Area Buttons
+const clearButton = document.getElementById('clear-btn');
+const copyButton = document.getElementById('copy-btn');
+const textarea = document.querySelector('textarea');
+
+clearButton.addEventListener('click', () => {
+	textarea.value = '';
+});
+
+copyButton.addEventListener('click', () => {
+	let userText = textarea.value;
+	navigator.clipboard.writeText(userText);
+	textarea.value = 'Copied!';
+	setTimeout(() => (textarea.value = userText), 500);
+});
+
+// Click & Keypress Events
 const themes = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
 const themeButtons = document.querySelectorAll('.theme-key');
 let themeKeyCode = [];
 themeButtons.forEach(button =>
 	themeKeyCode.push(button.getAttribute('data-key'))
 );
+const allKeys = document.querySelectorAll('.key');
+let keyCodes = [];
+allKeys.forEach(key => keyCodes.push(key.getAttribute('data-key')));
 
 for (let j = 0; j < themeButtons.length; j++) {
 	themeButtons[j].addEventListener('click', () => {
@@ -28,26 +47,17 @@ document.addEventListener('keydown', event => {
 				document.body.classList.add(`theme-${themes[j]}`);
 			}
 			break;
+		} else {
+			textarea.focus();
+		}
+	}
+	for (let k = 0; k < allKeys.length; k++) {
+		if (event.key === keyCodes[k]) {
+			allKeys[k].classList.add('active');
 		}
 	}
 });
 
 document.addEventListener('keyup', () => {
-	themeButtons.forEach(el => el.classList.remove('active'));
-});
-
-// Text Area Buttons
-const clearButton = document.getElementById('clear-btn');
-const copyButton = document.getElementById('copy-btn');
-const textarea = document.querySelector('textarea');
-
-clearButton.addEventListener('click', () => {
-	textarea.value = '';
-});
-
-copyButton.addEventListener('click', () => {
-	let userText = textarea.value;
-	navigator.clipboard.writeText(userText);
-	textarea.value = 'Copied!';
-	setTimeout(() => (textarea.value = userText), 500);
+	allKeys.forEach(el => el.classList.remove('active'));
 });

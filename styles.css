@@ -58,6 +58,15 @@
 	--active-row-six: rgb(187, 187, 187);
 }
 
+.theme-two .operation-key {
+	background-image: linear-gradient(#7977de, #7d7cce);
+}
+
+.theme-two .row-one .key,
+.theme-two .direction-keys .key {
+	background-image: linear-gradient(#9a77c4, #986dcd);
+}
+
 .theme-three {
 	--font-main: 'Source Code Pro', monospace;
 	--blobs-display: none;
