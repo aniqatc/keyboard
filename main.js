@@ -20,9 +20,9 @@ for (let j = 0; j < themeButtons.length; j++) {
 
 document.addEventListener('keydown', event => {
 	for (let j = 0; j < themeKeyCode.length; j++) {
-		themeButtons.forEach(el => el.classList.remove('active'));
-		themeButtons[j].classList.add('active');
 		if (event.key === themeKeyCode[j]) {
+			themeButtons.forEach(el => el.classList.remove('active'));
+			themeButtons[j].classList.add('active');
 			for (let i = 0; i < themeButtons.length; i++) {
 				document.body.classList.remove(`theme-${themes[i]}`);
 				document.body.classList.add(`theme-${themes[j]}`);
