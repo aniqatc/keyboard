@@ -1,11 +1,11 @@
 /* THEMES FOR F# BUTTONS */
 :root {
-	--active-red: rgb(255, 0, 0);
-	--active-orange: rgb(255, 100, 0);
-	--active-yellow: rgb(200, 255, 0);
-	--active-green: rgb(0, 255, 0);
-	--active-blue: rgb(0, 0, 255);
-	--active-purple: rgb(200, 0, 255);
+	--active-row-one: rgb(255, 0, 0);
+	--active-row-two: rgb(255, 100, 0);
+	--active-row-three: rgb(200, 255, 0);
+	--active-row-four: rgb(0, 255, 0);
+	--active-row-five: rgb(0, 0, 255);
+	--active-row-six: rgb(200, 0, 255);
 	--text-light: #f1f1f1;
 	--text-dark: #121212;
 	--icon-light: #9d9d9d;
@@ -26,8 +26,8 @@
 	--wrapper-blur: blur(4px);
 	--key-border: 4px;
 	--key-bg: linear-gradient(to bottom left, #000, rgb(0, 0, 0));
-	--key-shadow: 0 2px 2px 1px #000, inset 0 2px 1px 0 rgb(73, 73, 73);
-	--active-key-shadow: inset 0 1px 2px 0 #000, 0 1px 1px 0 #666, 0px 0px 4px 2px;
+	--key-shadow: 0 2px 2px 1px #000, inset 0 2px 1px 0 rgb(72, 72, 72);
+	--active-key-shadow: inset 0 1px 2px 0 #000, 0 1px 1px 0 #666, 0px 0px 8px 4px;
 }
 
 .theme-two {
@@ -48,14 +48,14 @@
 	--key-shadow: 0 2px 2px 1px rgb(150, 150, 150),
 		inset 0 2px 1px 0 rgb(136, 136, 136);
 	--active-key-shadow: inset 0 0 18px rgb(213, 213, 213),
-		0 0 2px rgb(70, 70, 70);
+		0 0 2px rgb(70, 70, 70), 0px 0px 8px 4px;
 	--active-outline: 1px solid;
-	--active-red: rgb(187, 187, 187);
-	--active-orange: rgb(187, 187, 187);
-	--active-yellow: rgb(187, 187, 187);
-	--active-green: rgb(187, 187, 187);
-	--active-blue: rgb(187, 187, 187);
-	--active-purple: rgb(187, 187, 187);
+	--active-row-one: rgb(187, 187, 187);
+	--active-row-two: rgb(187, 187, 187);
+	--active-row-three: rgb(187, 187, 187);
+	--active-row-four: rgb(187, 187, 187);
+	--active-row-five: rgb(187, 187, 187);
+	--active-row-six: rgb(187, 187, 187);
 }
 
 .theme-three {
@@ -167,12 +167,12 @@
 	--key-shadow: inset 0 -2px 3px rgba(0, 0, 0, 0.2),
 		0 0 0 2px rgba(0, 0, 0, 0.4);
 	--active-key-shadow: inset 0 1px 4px 0 rgb(176, 176, 176), 0px 0px 10px 5px;
-	--active-red: rgb(108, 255, 137);
-	--active-orange: rgb(0, 255, 42);
-	--active-yellow: rgb(0, 195, 104);
-	--active-green: rgb(0, 164, 49);
-	--active-blue: rgb(37, 156, 82);
-	--active-purple: rgb(56, 155, 68);
+	--active-row-one: rgb(108, 255, 137);
+	--active-row-two: rgb(0, 255, 42);
+	--active-row-three: rgb(0, 195, 104);
+	--active-row-four: rgb(0, 164, 49);
+	--active-row-five: rgb(37, 156, 82);
+	--active-row-six: rgb(56, 155, 68);
 }
 
 .theme-seven .key:hover {
@@ -207,12 +207,12 @@
 	--key-bg: linear-gradient(180deg, #bababa, #c0c0c0);
 	--key-shadow: inset 0 -2px 3px rgba(0, 0, 0, 0.4);
 	--active-key-shadow: inset 0 1px 4px 0 rgb(176, 176, 176), 0px 0px 5px 3px;
-	--active-red: #00f404;
-	--active-orange: #21c70f;
-	--active-yellow: #a0d937;
-	--active-green: #daeb42;
-	--active-blue: #d77c27;
-	--active-purple: #f45500;
+	--active-row-one: #00f404;
+	--active-row-two: #21c70f;
+	--active-row-three: #a0d937;
+	--active-row-four: #daeb42;
+	--active-row-five: #d77c27;
+	--active-row-six: #f45500;
 }
 
 .theme-eight .key:hover {
@@ -231,6 +231,7 @@
 	background-image: linear-gradient(#619276, #5c8f6e);
 }
 
+/* General */
 * {
 	padding: 0;
 	margin: 0;
@@ -267,6 +268,7 @@ textarea:focus {
 	outline: none;
 }
 
+/* Input Text Container */
 .input-container {
 	display: flex;
 	justify-content: center;
@@ -315,6 +317,7 @@ textarea:focus {
 	color: rgb(0, 0, 0);
 }
 
+/* Background Blob Animations */
 .blobs {
 	position: relative;
 	display: var(--blobs-display);
@@ -384,6 +387,7 @@ textarea:focus {
 	}
 }
 
+/* Keyboard */
 .row {
 	display: flex;
 	align-items: center;
@@ -412,44 +416,48 @@ textarea:focus {
 	width: 70px;
 	height: 75px;
 	border-radius: var(--key-border);
-	transition: all 100ms ease-in;
+	transition: all 150ms ease-in;
 	background-image: var(--key-bg);
 	box-shadow: var(--key-shadow);
 	position: relative;
 }
 
-/* .key:not(.operation-key, .x-key, .y-key) {
-	border-radius: var(--key-border);
-} */
+.right-align {
+	align-self: flex-end;
+}
+
+.left-align {
+	align-self: flex-start;
+}
 
 .row-one .key:active {
-	box-shadow: var(--active-key-shadow) var(--active-red);
-	outline: var(--active-outline) var(--active-red);
+	box-shadow: var(--active-key-shadow) var(--active-row-one);
+	outline: var(--active-outline) var(--active-row-one);
 }
 
 .row-two .key:active {
-	box-shadow: var(--active-key-shadow) var(--active-orange);
-	outline: var(--active-outline) var(--active-orange);
+	box-shadow: var(--active-key-shadow) var(--active-row-two);
+	outline: var(--active-outline) var(--active-row-two);
 }
 
 .row-three .key:active {
-	box-shadow: var(--active-key-shadow) var(--active-yellow);
-	outline: var(--active-outline) var(--active-yellow);
+	box-shadow: var(--active-key-shadow) var(--active-row-three);
+	outline: var(--active-outline) var(--active-row-three);
 }
 
 .row-four .key:active {
-	box-shadow: var(--active-key-shadow) var(--active-green);
-	outline: var(--active-outline) var(--active-green);
+	box-shadow: var(--active-key-shadow) var(--active-row-four);
+	outline: var(--active-outline) var(--active-row-four);
 }
 
 .row-five .key:active {
-	box-shadow: var(--active-key-shadow) var(--active-blue);
-	outline: var(--active-outline) var(--active-blue);
+	box-shadow: var(--active-key-shadow) var(--active-row-five);
+	outline: var(--active-outline) var(--active-row-five);
 }
 
 .row-six .key:active {
-	box-shadow: var(--active-key-shadow) var(--active-purple);
-	outline: var(--active-outline) var(--active-purple);
+	box-shadow: var(--active-key-shadow) var(--active-row-six);
+	outline: var(--active-outline) var(--active-row-six);
 }
 
 .key:active {
@@ -461,12 +469,23 @@ textarea:focus {
 	font-size: 1rem;
 }
 
-.right-align {
-	align-self: flex-end;
+.row-one .key {
+	height: 50%;
+	font-size: 0.8rem;
+	justify-content: flex-end;
+	align-items: center;
 }
 
-.left-align {
-	align-self: flex-start;
+.letter-key {
+	justify-content: flex-end;
+	font-size: 1.6rem;
+	/* text-transform: uppercase; */
+}
+
+.operation-key {
+	justify-content: flex-end;
+	font-size: 1rem;
+	padding: 0.4rem 0.8rem;
 }
 
 .m-key {
@@ -496,25 +515,6 @@ textarea:focus {
 	margin: 0;
 }
 
-.row-one .key {
-	height: 50%;
-	font-size: 0.8rem;
-	justify-content: flex-end;
-	align-items: center;
-}
-
-.letter-key {
-	justify-content: flex-end;
-	font-size: 1.6rem;
-	/* text-transform: uppercase; */
-}
-
-.operation-key {
-	justify-content: flex-end;
-	font-size: 1rem;
-	padding: 0.4rem 0.8rem;
-}
-
 .x-key {
 	justify-content: center;
 	height: auto;
@@ -540,6 +540,6 @@ textarea:focus {
 }
 
 .caps-indicator.active {
-	background-color: rgb(14, 255, 46);
-	box-shadow: 0px 0px 4px 1px rgb(14, 255, 46);
+	background-color: rgb(0, 255, 0);
+	box-shadow: 0px 0px 4px 1px rgb(0, 255, 0);
 }
