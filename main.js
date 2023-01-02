@@ -35,3 +35,19 @@ document.addEventListener('keydown', event => {
 document.addEventListener('keyup', () => {
 	themeButtons.forEach(el => el.classList.remove('active'));
 });
+
+// Text Area Buttons
+const clearButton = document.getElementById('clear-btn');
+const copyButton = document.getElementById('copy-btn');
+const textarea = document.querySelector('textarea');
+
+clearButton.addEventListener('click', () => {
+	textarea.value = '';
+});
+
+copyButton.addEventListener('click', () => {
+	let userText = textarea.value;
+	navigator.clipboard.writeText(userText);
+	textarea.value = 'Copied!';
+	setTimeout(() => (textarea.value = userText), 500);
+});
