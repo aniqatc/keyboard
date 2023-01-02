@@ -6,13 +6,17 @@
 	--active-green: rgb(0, 255, 0);
 	--active-blue: rgb(0, 0, 255);
 	--active-purple: rgb(200, 0, 255);
+	--text-light: #f1f1f1;
+	--text-dark: #121212;
+	--icon-light: #9d9d9d;
+	--icon-dark: #323232;
 }
 .theme-one {
 	--font-main: 'DM Sans', sans-serif;
 	--blobs-display: initial;
 	--background-gradient: linear-gradient(to left, #201f47, #351f47);
-	--text-main: #f1f1f1;
-	--button-color: #9d9d9d;
+	--text-main: var(--text-light);
+	--button-color: var(--icon-light);
 	--wrapper-shadow: 1px 2px 10px rgba(0, 0, 0, 0.5);
 	--wrapper-bg: rgba(24, 23, 47, 0.511);
 	--wrapper-blur: blur(4px);
@@ -27,8 +31,8 @@
 	--font-main: 'DM Sans', sans-serif;
 	--blobs-display: initial;
 	--background-gradient: linear-gradient(to left, #878787, #e7c9ff);
-	--text-main: #121212;
-	--button-color: #323232;
+	--text-main: var(--text-dark);
+	--button-color: var(--icon-dark);
 	--wrapper-shadow: 1px 2px 10px rgba(72, 72, 72, 0.5);
 	--wrapper-bg: rgba(217, 217, 217, 0.511);
 	--wrapper-blur: blur(4px);
@@ -55,8 +59,8 @@
 	--font-main: 'Source Code Pro', monospace;
 	--blobs-display: none;
 	--background-gradient: linear-gradient(rgb(0, 0, 0), rgb(0, 0, 0));
-	--text-main: #ebebeb;
-	--button-color: #fff;
+	--text-main: var(--text-light);
+	--button-color: var(--icon-light);
 	--wrapper-shadow: 1px 2px 10px rgba(152, 152, 152, 0.5);
 	--wrapper-bg: rgba(49, 49, 49, 0.7);
 	--wrapper-blur: blur(0);
@@ -73,8 +77,8 @@
 	--font-main: 'Source Code Pro', monospace;
 	--blobs-display: none;
 	--background-gradient: linear-gradient(#eee, #eee);
-	--text-main: #424242;
-	--button-color: #000;
+	--text-main: var(--light-dark);
+	--button-color: var(--icon-dark);
 	--wrapper-shadow: 1px 2px 10px rgba(119, 119, 119, 0.5);
 	--wrapper-bg: rgba(154, 154, 154, 0.511);
 	--wrapper-blur: blur(0);
@@ -91,39 +95,64 @@
 .theme-five {
 	--font-main: 'Hanken Grotesk', sans-serif;
 	--blobs-display: none;
-	--background-gradient: linear-gradient(#eee, #eee);
-	--text-main: #424242;
-	--button-color: #000;
-	--wrapper-shadow: 1px 2px 10px rgba(119, 119, 119, 0.5);
-	--wrapper-bg: rgba(154, 154, 154, 0.511);
+	--background-gradient: linear-gradient(to bottom left, #232323, #2b2727);
+	--text-main: var(--text-light);
+	--button-color: var(--icon-light);
+	--wrapper-shadow: 1px 1px 5px rgba(45, 45, 45, 0.5);
+	--wrapper-bg: rgba(101, 101, 101, 0.634);
 	--wrapper-blur: blur(0);
-	--key-border: 4px;
-	--key-bg: linear-gradient(to left, #dcdcdc, #f1f1f1, #e0e0e0);
-	--key-shadow: -5px -5px 10px rgb(181, 181, 181),
-		-2px -2px 6px rgb(179, 179, 179), 2px 2px 5px rgb(139, 139, 139),
-		5px 5px 10px rgb(216, 216, 216);
-	--active-key-shadow: inset 0 1px 2px 0 rgb(192, 192, 192), 0 1px 1px 0 #666,
-		0px 0px 4px 2px;
-	--active-outline: 2px solid;
+	--key-border: 6px;
+	--key-bg: linear-gradient(180deg, #282828, #202020);
+	--key-shadow: inset -8px 0 8px rgba(0, 0, 0, 0.15),
+		inset 0 -8px 8px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(0, 0, 0, 0.8),
+		10px 10px 24px rgba(0, 0, 0, 0.4);
+	--active-key-shadow: inset 0 1px 2px 0 rgb(192, 192, 192), 0px 0px 10px 5px;
+	--active-outline: none;
+}
+
+.theme-five .key::before {
+	content: '';
+	position: absolute;
+	top: 4px;
+	left: 6px;
+	bottom: 10px;
+	right: 10px;
+	background-color: linear-gradient(90deg, #232323, #4a4a4a);
+	border-radius: 10px;
+	box-shadow: -4px -4px 8px rgba(184, 184, 184, 0.2),
+		10px 5px 10px rgba(0, 0, 0, 0.14);
 }
 
 .theme-six {
 	--font-main: 'Hanken Grotesk', sans-serif;
 	--blobs-display: none;
-	--background-gradient: linear-gradient(#eee, #eee);
-	--text-main: #424242;
-	--button-color: #000;
-	--wrapper-shadow: 1px 2px 10px rgba(119, 119, 119, 0.5);
-	--wrapper-bg: rgba(154, 154, 154, 0.511);
+	--background-gradient: linear-gradient(to bottom left, #dadada, #e0e0e0);
+	--text-main: var(--text-dark);
+	--button-color: var(--icon-dark);
+	--wrapper-shadow: 1px 1px 5px rgba(47, 47, 47, 0.5);
+	--wrapper-bg: rgba(179, 179, 179, 0.634);
 	--wrapper-blur: blur(0);
-	--key-border: 4px;
-	--key-bg: linear-gradient(to left, #dcdcdc, #f1f1f1, #e0e0e0);
-	--key-shadow: -5px -5px 10px rgb(181, 181, 181),
-		-2px -2px 6px rgb(179, 179, 179), 2px 2px 5px rgb(139, 139, 139),
-		5px 5px 10px rgb(216, 216, 216);
-	--active-key-shadow: inset 0 1px 2px 0 rgb(192, 192, 192), 0 1px 1px 0 #666,
-		0px 0px 4px 2px;
+	--key-border: 6px;
+	--key-bg: linear-gradient(180deg, #c7c7c7, #c0c0c0);
+	--key-shadow: inset -8px 0 8px rgba(77, 77, 77, 0.15),
+		inset 0 -8px 8px rgba(151, 151, 151, 0.2),
+		0 0 0 2px rgba(112, 112, 112, 0.8), 10px 10px 24px rgba(112, 112, 112, 0.4);
+	--active-key-shadow: inset 0 1px 2px 0 rgb(192, 192, 192), 0px 0px 10px 5px;
+	--active-outline: none;
 	--active-outline: 2px solid;
+}
+
+.theme-six .key::before {
+	content: '';
+	position: absolute;
+	top: 4px;
+	left: 6px;
+	bottom: 6px;
+	right: 8px;
+	background-color: linear-gradient(90deg, #232323, #4a4a4a);
+	border-radius: 10px;
+	box-shadow: -4px -4px 8px rgba(184, 184, 184, 0.2),
+		10px 5px 10px rgba(101, 101, 101, 0.14);
 }
 
 * {
@@ -183,11 +212,6 @@ textarea:focus {
 	backdrop-filter: var(--wrapper-blur);
 	caret-color: var(--text-main);
 	color: var(--text-main);
-}
-
-.input-container textarea::selection {
-	background-color: #6f6f6f;
-	color: rgba(255, 255, 255, 0.632);
 }
 
 .input-buttons {
@@ -315,6 +339,7 @@ textarea:focus {
 	transition: all 100ms ease-in;
 	background-image: var(--key-bg);
 	box-shadow: var(--key-shadow);
+	position: relative;
 }
 
 /* .key:not(.operation-key, .x-key, .y-key) {
@@ -411,6 +436,7 @@ textarea:focus {
 .operation-key {
 	justify-content: flex-end;
 	font-size: 1rem;
+	padding: 0.4rem 0.8rem;
 }
 
 .x-key {

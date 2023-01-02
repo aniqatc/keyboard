@@ -1,1 +1,2 @@
-document.querySelector('body').classList.add('theme-one');
+document.querySelector('body').classList.add('theme-five');
+const keys = querySelectorAll('.key');
