@@ -1,1 +1,1 @@
-document.querySelector('body').classList.add('theme-three');
+document.querySelector('body').classList.add('theme-one');
