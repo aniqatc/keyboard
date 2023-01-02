@@ -12,9 +12,14 @@ clearButton.addEventListener('click', () => {
 
 copyButton.addEventListener('click', () => {
 	let userText = textarea.value;
-	navigator.clipboard.writeText(userText);
-	textarea.value = 'Copied!';
-	setTimeout(() => (textarea.value = userText), 500);
+	if (userText) {
+		navigator.clipboard.writeText(userText);
+		textarea.value = 'Copied! ✔︎';
+		setTimeout(() => (textarea.value = userText), 600);
+	} else {
+		textarea.value = `Type Something First! 📝`;
+		setTimeout(() => (textarea.value = ''), 600);
+	}
 });
 
 // Click & Keypress Events
@@ -24,9 +29,14 @@ let themeKeyCode = [];
 themeButtons.forEach(button =>
 	themeKeyCode.push(button.getAttribute('data-key'))
 );
-const allKeys = document.querySelectorAll('.key');
+const allKeys = document.querySelectorAll('.key:not(.operation-key)');
 let keyCodes = [];
 allKeys.forEach(key => keyCodes.push(key.getAttribute('data-key')));
+const allOperationalKeys = document.querySelectorAll('.operation-key');
+let operationKeyCodes = [];
+allOperationalKeys.forEach(key =>
+	operationKeyCodes.push(key.getAttribute('data-key'))
+);
 
 for (let j = 0; j < themeButtons.length; j++) {
 	themeButtons[j].addEventListener('click', () => {
@@ -56,8 +66,14 @@ document.addEventListener('keydown', event => {
 			allKeys[k].classList.add('active');
 		}
 	}
+	for (let i = 0; i < allOperationalKeys.length; i++) {
+		if (event.code === operationKeyCodes[i]) {
+			allOperationalKeys[i].classList.add('active');
+		}
+	}
 });
 
 document.addEventListener('keyup', () => {
 	allKeys.forEach(el => el.classList.remove('active'));
+	allOperationalKeys.forEach(el => el.classList.remove('active'));
 });
