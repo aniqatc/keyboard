@@ -543,3 +543,39 @@ textarea:focus {
 	background-color: rgb(0, 255, 0);
 	box-shadow: 0px 0px 4px 1px rgb(0, 255, 0);
 }
+
+/* Active Classes for Keypress */
+.row-one .key.active {
+	box-shadow: var(--active-key-shadow) var(--active-row-one);
+	outline: var(--active-outline) var(--active-row-one);
+}
+
+.row-two .key.active {
+	box-shadow: var(--active-key-shadow) var(--active-row-two);
+	outline: var(--active-outline) var(--active-row-two);
+}
+
+.row-three .key.active {
+	box-shadow: var(--active-key-shadow) var(--active-row-three);
+	outline: var(--active-outline) var(--active-row-three);
+}
+
+.row-four .key.active {
+	box-shadow: var(--active-key-shadow) var(--active-row-four);
+	outline: var(--active-outline) var(--active-row-four);
+}
+
+.row-five .key.active {
+	box-shadow: var(--active-key-shadow) var(--active-row-five);
+	outline: var(--active-outline) var(--active-row-five);
+}
+
+.row-six .key.active {
+	box-shadow: var(--active-key-shadow) var(--active-row-six);
+	outline: var(--active-outline) var(--active-row-six);
+}
+
+.key.active {
+	transform: translateY(2px) scale(0.98);
+	font-weight: bold;
+}
