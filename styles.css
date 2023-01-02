@@ -1,3 +1,82 @@
+/* THEMES */
+:root {
+	--active-red: rgb(255, 0, 0);
+	--active-orange: rgb(255, 100, 0);
+	--active-yellow: rgb(200, 255, 0);
+	--active-green: rgb(0, 255, 0);
+	--active-blue: rgb(0, 0, 255);
+	--active-purple: rgb(200, 0, 255);
+}
+
+.theme-one {
+	--font-main: 'DM Sans', sans-serif;
+	--background-gradient: linear-gradient(to left, #201f47, #351f47);
+	--text-main: #f1f1f1;
+	--button-color: #9d9d9d;
+	--wrapper-shadow: 1px 2px 10px rgba(0, 0, 0, 0.5);
+	--wrapper-bg: rgba(24, 23, 47, 0.511);
+	--wrapper-blur: blur(4px);
+	--key-bg: linear-gradient(to bottom left, #000, rgb(0, 0, 0));
+	--key-shadow: 0 2px 2px 1px #000, inset 0 2px 1px 0 rgb(73, 73, 73);
+	--active-key-shadow: inset 0 1px 2px 0 #000, 0 1px 1px 0 #666, 0px 0px 4px 2px;
+	--active-outline: 2px solid;
+	--active-red: rgb(255, 0, 0);
+	--active-orange: rgb(255, 100, 0);
+	--active-yellow: rgb(200, 255, 0);
+	--active-green: rgb(0, 255, 0);
+	--active-blue: rgb(0, 0, 255);
+	--active-purple: rgb(200, 0, 255);
+	--blobs-display: initial;
+}
+
+.theme-two {
+	--font-main: 'DM Sans', sans-serif;
+	--background-gradient: linear-gradient(to left, #878787, #e7c9ff);
+	--text-main: #121212;
+	--button-color: #323232;
+	--wrapper-shadow: 1px 2px 10px rgba(72, 72, 72, 0.5);
+	--wrapper-bg: rgba(217, 217, 217, 0.511);
+	--wrapper-blur: blur(4px);
+	--key-bg: linear-gradient(
+		to bottom left,
+		rgb(197, 197, 197),
+		rgb(202, 202, 202)
+	);
+	--key-shadow: 0 2px 2px 1px rgb(127, 127, 127),
+		inset 0 2px 1px 0 rgb(172, 172, 172);
+	--active-key-shadow: inset 0 0 18px rgb(213, 213, 213),
+		0 0 2px rgb(70, 70, 70);
+	--active-outline: 1px solid;
+	--active-red: rgb(187, 187, 187);
+	--active-orange: rgb(187, 187, 187);
+	--active-yellow: rgb(187, 187, 187);
+	--active-green: rgb(187, 187, 187);
+	--active-blue: rgb(187, 187, 187);
+	--active-purple: rgb(187, 187, 187);
+	--blobs-display: initial;
+}
+
+.theme-three {
+	--font-main: 'Source Code Pro', monospace;
+	--background-gradient: #fff;
+	--text-main: #f1f1f1;
+	--button-color: #9d9d9d;
+	--wrapper-shadow: 1px 2px 10px rgba(0, 0, 0, 0.5);
+	--wrapper-bg: rgba(24, 23, 47, 0.511);
+	--wrapper-blur: blur(4px);
+	--key-bg: linear-gradient(to bottom left, #000, rgb(0, 0, 0));
+	--key-shadow: 0 2px 2px 1px #000, inset 0 2px 1px 0 rgb(73, 73, 73);
+	--active-key-shadow: inset 0 1px 2px 0 #000, 0 1px 1px 0 #666, 0px 0px 4px 2px;
+	--active-outline: 2px solid;
+	--active-red: rgb(255, 0, 0);
+	--active-orange: rgb(255, 100, 0);
+	--active-yellow: rgb(200, 255, 0);
+	--active-green: rgb(0, 255, 0);
+	--active-blue: rgb(0, 0, 255);
+	--active-purple: rgb(200, 0, 255);
+	--blobs-display: none;
+}
+
 * {
 	padding: 0;
 	margin: 0;
@@ -5,8 +84,9 @@
 }
 
 body {
-	font-family: 'DM Sans', sans-serif;
-	font-size: 62.5%;
+	background-image: var(--background-gradient);
+	color: var(--text-main);
+	font-family: var(--font-main);
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -49,6 +129,11 @@ textarea:focus {
 	padding: 1.2rem 2.4rem 1.2rem 1.2rem;
 	line-height: 1.5;
 	font-size: 1rem;
+	box-shadow: var(--wrapper-shadow);
+	background-color: var(--wrapper-bg);
+	backdrop-filter: var(--wrapper-blur);
+	caret-color: var(--text-main);
+	color: var(--text-main);
 }
 
 .input-container textarea::selection {
@@ -69,6 +154,7 @@ textarea:focus {
 	padding: 0.2rem;
 	transition: all 200ms ease-in-out;
 	cursor: pointer;
+	color: var(--button-color);
 }
 
 .input-buttons button:hover {
@@ -82,6 +168,7 @@ textarea:focus {
 
 .blobs {
 	position: relative;
+	display: var(--blobs-display);
 }
 
 .blob {
@@ -158,6 +245,10 @@ textarea:focus {
 	max-width: 100%;
 	padding: 1.2rem;
 	border-radius: 8px;
+	opacity: 0.8;
+	box-shadow: var(--wrapper-shadow);
+	background-color: var(--wrapper-bg);
+	backdrop-filter: var(--wrapper-blur);
 }
 
 .key {
@@ -173,47 +264,43 @@ textarea:focus {
 	height: 75px;
 	border-radius: 4px;
 	transition: all 100ms ease-in;
+	background-image: var(--key-bg);
+	box-shadow: var(--key-shadow);
+}
+
+.row-one .key:active {
+	box-shadow: var(--active-key-shadow) var(--active-red);
+	outline: var(--active-outline) var(--active-red);
+}
+
+.row-two .key:active {
+	box-shadow: var(--active-key-shadow) var(--active-orange);
+	outline: var(--active-outline) var(--active-orange);
+}
+
+.row-three .key:active {
+	box-shadow: var(--active-key-shadow) var(--active-yellow);
+	outline: var(--active-outline) var(--active-yellow);
+}
+
+.row-four .key:active {
+	box-shadow: var(--active-key-shadow) var(--active-green);
+	outline: var(--active-outline) var(--active-green);
+}
+
+.row-five .key:active {
+	box-shadow: var(--active-key-shadow) var(--active-blue);
+	outline: var(--active-outline) var(--active-blue);
+}
+
+.row-six .key:active {
+	box-shadow: var(--active-key-shadow) var(--active-purple);
+	outline: var(--active-outline) var(--active-purple);
 }
 
 .key:active {
 	transform: translateY(2px) scale(0.98);
 	font-weight: bold;
-}
-
-.row-one .key:active {
-	box-shadow: inset 0 1px 2px 0 #000, 0 1px 1px 0 #666,
-		0px 0px 4px 2px rgb(255, 0, 0);
-	outline: 2px solid rgb(255, 0, 0);
-}
-
-.row-two .key:active {
-	box-shadow: inset 0 1px 2px 0 #000, 0 1px 1px 0 #666,
-		0px 0px 4px 2px rgb(255, 100, 0);
-	outline: 2px solid rgb(255, 100, 0);
-}
-
-.row-three .key:active {
-	box-shadow: inset 0 1px 2px 0 #000, 0 1px 1px 0 #666,
-		0px 0px 4px 2px rgb(200, 255, 0);
-	outline: 2px solid rgb(200, 255, 0);
-}
-
-.row-four .key:active {
-	box-shadow: inset 0 1px 2px 0 #000, 0 1px 1px 0 #666,
-		0px 0px 4px 2px rgb(0, 255, 0);
-	outline: 2px solid rgb(0, 255, 0);
-}
-
-.row-five .key:active {
-	box-shadow: inset 0 1px 2px 0 #000, 0 1px 1px 0 #666,
-		0px 0px 4px 2px rgb(0, 0, 255);
-	outline: 2px solid rgb(0, 0, 255);
-}
-
-.row-six .key:active {
-	box-shadow: inset 0 1px 2px 0 #000, 0 1px 1px 0 #666,
-		0px 0px 4px 2px rgb(200, 0, 255);
-	outline: 2px solid rgb(200, 0, 255);
 }
 
 .secondary-key {
@@ -270,7 +357,7 @@ textarea:focus {
 
 .operation-key {
 	justify-content: flex-end;
-	font-size: 1.1rem;
+	font-size: 1rem;
 }
 
 .x-key {
@@ -300,116 +387,4 @@ textarea:focus {
 .caps-indicator.active {
 	background-color: rgb(14, 255, 46);
 	box-shadow: 0px 0px 4px 1px rgb(14, 255, 46);
-}
-
-.theme-one {
-	--background-gradient: linear-gradient(to left, #201f47, #351f47);
-}
-
-.theme-two {
-}
-
-/* THEME ONE DARK */
-
-.dark-one {
-	background-image: var(--background-gradient);
-	color: rgb(240, 240, 240);
-}
-
-.input-buttons button.theme-one {
-	color: #9d9d9d;
-}
-
-.input-container textarea.theme-one {
-	box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.5);
-	background-color: rgba(24, 23, 47, 0.511);
-	backdrop-filter: blur(4px);
-	caret-color: rgb(255, 255, 255);
-	color: #f1f1f1;
-}
-
-.keyboard-container.theme-one {
-	opacity: 0.8;
-	border-radius: 8px;
-	box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.5);
-	background-color: rgba(24, 23, 47, 0.511);
-	backdrop-filter: blur(4px);
-}
-
-.key.theme-one {
-	background-image: linear-gradient(to bottom left, #000, rgb(0, 0, 0));
-	border-radius: 4px;
-	box-shadow: 0 2px 2px 1px #000, inset 0 2px 1px 0 rgb(73, 73, 73);
-}
-
-/* THEME TWO LIGHT */
-.light-one {
-	background-image: linear-gradient(to left, #878787, #e7c9ff);
-	color: rgb(5, 5, 5);
-}
-
-.input-buttons button.theme-two {
-	color: #323232;
-}
-
-.input-container textarea.theme-two {
-	box-shadow: 1px 2px 10px rgba(72, 72, 72, 0.5);
-	background-color: rgba(217, 217, 217, 0.511);
-	backdrop-filter: blur(4px);
-	caret-color: rgb(17, 17, 17);
-	color: #121212;
-}
-
-.keyboard-container.theme-two {
-	opacity: 0.8;
-	box-shadow: 1px 2px 10px rgba(72, 72, 72, 0.5);
-	background-color: rgba(217, 217, 217, 0.511);
-	backdrop-filter: blur(4px);
-}
-
-.key.theme-two {
-	background-image: linear-gradient(
-		to bottom left,
-		rgb(197, 197, 197),
-		rgb(202, 202, 202)
-	);
-	box-shadow: 0 2px 2px 1px rgb(127, 127, 127),
-		inset 0 2px 1px 0 rgb(172, 172, 172);
-}
-
-.key:active.theme-two {
-	box-shadow: inset 0 0 18px rgb(213, 213, 213), 0 0 2px rgb(70, 70, 70);
-	outline: none;
-}
-
-/* THEME THREE DARK */
-.dark-two {
-	background-image: linear-gradient(to left, #201f47, #351f47);
-	color: rgb(240, 240, 240);
-}
-
-.input-buttons button.theme-three {
-	color: #9d9d9d;
-}
-
-.input-container textarea.theme-three {
-	box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.5);
-	background-color: rgba(24, 23, 47, 0.511);
-	backdrop-filter: blur(4px);
-	caret-color: rgb(255, 255, 255);
-	color: #f1f1f1;
-}
-
-.keyboard-container.theme-three {
-	opacity: 0.8;
-	border-radius: 8px;
-	box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.5);
-	background-color: rgba(24, 23, 47, 0.511);
-	backdrop-filter: blur(4px);
-}
-
-.key.theme-three {
-	background-image: linear-gradient(to bottom left, #000, rgb(0, 0, 0));
-	border-radius: 4px;
-	box-shadow: 0 2px 2px 1px #000, inset 0 2px 1px 0 rgb(73, 73, 73);
 }
