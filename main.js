@@ -29,14 +29,18 @@ let themeKeyCode = [];
 themeButtons.forEach(button =>
 	themeKeyCode.push(button.getAttribute('data-key'))
 );
+
 const allKeys = document.querySelectorAll('.key:not(.operation-key)');
 let keyCodes = [];
 allKeys.forEach(key => keyCodes.push(key.getAttribute('data-key')));
+
 const allOperationalKeys = document.querySelectorAll('.operation-key');
 let operationKeyCodes = [];
 allOperationalKeys.forEach(key =>
 	operationKeyCodes.push(key.getAttribute('data-key'))
 );
+
+const letterKeys = document.querySelectorAll('.letter-key');
 
 for (let j = 0; j < themeButtons.length; j++) {
 	themeButtons[j].addEventListener('click', () => {
@@ -69,6 +73,14 @@ document.addEventListener('keydown', event => {
 	for (let i = 0; i < allOperationalKeys.length; i++) {
 		if (event.code === operationKeyCodes[i]) {
 			allOperationalKeys[i].classList.add('active');
+		}
+		if (event.code === 'CapsLock' && event.getModifierState('CapsLock')) {
+			document.querySelector('.caps-indicator').classList.add('active');
+			letterKeys.forEach(el => (el.style.textTransform = 'uppercase'));
+		}
+		if (!event.getModifierState('CapsLock')) {
+			document.querySelector('.caps-indicator').classList.remove('active');
+			letterKeys.forEach(el => (el.style.textTransform = 'lowercase'));
 		}
 	}
 });
