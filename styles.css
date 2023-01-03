@@ -572,9 +572,9 @@ textarea:focus {
 	background-color: rgb(121, 121, 121);
 }
 
-/* .small-device-info {
+.small-device-info {
 	display: none;
-} */
+}
 
 /* Active Classes for Keypress */
 .caps-indicator.active {
@@ -775,6 +775,10 @@ b {
 		overflow: hidden;
 	}
 
+	.row-one .key:nth-of-type(13) {
+		display: none;
+	}
+
 	.input-container textarea {
 		height: 80px;
 		width: 280px;
@@ -822,8 +826,8 @@ b {
 	}
 }
 
-@media (max-width: 420px) {
-	/* section {
+@media (max-width: 380px) {
+	section {
 		display: none;
 	}
 
@@ -832,5 +836,5 @@ b {
 		margin: 1rem;
 		width: 300px;
 		text-align: center;
-	} */
+	}
 }
