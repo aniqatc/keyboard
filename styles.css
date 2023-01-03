@@ -860,7 +860,12 @@ b {
 		outline: none;
 	}
 
-	@keyframes key-colors {
+	.key.active.key-animation {
+		-webkit-animation: key-colors-mobile 4s ease-in;
+		animation: key-colors-mobile 4s ease-in;
+	}
+
+	@keyframes key-colors-mobile {
 		0% {
 			box-shadow: var(--active-key-shadow) var(--active-row-one);
 		}
