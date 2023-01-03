@@ -105,7 +105,7 @@
 	--font-main: 'Source Code Pro', monospace;
 	--blobs-display: none;
 	--background-gradient: linear-gradient(#eee, #eee);
-	--text-main: var(--light-dark);
+	--text-main: var(--text-dark);
 	--button-color: var(--icon-dark);
 	--wrapper-shadow: 1px 2px 10px rgba(119, 119, 119, 0.5);
 	--wrapper-bg: rgba(154, 154, 154, 0.511);
