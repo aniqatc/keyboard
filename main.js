@@ -62,10 +62,12 @@ const capsIndicator = document.querySelector('.caps-indicator');
 allKeys.forEach(key => {
 	key.addEventListener('click', event => {
 		key.classList.add('active');
-		// Remove Class After 4s
+		// Remove Class After 4s If It's Not Part of The Animation
 		setTimeout(() => {
-			key.classList.remove('active');
-		}, 2000);
+			if (!key.classList.contains('key-animation')) {
+				key.classList.remove('active');
+			}
+		}, 3500);
 		const keyCode = event.target.getAttribute('data-key');
 		// Add Letter Clicks to Text Area
 		if (keyCode.length == 1) {
@@ -79,9 +81,9 @@ allKeys.forEach(key => {
 		} else if (keyCode === 'Tab') {
 			textarea.value += '    ';
 		} else if (keyCode === 'F9') {
-			animationRows();
+			animateF9();
 		} else if (keyCode === 'F10') {
-			animationColors();
+			animateF10();
 		}
 	});
 });
@@ -157,12 +159,12 @@ document.addEventListener('keydown', event => {
 
 	// F9 Animation
 	if (event.key === 'F9') {
-		animationRows();
+		animateF9();
 	}
 
 	// F10 Animation
 	if (event.key === 'F10') {
-		animationColors();
+		animateF10();
 	}
 });
 
@@ -186,50 +188,66 @@ openModalButton.addEventListener('click', openModal);
 closeModalButton.addEventListener('click', closeModal);
 overlay.addEventListener('click', closeModal);
 
-function animationRows() {
+// Animations
+function animateF9() {
 	allKeys.forEach(el => el.classList.remove('key-animation', 'active'));
 	const rowOne = document.querySelectorAll('.row-one .key');
 	for (let i = 0; i < rowOne.length; i++) {
 		setTimeout(() => {
 			rowOne[i].classList.add('active');
+			setTimeout(() => {
+				rowOne[i].classList.remove('active');
+			}, 1000);
 		}, 100 * i);
 	}
 	const rowTwo = document.querySelectorAll('.row-two .key');
 	for (let i = 0; i < rowTwo.length; i++) {
 		setTimeout(() => {
 			rowTwo[i].classList.add('active');
+			setTimeout(() => {
+				rowTwo[i].classList.remove('active');
+			}, 1000);
 		}, 500 + 100 * i);
 	}
 	const rowThree = document.querySelectorAll('.row-three .key');
 	for (let i = 0; i < rowThree.length; i++) {
 		setTimeout(() => {
 			rowThree[i].classList.add('active');
+			setTimeout(() => {
+				rowThree[i].classList.remove('active');
+			}, 1000);
 		}, 1000 + 100 * i);
 	}
 	const rowFour = document.querySelectorAll('.row-four .key');
 	for (let i = 0; i < rowFour.length; i++) {
 		setTimeout(() => {
 			rowFour[i].classList.add('active');
+			setTimeout(() => {
+				rowFour[i].classList.remove('active');
+			}, 1000);
 		}, 1500 + 100 * i);
 	}
 	const rowFive = document.querySelectorAll('.row-five .key');
 	for (let i = 0; i < rowFive.length; i++) {
 		setTimeout(() => {
 			rowFive[i].classList.add('active');
+			setTimeout(() => {
+				rowFive[i].classList.remove('active');
+			}, 1000);
 		}, 2000 + 100 * i);
 	}
 	const rowSix = document.querySelectorAll('.row-six .key');
 	for (let i = 0; i < rowFour.length; i++) {
 		setTimeout(() => {
 			rowSix[i].classList.add('active');
+			setTimeout(() => {
+				rowSix[i].classList.remove('active');
+			}, 1000);
 		}, 2500 + 100 * i);
 	}
-	setTimeout(() => {
-		allKeys.forEach(el => el.classList.remove('active'));
-	}, 6000);
 }
 
-function animationColors() {
+function animateF10() {
 	allKeys.forEach(el => el.classList.remove('active', 'key-animation'));
 	for (let i = 0; i < allKeys.length; i++) {
 		setTimeout(() => {
@@ -245,14 +263,18 @@ function animationColors() {
 	}, 5000);
 }
 
-// Remove Active Class With A Delay
+// Remove Active
 document.addEventListener('keyup', event => {
+	setTimeout(() => {
+		allKeys.forEach(el => {
+			if (!el.classList.contains('key-animation')) {
+				el.classList.remove('active');
+			}
+		});
+	}, 3000);
+
 	if (!event.getModifierState('CapsLock')) {
 		capsIndicator.classList.remove('active');
 		letterKeys.forEach(el => (el.style.textTransform = 'lowercase'));
 	}
-
-	setTimeout(() => {
-		allKeys.forEach(el => el.classList.remove('active', 'key-animation'));
-	}, 2000);
 });
