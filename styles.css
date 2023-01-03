@@ -823,7 +823,7 @@ b {
 }
 
 @media (max-width: 420px) {
-	section {
+	/* section {
 		display: none;
 	}
 
@@ -832,5 +832,5 @@ b {
 		margin: 1rem;
 		width: 300px;
 		text-align: center;
-	}
+	} */
 }
