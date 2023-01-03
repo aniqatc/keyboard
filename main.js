@@ -65,7 +65,7 @@ allKeys.forEach(key => {
 		// Remove Class After 4s
 		setTimeout(() => {
 			key.classList.remove('active');
-		}, 1000);
+		}, 4000);
 		const keyCode = event.target.getAttribute('data-key');
 		textarea.focus();
 		// Add Letter Clicks to Text Area
@@ -79,6 +79,10 @@ allKeys.forEach(key => {
 			textarea.value += '\n';
 		} else if (keyCode === 'Tab') {
 			textarea.value += '    ';
+		} else if (keyCode === 'F9') {
+			animationRows();
+		} else if (keyCode === 'F10') {
+			animationColors();
 		}
 	});
 });
@@ -102,7 +106,6 @@ document.getElementById('shuffle').addEventListener('click', () => {
 	const randomTheme = themes[Math.floor(Math.random() * themes.length)];
 	document.body.classList.add(`theme-${randomTheme}`);
 	localStorage.setItem('theme', randomTheme);
-	console.log(randomTheme);
 });
 
 // Change Theme on Keydown
@@ -152,14 +155,15 @@ document.addEventListener('keydown', event => {
 		openModal();
 		textarea.blur();
 	}
-});
 
-// Remove Active Class With A Delay
-document.addEventListener('keyup', event => {
-	setTimeout(() => allKeys.forEach(el => el.classList.remove('active')), 1000);
-	if (!event.getModifierState('CapsLock')) {
-		capsIndicator.classList.remove('active');
-		letterKeys.forEach(el => (el.style.textTransform = 'lowercase'));
+	// F9 Animation
+	if (event.key === 'F9') {
+		animationRows();
+	}
+
+	// F10 Animation
+	if (event.key === 'F10') {
+		animationColors();
 	}
 });
 
@@ -182,3 +186,74 @@ function openModal() {
 openModalButton.addEventListener('click', openModal);
 closeModalButton.addEventListener('click', closeModal);
 overlay.addEventListener('click', closeModal);
+
+function animationRows() {
+	allKeys.forEach(el => el.classList.remove('active', 'key-animation'));
+	const rowOne = document.querySelectorAll('.row-one .key');
+	for (let i = 0; i < rowOne.length; i++) {
+		setTimeout(() => {
+			rowOne[i].classList.add('active');
+		}, 100 * i);
+	}
+	const rowTwo = document.querySelectorAll('.row-two .key');
+	for (let i = 0; i < rowTwo.length; i++) {
+		setTimeout(() => {
+			rowTwo[i].classList.add('active');
+		}, 500 + 100 * i);
+	}
+	const rowThree = document.querySelectorAll('.row-three .key');
+	for (let i = 0; i < rowThree.length; i++) {
+		setTimeout(() => {
+			rowThree[i].classList.add('active');
+		}, 1000 + 100 * i);
+	}
+	const rowFour = document.querySelectorAll('.row-four .key');
+	for (let i = 0; i < rowFour.length; i++) {
+		setTimeout(() => {
+			rowFour[i].classList.add('active');
+		}, 1500 + 100 * i);
+	}
+	const rowFive = document.querySelectorAll('.row-five .key');
+	for (let i = 0; i < rowFive.length; i++) {
+		setTimeout(() => {
+			rowFive[i].classList.add('active');
+		}, 2000 + 100 * i);
+	}
+	const rowSix = document.querySelectorAll('.row-six .key');
+	for (let i = 0; i < rowFour.length; i++) {
+		setTimeout(() => {
+			rowSix[i].classList.add('active');
+		}, 2500 + 100 * i);
+	}
+	setTimeout(() => {
+		allKeys.forEach(el => el.classList.remove('active'));
+	}, 6000);
+}
+
+function animationColors() {
+	allKeys.forEach(el => el.classList.remove('active'));
+	for (let i = 0; i < allKeys.length; i++) {
+		setTimeout(() => {
+			allKeys[i].classList.add('active', 'key-animation');
+		}, 50 * i);
+	}
+	setTimeout(() => {
+		for (let i = 0; i < allKeys.length; i++) {
+			setTimeout(() => {
+				allKeys[i].classList.remove('active', 'key-animation');
+			}, 100 * i);
+		}
+	}, 5000);
+}
+
+// Remove Active Class With A Delay
+document.addEventListener('keyup', event => {
+	if (!event.getModifierState('CapsLock')) {
+		capsIndicator.classList.remove('active');
+		letterKeys.forEach(el => (el.style.textTransform = 'lowercase'));
+	}
+
+	setTimeout(() => {
+		allKeys.forEach(el => el.classList.remove('active', 'key-animation'));
+	}, 3000);
+});
