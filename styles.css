@@ -10,7 +10,7 @@
 	--text-dark: #121212;
 	--icon-light: #9d9d9d;
 	--icon-dark: #323232;
-	--active-outline: ridge 2px solid;
+	--active-outline: 2px ridge;
 	--blob-color-one: #6516c5;
 	--blob-color-two: #6b1184;
 	--blob-color-three: #232280;
@@ -61,7 +61,7 @@
 	--key-shadow: 0 2px 2px 1px rgb(150, 150, 150),
 		inset 0 2px 1px 0 rgb(136, 136, 136);
 	--active-key-shadow: 0 0 2px rgb(70, 70, 70), 0px 0px 8px 4px;
-	--active-outline: ridge 1px solid;
+	--active-outline: 1px ridge;
 	--active-row-one: rgb(202, 96, 204);
 	--active-row-two: rgb(153, 44, 155);
 	--active-row-three: rgb(145, 22, 147);
