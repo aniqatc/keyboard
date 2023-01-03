@@ -10,7 +10,7 @@
 	--text-dark: #121212;
 	--icon-light: #9d9d9d;
 	--icon-dark: #323232;
-	--active-outline: 2px solid;
+	--active-outline: ridge 2px solid;
 	--blob-color-one: #6516c5;
 	--blob-color-two: #6b1184;
 	--blob-color-three: #232280;
@@ -61,7 +61,7 @@
 	--key-shadow: 0 2px 2px 1px rgb(150, 150, 150),
 		inset 0 2px 1px 0 rgb(136, 136, 136);
 	--active-key-shadow: 0 0 2px rgb(70, 70, 70), 0px 0px 8px 4px;
-	--active-outline: 1px solid;
+	--active-outline: ridge 1px solid;
 	--active-row-one: rgb(202, 96, 204);
 	--active-row-two: rgb(153, 44, 155);
 	--active-row-three: rgb(145, 22, 147);
@@ -467,37 +467,37 @@ textarea:focus {
 .row-one .key:active,
 .row-one .key.active {
 	box-shadow: var(--active-key-shadow) var(--active-row-one);
-	outline: var(--active-outline) var(--active-row-one);
+	border: var(--active-outline) var(--active-row-one);
 }
 
 .row-two .key:active,
 .row-two .key.active {
 	box-shadow: var(--active-key-shadow) var(--active-row-two);
-	outline: var(--active-outline) var(--active-row-two);
+	border: var(--active-outline) var(--active-row-two);
 }
 
 .row-three .key:active,
 .row-three .key.active {
 	box-shadow: var(--active-key-shadow) var(--active-row-three);
-	outline: var(--active-outline) var(--active-row-three);
+	border: var(--active-outline) var(--active-row-three);
 }
 
 .row-four .key:active,
 .row-four .key.active {
 	box-shadow: var(--active-key-shadow) var(--active-row-four);
-	outline: var(--active-outline) var(--active-row-four);
+	border: var(--active-outline) var(--active-row-four);
 }
 
 .row-five .key:active,
 .row-five .key.active {
 	box-shadow: var(--active-key-shadow) var(--active-row-five);
-	outline: var(--active-outline) var(--active-row-five);
+	border: var(--active-outline) var(--active-row-five);
 }
 
 .row-six .key:active,
 .row-six .key.active {
 	box-shadow: var(--active-key-shadow) var(--active-row-six);
-	outline: var(--active-outline) var(--active-row-six);
+	border: var(--active-outline) var(--active-row-six);
 }
 
 .key:active,
@@ -515,7 +515,7 @@ textarea:focus {
 @keyframes fade {
 	100% {
 		box-shadow: 0 0 0 transparent;
-		outline: transparent;
+		border: transparent;
 	}
 }
 
@@ -707,6 +707,12 @@ b {
 	animation: word 4s ease-in infinite reverse;
 }
 
+.modal .fa-shuffle {
+	background-color: var(--wrapper-bg);
+	padding: 0.15rem 0.25rem;
+	border-radius: 10px;
+}
+
 @keyframes word {
 	0% {
 		color: var(--active-row-one);
@@ -738,27 +744,27 @@ b {
 @keyframes key-colors {
 	0% {
 		box-shadow: var(--active-key-shadow) var(--active-row-one);
-		outline: var(--active-outline) var(--active-row-one);
+		border: var(--active-outline) var(--active-row-one);
 	}
 	20% {
 		box-shadow: var(--active-key-shadow) var(--active-row-two);
-		outline: var(--active-outline) var(--active-row-two);
+		border: var(--active-outline) var(--active-row-two);
 	}
 	40% {
 		box-shadow: var(--active-key-shadow) var(--active-row-three);
-		outline: var(--active-outline) var(--active-row-three);
+		border: var(--active-outline) var(--active-row-three);
 	}
 	60% {
 		box-shadow: var(--active-key-shadow) var(--active-row-four);
-		outline: var(--active-outline) var(--active-row-four);
+		border: var(--active-outline) var(--active-row-four);
 	}
 	80% {
 		box-shadow: var(--active-key-shadow) var(--active-row-five);
-		outline: var(--active-outline) var(--active-row-five);
+		border: var(--active-outline) var(--active-row-five);
 	}
 	100% {
 		box-shadow: var(--active-key-shadow) var(--active-row-six);
-		outline: var(--active-outline) var(--active-row-six);
+		border: var(--active-outline) var(--active-row-six);
 	}
 }
 
@@ -848,42 +854,6 @@ b {
 	.key {
 		width: 35px;
 		justify-content: flex-end;
-	}
-
-	.row-one,
-	.row-two,
-	.row-three,
-	.row-four,
-	.row-five,
-	.row-six .key:active,
-	.key.active {
-		outline: none;
-	}
-
-	.key.active.key-animation {
-		-webkit-animation: key-colors-mobile 4s ease-in;
-		animation: key-colors-mobile 4s ease-in;
-	}
-
-	@keyframes key-colors-mobile {
-		0% {
-			box-shadow: var(--active-key-shadow) var(--active-row-one);
-		}
-		20% {
-			box-shadow: var(--active-key-shadow) var(--active-row-two);
-		}
-		40% {
-			box-shadow: var(--active-key-shadow) var(--active-row-three);
-		}
-		60% {
-			box-shadow: var(--active-key-shadow) var(--active-row-four);
-		}
-		80% {
-			box-shadow: var(--active-key-shadow) var(--active-row-five);
-		}
-		100% {
-			box-shadow: var(--active-key-shadow) var(--active-row-six);
-		}
 	}
 
 	.secondary-key {
