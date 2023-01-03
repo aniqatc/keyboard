@@ -850,6 +850,11 @@ b {
 		justify-content: flex-end;
 	}
 
+	.key:active,
+	.key.active {
+		outline: none;
+	}
+
 	.secondary-key {
 		display: none;
 	}
