@@ -1,9 +1,7 @@
 // Initial Theme
-document.querySelector('body').classList.add('theme-one');
-
-const userTheme = localStorage.getItem('userChoice');
-if (userTheme) {
-	document.querySelector('body').classList.add(userTheme);
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) {
+	document.body.classList.add(`theme-${savedTheme}`);
 }
 
 // Text Area Buttons
@@ -63,7 +61,7 @@ for (let j = 0; j < themeButtons.length; j++) {
 		for (let i = 0; i < themeButtons.length; i++) {
 			document.body.classList.remove(`theme-${themes[i]}`);
 			document.body.classList.add(`theme-${themes[j]}`);
-			updateStorage(`theme-${themes[j]}`);
+			localStorage.setItem('theme', themes[j]);
 		}
 	});
 }
@@ -73,10 +71,10 @@ document.getElementById('shuffle').addEventListener('click', () => {
 	for (let i = 0; i < themes.length; i++) {
 		document.body.classList.remove(`theme-${themes[i]}`);
 	}
-	document.body.classList.add(
-		`theme-${themes[Math.floor(Math.random() * themes.length)]}`
-	);
-	updateStorage(`theme-${themes[j]}`);
+	const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+	document.body.classList.add(`theme-${randomTheme}`);
+	localStorage.setItem('theme', randomTheme);
+	console.log(randomTheme);
 });
 
 // Click Event Trigger Corresponding Keydown Event
@@ -85,7 +83,7 @@ allKeys.forEach(key => {
 		const keyCode = event.target.getAttribute('data-key');
 		textarea.focus();
 		// Add Letter Clicks to Text Area
-		if (keyCode.length === 1) {
+		if (keyCode.length == 1) {
 			textarea.value += keyCode;
 		} else if (keyCode === 'Space') {
 			textarea.value += ' ';
@@ -93,6 +91,8 @@ allKeys.forEach(key => {
 			textarea.value = textarea.value.substring(0, textarea.value.length - 1);
 		} else if (keyCode === 'Enter') {
 			textarea.value += '\n';
+		} else if (keyCode === 'Tab') {
+			textarea.value += '    ';
 		}
 	});
 });
@@ -106,7 +106,7 @@ document.addEventListener('keydown', event => {
 			for (let i = 0; i < themeButtons.length; i++) {
 				document.body.classList.remove(`theme-${themes[i]}`);
 				document.body.classList.add(`theme-${themes[j]}`);
-				updateStorage(`theme-${themes[j]}`);
+				localStorage.setItem('theme', themes[j]);
 			}
 			break;
 		} else {
@@ -131,6 +131,11 @@ document.addEventListener('keydown', event => {
 			letterKeys.forEach(el => (el.style.textTransform = 'uppercase'));
 		}
 	}
+
+	// Shift Hold
+	if (event.key === 'Shift') {
+		letterKeys.forEach(el => (el.style.textTransform = 'uppercase'));
+	}
 });
 
 // Remove Active Class With A Delay
@@ -141,7 +146,3 @@ document.addEventListener('keyup', event => {
 		letterKeys.forEach(el => (el.style.textTransform = 'lowercase'));
 	}
 });
-
-function updateStorage(theme) {
-	localStorage.setItem('userChoice', theme);
-}
