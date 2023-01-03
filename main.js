@@ -65,7 +65,7 @@ allKeys.forEach(key => {
 		// Remove Class After 4s
 		setTimeout(() => {
 			key.classList.remove('active');
-		}, 4000);
+		}, 2000);
 		const keyCode = event.target.getAttribute('data-key');
 		// Add Letter Clicks to Text Area
 		if (keyCode.length == 1) {
@@ -254,5 +254,5 @@ document.addEventListener('keyup', event => {
 
 	setTimeout(() => {
 		allKeys.forEach(el => el.classList.remove('active', 'key-animation'));
-	}, 3000);
+	}, 2000);
 });
