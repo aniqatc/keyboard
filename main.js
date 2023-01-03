@@ -187,7 +187,7 @@ closeModalButton.addEventListener('click', closeModal);
 overlay.addEventListener('click', closeModal);
 
 function animationRows() {
-	allKeys.forEach(el => el.classList.remove('active', 'key-animation'));
+	allKeys.forEach(el => el.classList.remove('key-animation', 'active'));
 	const rowOne = document.querySelectorAll('.row-one .key');
 	for (let i = 0; i < rowOne.length; i++) {
 		setTimeout(() => {
@@ -230,7 +230,7 @@ function animationRows() {
 }
 
 function animationColors() {
-	allKeys.forEach(el => el.classList.remove('active'));
+	allKeys.forEach(el => el.classList.remove('active', 'key-animation'));
 	for (let i = 0; i < allKeys.length; i++) {
 		setTimeout(() => {
 			allKeys[i].classList.add('active', 'key-animation');

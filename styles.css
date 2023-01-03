@@ -850,7 +850,12 @@ b {
 		justify-content: flex-end;
 	}
 
-	.key:active,
+	.row-one,
+	.row-two,
+	.row-three,
+	.row-four,
+	.row-five,
+	.row-six .key:active,
 	.key.active {
 		outline: none;
 	}
