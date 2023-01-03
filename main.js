@@ -1,3 +1,6 @@
+// Allow Touchstart Events
+document.addEventListener('touchstart', function () {}, true);
+
 // Initial Theme
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme) {
@@ -58,6 +61,11 @@ const capsIndicator = document.querySelector('.caps-indicator');
 // Click Event Trigger Corresponding Keydown Event
 allKeys.forEach(key => {
 	key.addEventListener('click', event => {
+		key.classList.add('active');
+		// Remove Class After 4s
+		setTimeout(() => {
+			key.classList.remove('active');
+		}, 1000);
 		const keyCode = event.target.getAttribute('data-key');
 		textarea.focus();
 		// Add Letter Clicks to Text Area

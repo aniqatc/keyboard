@@ -279,8 +279,8 @@ body {
 	justify-content: center;
 	align-items: center;
 	overflow: hidden;
-	transition: all 250ms ease-in;
 	height: 100vh;
+	transition: all 250ms ease-in;
 }
 
 kbd {
@@ -454,6 +454,7 @@ textarea:focus {
 	background-image: var(--key-bg);
 	box-shadow: var(--key-shadow);
 	position: relative;
+	transition: all 250ms ease-out;
 }
 
 .right-align {
@@ -464,39 +465,47 @@ textarea:focus {
 	align-self: flex-start;
 }
 
-.row-one .key:active {
+.row-one .key:active,
+.row-one .key.active {
 	box-shadow: var(--active-key-shadow) var(--active-row-one);
 	outline: var(--active-outline) var(--active-row-one);
 }
 
-.row-two .key:active {
+.row-two .key:active,
+.row-two .key.active {
 	box-shadow: var(--active-key-shadow) var(--active-row-two);
 	outline: var(--active-outline) var(--active-row-two);
 }
 
-.row-three .key:active {
+.row-three .key:active,
+.row-three .key.active {
 	box-shadow: var(--active-key-shadow) var(--active-row-three);
 	outline: var(--active-outline) var(--active-row-three);
 }
 
-.row-four .key:active {
+.row-four .key:active,
+.row-four .key.active {
 	box-shadow: var(--active-key-shadow) var(--active-row-four);
 	outline: var(--active-outline) var(--active-row-four);
 }
 
-.row-five .key:active {
+.row-five .key:active,
+.row-five .key.active {
 	box-shadow: var(--active-key-shadow) var(--active-row-five);
 	outline: var(--active-outline) var(--active-row-five);
 }
 
-.row-six .key:active {
+.row-six .key:active,
+.row-six .key.active {
 	box-shadow: var(--active-key-shadow) var(--active-row-six);
 	outline: var(--active-outline) var(--active-row-six);
 }
 
-.key:active {
+.key:active,
+.key.active {
 	transform: translateY(2px) scale(0.98);
 	font-weight: bold;
+	transition: all 250ms ease-out;
 }
 
 .secondary-key {
@@ -576,45 +585,9 @@ textarea:focus {
 	display: none;
 }
 
-/* Active Classes for Keypress */
 .caps-indicator.active {
 	background-color: rgb(0, 255, 0);
 	box-shadow: 0px 0px 4px 1px rgb(0, 255, 0);
-}
-
-.row-one .key.active {
-	box-shadow: var(--active-key-shadow) var(--active-row-one);
-	outline: var(--active-outline) var(--active-row-one);
-}
-
-.row-two .key.active {
-	box-shadow: var(--active-key-shadow) var(--active-row-two);
-	outline: var(--active-outline) var(--active-row-two);
-}
-
-.row-three .key.active {
-	box-shadow: var(--active-key-shadow) var(--active-row-three);
-	outline: var(--active-outline) var(--active-row-three);
-}
-
-.row-four .key.active {
-	box-shadow: var(--active-key-shadow) var(--active-row-four);
-	outline: var(--active-outline) var(--active-row-four);
-}
-
-.row-five .key.active {
-	box-shadow: var(--active-key-shadow) var(--active-row-five);
-	outline: var(--active-outline) var(--active-row-five);
-}
-
-.row-six .key.active {
-	box-shadow: var(--active-key-shadow) var(--active-row-six);
-	outline: var(--active-outline) var(--active-row-six);
-}
-
-.key.active {
-	transform: translateY(2px) scale(0.98);
-	font-weight: bold;
 }
 
 /* Credits */
@@ -643,7 +616,7 @@ footer a:hover {
 .close-modal {
 	position: absolute;
 	right: 8%;
-	top: 10%;
+	top: 14%;
 	cursor: pointer;
 	font-size: 2rem;
 }
@@ -665,12 +638,11 @@ footer a:hover {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	width: 65%;
-
 	color: var(--text-main);
 	background: var(--background-gradient);
 	opacity: 1;
-	padding: 4rem;
-	border-radius: 4px;
+	padding: 3rem;
+	border-radius: 8px;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 	z-index: 5;
 }
@@ -687,6 +659,12 @@ b {
 
 .modal i {
 	margin: 0.4rem;
+	transition: color 200ms ease-in;
+}
+
+.modal i:hover {
+	color: #fff;
+	animation-play-state: paused;
 }
 
 .modal span {
@@ -716,6 +694,7 @@ b {
 		font-size: 70%;
 		overflow: hidden;
 	}
+
 	.input-container textarea {
 		height: 150px;
 		width: 450px;
@@ -775,14 +754,20 @@ b {
 		overflow: hidden;
 	}
 
+	.row-one .key:nth-of-type(12),
 	.row-one .key:nth-of-type(13) {
 		display: none;
 	}
 
-	.input-container textarea {
-		height: 80px;
-		width: 280px;
+	.row-one .key {
+		width: 100%;
 	}
+
+	.input-container textarea {
+		height: 120px;
+		width: 350px;
+	}
+
 	.keyboard-container {
 		padding: 0.8rem;
 	}
@@ -798,7 +783,7 @@ b {
 
 	.operation-key {
 		padding: 0.4rem;
-		font-size: 0.7rem;
+		font-size: 0.8rem;
 	}
 
 	.m-key {
@@ -827,14 +812,19 @@ b {
 }
 
 @media (max-width: 380px) {
-	section {
+	.keyboard-container {
 		display: none;
+	}
+
+	.input-container textarea {
+		width: 280px;
+		margin: 1rem 2rem;
 	}
 
 	.small-device-info {
 		display: block;
-		margin: 1rem;
-		width: 300px;
+		margin: 1rem 2rem;
 		text-align: center;
+		max-width: 100%;
 	}
 }
