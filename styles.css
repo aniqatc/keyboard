@@ -753,6 +753,10 @@ b {
 	.y-key {
 		height: auto;
 	}
+
+	.modal {
+		width: 75%;
+	}
 }
 
 @media (max-width: 550px) {
@@ -801,5 +805,9 @@ b {
 
 	.direction-keys {
 		display: none;
+	}
+
+	.modal {
+		width: 85%;
 	}
 }
