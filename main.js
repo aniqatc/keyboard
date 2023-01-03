@@ -142,6 +142,7 @@ document.addEventListener('keydown', event => {
 	// Escape Open Modal
 	if (event.key === 'Escape') {
 		openModal();
+		textarea.blur();
 	}
 });
 
