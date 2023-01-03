@@ -180,7 +180,7 @@ function animateF9() {
 			rowOne[i].classList.add('active');
 			setTimeout(() => {
 				rowOne[i].classList.remove('active');
-			}, 1000);
+			}, 500);
 		}, 100 * i);
 	}
 	const rowTwo = document.querySelectorAll('.row-two .key');
@@ -190,7 +190,7 @@ function animateF9() {
 			setTimeout(() => {
 				rowTwo[i].classList.remove('active');
 			}, 1000);
-		}, 500 + 100 * i);
+		}, 400 + 100 * i);
 	}
 	const rowThree = document.querySelectorAll('.row-three .key');
 	for (let i = 0; i < rowThree.length; i++) {
@@ -198,8 +198,8 @@ function animateF9() {
 			rowThree[i].classList.add('active');
 			setTimeout(() => {
 				rowThree[i].classList.remove('active');
-			}, 1000);
-		}, 1000 + 100 * i);
+			}, 1500);
+		}, 800 + 100 * i);
 	}
 	const rowFour = document.querySelectorAll('.row-four .key');
 	for (let i = 0; i < rowFour.length; i++) {
@@ -207,8 +207,8 @@ function animateF9() {
 			rowFour[i].classList.add('active');
 			setTimeout(() => {
 				rowFour[i].classList.remove('active');
-			}, 1000);
-		}, 1500 + 100 * i);
+			}, 2000);
+		}, 1200 + 100 * i);
 	}
 	const rowFive = document.querySelectorAll('.row-five .key');
 	for (let i = 0; i < rowFive.length; i++) {
@@ -216,8 +216,8 @@ function animateF9() {
 			rowFive[i].classList.add('active');
 			setTimeout(() => {
 				rowFive[i].classList.remove('active');
-			}, 1000);
-		}, 2000 + 100 * i);
+			}, 2500);
+		}, 1600 + 100 * i);
 	}
 	const rowSix = document.querySelectorAll('.row-six .key');
 	for (let i = 0; i < rowFour.length; i++) {
@@ -225,7 +225,7 @@ function animateF9() {
 			rowSix[i].classList.add('active');
 			setTimeout(() => {
 				rowSix[i].classList.remove('active');
-			}, 1000);
+			}, 3000);
 		}, 2500 + 100 * i);
 	}
 }
