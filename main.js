@@ -67,7 +67,6 @@ allKeys.forEach(key => {
 			key.classList.remove('active');
 		}, 4000);
 		const keyCode = event.target.getAttribute('data-key');
-		textarea.focus();
 		// Add Letter Clicks to Text Area
 		if (keyCode.length == 1) {
 			textarea.value += keyCode;
@@ -152,8 +151,8 @@ document.addEventListener('keydown', event => {
 
 	// Escape Open Modal
 	if (event.key === 'Escape') {
-		openModal();
 		textarea.blur();
+		openModal();
 	}
 
 	// F9 Animation
