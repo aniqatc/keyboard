@@ -893,12 +893,10 @@ b {
 	.modal {
 		width: 85%;
 	}
-
-	.key:active,
-	.key.active {
-		transform: translateY(1px) scale(0.95);
-		font-weight: initial;
-		transition: all 250ms ease-in;
+}
+@media (max-width: 430px) {
+	.key {
+		margin: 0.1rem;
 	}
 }
 
