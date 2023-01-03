@@ -859,16 +859,21 @@ b {
 		font-size: 0.8rem;
 	}
 
+	.row-six .operation-key:nth-of-type(2),
+	.operation-key:nth-of-type(6) {
+		width: 55px;
+	}
+
 	.m-key {
-		width: 50px;
+		width: 60px;
 	}
 
 	.lg-key {
-		width: 70px;
+		width: 85px;
 	}
 
 	.xl-key {
-		width: 90px;
+		width: 110px;
 	}
 
 	.space-key {
