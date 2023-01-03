@@ -278,9 +278,9 @@ body {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	height: 100vh;
 	overflow: hidden;
 	transition: all 250ms ease-in;
+	height: 100vh;
 }
 
 kbd {
@@ -512,7 +512,6 @@ textarea:focus {
 .letter-key {
 	justify-content: flex-end;
 	font-size: 1.6rem;
-	/* text-transform: uppercase; */
 }
 
 .operation-key {
@@ -636,21 +635,6 @@ footer a:hover {
 	display: none;
 }
 
-.modal {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 65%;
-
-	color: var(--text-main);
-	background-color: var(--wrapper-bg);
-	padding: 4rem;
-	border-radius: 4px;
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-	z-index: 5;
-}
-
 .close-modal {
 	position: absolute;
 	right: 8%;
@@ -668,6 +652,22 @@ footer a:hover {
 	background-color: rgba(0, 0, 0, 0.6);
 	backdrop-filter: blur(4px);
 	z-index: 1;
+}
+
+.modal {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 65%;
+
+	color: var(--text-main);
+	background: var(--background-gradient);
+	opacity: 1;
+	padding: 4rem;
+	border-radius: 4px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+	z-index: 5;
 }
 
 .modal i,
@@ -704,4 +704,102 @@ b {
 .modal p {
 	line-height: 1.6;
 	margin-top: 1rem;
+}
+
+@media (max-width: 800px) {
+	html {
+		font-size: 70%;
+	}
+	.input-container textarea {
+		height: 150px;
+		width: 450px;
+	}
+
+	.input-buttons {
+		bottom: 18%;
+		right: 8%;
+	}
+
+	.keyboard-container {
+		padding: 1rem;
+	}
+
+	.key {
+		width: 60px;
+		height: 50px;
+	}
+
+	.operation-key {
+		padding: 0.8rem;
+	}
+
+	.m-key {
+		width: 70px;
+	}
+
+	.lg-key {
+		width: 90px;
+	}
+
+	.xl-key {
+		width: 125px;
+	}
+
+	.space-key {
+		width: 225px;
+	}
+
+	.x-key,
+	.y-key {
+		height: auto;
+	}
+}
+
+@media (max-width: 550px) {
+	.input-container textarea {
+		height: 80px;
+		width: 280px;
+	}
+
+	.input-buttons button {
+		font-size: 1rem;
+	}
+
+	.keyboard-container {
+		padding: 0.8rem;
+	}
+
+	.key {
+		width: 35px;
+		justify-content: flex-end;
+	}
+
+	.secondary-key {
+		display: none;
+	}
+
+	.operation-key {
+		padding: 0.4rem;
+		font-size: 0.7rem;
+	}
+
+	.m-key {
+		width: 50px;
+	}
+
+	.lg-key {
+		width: 70px;
+	}
+
+	.xl-key {
+		width: 90px;
+	}
+
+	.space-key {
+		width: 100%;
+	}
+
+	.direction-keys {
+		display: none;
+	}
 }
