@@ -55,6 +55,26 @@ allOperationalKeys.forEach(key =>
 const letterKeys = document.querySelectorAll('.letter-key');
 const capsIndicator = document.querySelector('.caps-indicator');
 
+// Click Event Trigger Corresponding Keydown Event
+allKeys.forEach(key => {
+	key.addEventListener('click', event => {
+		const keyCode = event.target.getAttribute('data-key');
+		textarea.focus();
+		// Add Letter Clicks to Text Area
+		if (keyCode.length == 1) {
+			textarea.value += keyCode;
+		} else if (keyCode === 'Space') {
+			textarea.value += ' ';
+		} else if (keyCode === 'Backspace') {
+			textarea.value = textarea.value.substring(0, textarea.value.length - 1);
+		} else if (keyCode === 'Enter') {
+			textarea.value += '\n';
+		} else if (keyCode === 'Tab') {
+			textarea.value += '    ';
+		}
+	});
+});
+
 // Change Theme on Click
 for (let j = 0; j < themeButtons.length; j++) {
 	themeButtons[j].addEventListener('click', () => {
@@ -75,26 +95,6 @@ document.getElementById('shuffle').addEventListener('click', () => {
 	document.body.classList.add(`theme-${randomTheme}`);
 	localStorage.setItem('theme', randomTheme);
 	console.log(randomTheme);
-});
-
-// Click Event Trigger Corresponding Keydown Event
-allKeys.forEach(key => {
-	key.addEventListener('click', event => {
-		const keyCode = event.target.getAttribute('data-key');
-		textarea.focus();
-		// Add Letter Clicks to Text Area
-		if (keyCode.length == 1) {
-			textarea.value += keyCode;
-		} else if (keyCode === 'Space') {
-			textarea.value += ' ';
-		} else if (keyCode === 'Backspace') {
-			textarea.value = textarea.value.substring(0, textarea.value.length - 1);
-		} else if (keyCode === 'Enter') {
-			textarea.value += '\n';
-		} else if (keyCode === 'Tab') {
-			textarea.value += '    ';
-		}
-	});
 });
 
 // Change Theme on Keydown
@@ -118,6 +118,8 @@ document.addEventListener('keydown', event => {
 	for (let k = 0; k < allCharKeys.length; k++) {
 		if (event.key === charKeyCodes[k]) {
 			allCharKeys[k].classList.add('active');
+		} else if (event.key === charKeyCodes[k].toUpperCase()) {
+			allCharKeys[k].classList.add('active');
 		}
 	}
 
@@ -136,6 +138,11 @@ document.addEventListener('keydown', event => {
 	if (event.key === 'Shift') {
 		letterKeys.forEach(el => (el.style.textTransform = 'uppercase'));
 	}
+
+	// Escape Open Modal
+	if (event.key === 'Escape') {
+		openModal();
+	}
 });
 
 // Remove Active Class With A Delay
@@ -146,3 +153,23 @@ document.addEventListener('keyup', event => {
 		letterKeys.forEach(el => (el.style.textTransform = 'lowercase'));
 	}
 });
+
+// "Esc" Modal Popup
+const modal = document.querySelector('.modal');
+const overlay = document.querySelector('.overlay');
+const closeModalButton = document.querySelector('.close-modal');
+const openModalButton = document.getElementById('esc');
+
+function closeModal() {
+	modal.classList.add('hidden');
+	overlay.classList.add('hidden');
+}
+
+function openModal() {
+	modal.classList.remove('hidden');
+	overlay.classList.remove('hidden');
+}
+
+openModalButton.addEventListener('click', openModal);
+closeModalButton.addEventListener('click', closeModal);
+overlay.addEventListener('click', closeModal);
