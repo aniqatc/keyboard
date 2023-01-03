@@ -513,7 +513,7 @@ textarea:focus {
 }
 
 @keyframes fade {
-	to {
+	100% {
 		box-shadow: 0 0 0 transparent;
 		outline: transparent;
 	}
@@ -850,14 +850,30 @@ b {
 		justify-content: flex-end;
 	}
 
-	.row-one,
-	.row-two,
-	.row-three,
-	.row-four,
-	.row-five,
-	.row-six .key:active,
+	.key:active,
 	.key.active {
 		outline: none;
+	}
+
+	@keyframes key-colors {
+		0% {
+			box-shadow: var(--active-key-shadow) var(--active-row-one);
+		}
+		20% {
+			box-shadow: var(--active-key-shadow) var(--active-row-two);
+		}
+		40% {
+			box-shadow: var(--active-key-shadow) var(--active-row-three);
+		}
+		60% {
+			box-shadow: var(--active-key-shadow) var(--active-row-four);
+		}
+		80% {
+			box-shadow: var(--active-key-shadow) var(--active-row-five);
+		}
+		100% {
+			box-shadow: var(--active-key-shadow) var(--active-row-six);
+		}
 	}
 
 	.secondary-key {
