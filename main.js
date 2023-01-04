@@ -137,7 +137,7 @@ allKeys.forEach(key => {
 		} else if (keyCode === 'ArrowUp') {
 			caretStart = textarea.value.lastIndexOf('\n', caretStart - 1);
 		} else if (keyCode === 'ArrowDown') {
-			caretStart = textarea.value.lastIndexOf('\n', caretStart) + 1;
+			caretStart = textarea.value.indexOf('\n', caretStart) + 1;
 		}
 		textarea.setSelectionRange(caretStart, caretStart);
 	});
