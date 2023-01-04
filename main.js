@@ -226,6 +226,7 @@ document.addEventListener('keydown', event => {
 // Animations for F9 and F10
 function animateF9() {
 	allKeys.forEach(el => el.classList.remove('key-color-cycle', 'active'));
+	textarea.blur();
 	const rowOne = document.querySelectorAll('.row-one .key');
 	for (let i = 0; i < rowOne.length; i++) {
 		setTimeout(() => {
@@ -284,6 +285,7 @@ function animateF9() {
 
 function animateF10() {
 	allKeys.forEach(el => el.classList.remove('active', 'key-color-cycle'));
+	textarea.blur();
 	for (let i = 0; i < allKeys.length; i++) {
 		setTimeout(() => {
 			allKeys[i].classList.add('active', 'key-color-cycle');
