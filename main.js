@@ -30,13 +30,14 @@ clearButton.addEventListener('click', () => {
 });
 
 copyButton.addEventListener('click', () => {
-	let userText = textarea.value;
-	if (userText || textPreview.innerHTML) {
-		navigator.clipboard.writeText(userText);
+	let textValue = textarea.value;
+	let htmlValue = textPreview.innerHTML;
+	if (textValue || htmlValue) {
+		navigator.clipboard.writeText(textValue);
 		textarea.value = 'Copied! ✔︎';
-		setTimeout(() => (textarea.value = userText), 600);
+		setTimeout(() => (textarea.value = textValue), 600);
 		textPreview.innerHTML = 'Copied! ✔︎';
-		setTimeout(() => (textPreview.innerHTML = userText), 600);
+		setTimeout(() => (textPreview.innerHTML = htmlValue), 600);
 	} else {
 		textarea.value = `Type Something! 📝`;
 		setTimeout(() => (textarea.value = ''), 600);
@@ -46,12 +47,13 @@ copyButton.addEventListener('click', () => {
 });
 
 saveButton.addEventListener('click', () => {
-	let userText = textarea.value;
+	let textValue = textarea.value;
 	textarea.value = 'Saved! ✔︎';
-	setTimeout(() => (textarea.value = userText), 600);
+	setTimeout(() => (textarea.value = textValue), 600);
+	let htmlValue = textPreview.innerHTML;
 	textPreview.innerHTML = 'Saved! ✔';
-	setTimeout(() => (textPreview.innerHTML = userText), 600);
-	localStorage.setItem('note', `${textarea.value}`);
+	setTimeout(() => (textPreview.innerHTML = htmlValue), 600);
+	localStorage.setItem('note', `${textValue}`);
 });
 
 previewButton.addEventListener('click', () => {
