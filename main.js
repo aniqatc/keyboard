@@ -294,7 +294,7 @@ document.addEventListener('keyup', event => {
 				el.classList.remove('active');
 			}
 		});
-	}, 3000);
+	}, 2000);
 
 	if (!event.getModifierState('CapsLock')) {
 		capsIndicator.classList.remove('active');

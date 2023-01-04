@@ -598,8 +598,8 @@ textarea:focus {
 }
 
 .key.active {
-	-webkit-animation: fade 4s ease-in forwards;
-	animation: fade 4s ease-in forwards;
+	-webkit-animation: fade 2s ease-in forwards;
+	animation: fade 2s ease-in forwards;
 }
 
 @keyframes fade {
