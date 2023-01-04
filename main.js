@@ -7,25 +7,65 @@ if (savedTheme) {
 	document.body.classList.add(`theme-${savedTheme}`);
 }
 
+// Previously Saved Text from Local Storage
+const textarea = document.querySelector('textarea');
+const savedText = localStorage.getItem('note');
+if (savedText) {
+	textarea.value = `${savedText}`;
+}
+
 // Textarea Button Functionality
 const clearButton = document.getElementById('clear-btn');
 const copyButton = document.getElementById('copy-btn');
-const textarea = document.querySelector('textarea');
+const saveButton = document.getElementById('save-btn');
+const previewButton = document.getElementById('preview-btn');
+const editButton = document.getElementById('edit-btn');
+const textPreview = document.querySelector('.textarea-preview');
+const previewLabel = document.querySelector('.preview-label');
 
 clearButton.addEventListener('click', () => {
 	textarea.value = '';
+	textPreview.innerHTML = '';
+	localStorage.setItem('note', `${textarea.value}`);
 });
 
 copyButton.addEventListener('click', () => {
 	let userText = textarea.value;
-	if (userText) {
+	if (userText || textPreview.innerHTML) {
 		navigator.clipboard.writeText(userText);
 		textarea.value = 'Copied! ✔︎';
 		setTimeout(() => (textarea.value = userText), 600);
+		textPreview.innerHTML = 'Copied! ✔︎';
+		setTimeout(() => (textPreview.innerHTML = userText), 600);
 	} else {
-		textarea.value = `Type Something First! 📝`;
+		textarea.value = `Type Something! 📝`;
 		setTimeout(() => (textarea.value = ''), 600);
+		textPreview.innerHTML = `Type Something! 📝`;
+		setTimeout(() => (textPreview.innerHTML = ''), 600);
 	}
+});
+
+saveButton.addEventListener('click', () => {
+	let userText = textarea.value;
+	textarea.value = 'Saved! ✔︎';
+	setTimeout(() => (textarea.value = userText), 600);
+	textPreview.innerHTML = 'Saved! ✔';
+	setTimeout(() => (textPreview.innerHTML = userText), 600);
+	localStorage.setItem('note', `${textarea.value}`);
+});
+
+previewButton.addEventListener('click', () => {
+	const markdown = marked(textarea.value);
+	textPreview.innerHTML = markdown;
+	previewLabel.style.display = 'block';
+	textPreview.style.display = 'block';
+	textarea.style.display = 'none';
+});
+
+editButton.addEventListener('click', () => {
+	previewLabel.style.display = 'none';
+	textPreview.style.display = 'none';
+	textarea.style.display = 'block';
 });
 
 // CLICK AND KEYPRESS EVENTS
@@ -181,7 +221,7 @@ function animateF9() {
 			setTimeout(() => {
 				rowOne[i].classList.remove('active');
 			}, 500);
-		}, 100 * i);
+		}, 100);
 	}
 	const rowTwo = document.querySelectorAll('.row-two .key');
 	for (let i = 0; i < rowTwo.length; i++) {
@@ -190,7 +230,7 @@ function animateF9() {
 			setTimeout(() => {
 				rowTwo[i].classList.remove('active');
 			}, 1000);
-		}, 400 + 100 * i);
+		}, 500);
 	}
 	const rowThree = document.querySelectorAll('.row-three .key');
 	for (let i = 0; i < rowThree.length; i++) {
@@ -199,7 +239,7 @@ function animateF9() {
 			setTimeout(() => {
 				rowThree[i].classList.remove('active');
 			}, 1500);
-		}, 800 + 100 * i);
+		}, 900);
 	}
 	const rowFour = document.querySelectorAll('.row-four .key');
 	for (let i = 0; i < rowFour.length; i++) {
@@ -208,7 +248,7 @@ function animateF9() {
 			setTimeout(() => {
 				rowFour[i].classList.remove('active');
 			}, 2000);
-		}, 1200 + 100 * i);
+		}, 1300);
 	}
 	const rowFive = document.querySelectorAll('.row-five .key');
 	for (let i = 0; i < rowFive.length; i++) {
@@ -217,7 +257,7 @@ function animateF9() {
 			setTimeout(() => {
 				rowFive[i].classList.remove('active');
 			}, 2500);
-		}, 1600 + 100 * i);
+		}, 1700);
 	}
 	const rowSix = document.querySelectorAll('.row-six .key');
 	for (let i = 0; i < rowFour.length; i++) {
@@ -226,7 +266,7 @@ function animateF9() {
 			setTimeout(() => {
 				rowSix[i].classList.remove('active');
 			}, 3000);
-		}, 2500 + 100 * i);
+		}, 2100);
 	}
 }
 
@@ -241,9 +281,9 @@ function animateF10() {
 		for (let i = 0; i < allKeys.length; i++) {
 			setTimeout(() => {
 				allKeys[i].classList.remove('active', 'key-color-cycle');
-			}, 100 * i);
+			}, 50 * i);
 		}
-	}, 5000);
+	}, 3000);
 }
 
 // Remove Active Classes on Keyup Events

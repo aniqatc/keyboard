@@ -291,8 +291,13 @@ textarea:focus {
 	outline: none;
 }
 
+.hidden {
+	display: none;
+}
+
 /************************/
 /* Input Text Container */
+
 .input-container {
 	display: flex;
 	justify-content: center;
@@ -300,12 +305,13 @@ textarea:focus {
 	position: relative;
 }
 
-.input-container textarea {
+.input-container textarea,
+.textarea-preview {
 	height: 200px;
 	width: 600px;
 	max-width: 100%;
 	margin: 1.6rem;
-	padding: 1.2rem 2.4rem 1.2rem 1.2rem;
+	padding: 1.6rem 2.6rem 1.2rem 1.2rem;
 	line-height: 1.5;
 	font-size: 1rem;
 	border-radius: 4px;
@@ -314,14 +320,28 @@ textarea:focus {
 	backdrop-filter: var(--wrapper-blur);
 	caret-color: var(--text-main);
 	color: var(--text-main);
+	overflow-wrap: break-word;
+	position: relative;
+}
+
+.preview-label {
+	font-size: 0.8rem;
+	position: absolute;
+	top: 10%;
+	left: 4%;
+	background-color: rgba(0, 0, 0, 0.1);
+	padding: 0.1rem 0.3rem;
+	border-radius: 4px;
+	color: var(--button-color);
 }
 
 .input-buttons {
 	position: absolute;
 	display: flex;
 	flex-direction: column;
-	bottom: 15%;
+	top: 50%;
 	right: 6%;
+	transform: translateY(-50%);
 }
 
 .input-buttons button {
@@ -643,10 +663,6 @@ textarea:focus {
 	border-radius: 8px;
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 	z-index: 5;
-}
-
-.hidden {
-	display: none;
 }
 
 .close-modal {

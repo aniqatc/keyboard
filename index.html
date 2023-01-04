@@ -50,8 +50,14 @@
 		</section>
 		<section class="input-container">
 			<textarea></textarea>
+			<div class="textarea-preview hidden"></div>
+			<span class="preview-label hidden">Markdown Preview</span>
 			<div class="input-buttons">
+				<button id="edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
 				<button id="copy-btn"><i class="fa-regular fa-clipboard"></i></button>
+				<button id="preview-btn"><i class="fa-solid fa-eye"></i></button>
+				<button id="save-btn"><i class="fa-solid fa-floppy-disk"></i></button>
+
 				<button id="clear-btn"><i class="fa-regular fa-trash-can"></i></button>
 			</div>
 		</section>
@@ -304,6 +310,7 @@
 			<i class="fa-solid fa-code"></i> Designed & Coded by
 			<a href="https://twitter.com/aniqatc" target="_blank">Aniqa</a>
 		</footer>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/1.2.2/marked.min.js"></script>
 		<script src="main.js"></script>
 	</body>
 </html>
