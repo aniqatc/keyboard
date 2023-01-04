@@ -125,8 +125,10 @@ allKeys.forEach(key => {
 		} else if (keyCode === 'Tab') {
 			textarea.value += '    ';
 		} else if (keyCode === 'F9') {
+			textarea.blur();
 			animateF9();
 		} else if (keyCode === 'F10') {
+			textarea.blur();
 			animateF10();
 		} else if (keyCode === 'ArrowLeft') {
 			caretStart--;
@@ -226,7 +228,6 @@ document.addEventListener('keydown', event => {
 // Animations for F9 and F10
 function animateF9() {
 	allKeys.forEach(el => el.classList.remove('key-color-cycle', 'active'));
-	textarea.blur();
 	const rowOne = document.querySelectorAll('.row-one .key');
 	for (let i = 0; i < rowOne.length; i++) {
 		setTimeout(() => {
@@ -285,7 +286,6 @@ function animateF9() {
 
 function animateF10() {
 	allKeys.forEach(el => el.classList.remove('active', 'key-color-cycle'));
-	textarea.blur();
 	for (let i = 0; i < allKeys.length; i++) {
 		setTimeout(() => {
 			allKeys[i].classList.add('active', 'key-color-cycle');
