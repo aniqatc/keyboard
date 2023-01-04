@@ -112,6 +112,7 @@ allKeys.forEach(key => {
 			}
 		}, 3500);
 		const keyCode = event.target.getAttribute('data-key');
+		let caretStart = textarea.selectionStart;
 		// Add Letter Clicks to Text Area
 		if (keyCode.length == 1) {
 			textarea.value += keyCode;
@@ -127,7 +128,16 @@ allKeys.forEach(key => {
 			animateF9();
 		} else if (keyCode === 'F10') {
 			animateF10();
+		} else if (keyCode === 'ArrowLeft') {
+			caretStart--;
+		} else if (keyCode === 'ArrowRight') {
+			caretStart++;
+		} else if (keyCode === 'ArrowUp') {
+			caretStart = textarea.value.lastIndexOf('\n', caretStart - 1);
+		} else if (keyCode === 'ArrowDown') {
+			caretStart = textarea.value.lastIndexOf('\n', caretStart) + 1;
 		}
+		textarea.setSelectionRange(caretStart, caretStart);
 	});
 });
 
