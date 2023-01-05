@@ -10,7 +10,7 @@ function renderToast() {
 
 	setTimeout(() => {
 		notif.remove();
-	}, 4000);
+	}, 5000);
 }
 
 // Render Toast Notifcation

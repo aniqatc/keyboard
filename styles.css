@@ -782,8 +782,8 @@ b {
 	margin: 0.5rem;
 	color: var(--button-color);
 	transition: all 200ms ease-out;
-	animation: fade 3s 1s ease-out;
-	-webkit-animation: fade 3s 1s ease-out;
+	animation: fade 4s ease-out 1s;
+	-webkit-animation: fade 4s ease-out 1s;
 }
 
 @keyframes fade {
