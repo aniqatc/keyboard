@@ -272,6 +272,10 @@ kbd {
 	display: inline-block;
 }
 
+audio {
+	visibility: hidden;
+}
+
 textarea,
 button {
 	font-family: inherit;

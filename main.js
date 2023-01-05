@@ -101,10 +101,16 @@ allOperationalKeys.forEach(key =>
 const letterKeys = document.querySelectorAll('.letter-key');
 const capsIndicator = document.querySelector('.caps-indicator');
 
+// Click Sound
+const clickAudio = document.getElementById('click-audio');
+
 // Click Event Trigger Corresponding Keydown Event
 allKeys.forEach(key => {
 	key.addEventListener('click', event => {
+		// Add Active Class
 		key.classList.add('active');
+		// Add Click Sound
+		clickAudio.play();
 		// Remove Class After 4s If It's Not Part of The Animation
 		setTimeout(() => {
 			if (!key.classList.contains('key-color-cycle')) {
