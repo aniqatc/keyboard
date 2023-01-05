@@ -381,6 +381,8 @@ a:hover {
 	opacity: 0.45;
 	filter: blur(5px);
 	border-radius: 35% 50% 40% 65%;
+	-webkit-animation: shape-changes 10s ease-in infinite alternate,
+		blob-movements 20s ease-in infinite alternate;
 	animation: shape-changes 10s ease-in infinite alternate,
 		blob-movements 20s ease-in infinite alternate;
 }
@@ -617,8 +619,8 @@ a:hover {
 
 .key.active.key-color-cycle {
 	-webkit-animation: key-colors 4s ease-in;
-	animation: key-colors 4s ease-in;
 	-webkit-animation-iteration-count: 4;
+	animation: key-colors 4s ease-in;
 	animation-iteration-count: 4;
 }
 
@@ -782,8 +784,8 @@ b {
 	margin: 0.5rem;
 	color: var(--button-color);
 	transition: all 200ms ease-out;
-	animation: fade 4s ease-out 1s;
 	-webkit-animation: fade 4s ease-out 1s;
+	animation: fade 4s ease-out 1s;
 }
 
 @keyframes fade {
