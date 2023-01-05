@@ -110,7 +110,7 @@ allKeys.forEach(key => {
 			if (!key.classList.contains('key-color-cycle')) {
 				key.classList.remove('active');
 			}
-		}, 3500);
+		}, 1500);
 		const keyCode = event.target.getAttribute('data-key');
 		let caretStart = textarea.selectionStart;
 		// Add Letter Clicks to Text Area
@@ -308,7 +308,7 @@ document.addEventListener('keyup', event => {
 				el.classList.remove('active');
 			}
 		});
-	}, 2000);
+	}, 1500);
 
 	if (!event.getModifierState('CapsLock')) {
 		capsIndicator.classList.remove('active');
