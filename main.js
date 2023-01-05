@@ -107,6 +107,7 @@ const clickAudio = document.getElementById('click-audio');
 // Click Event Trigger Corresponding Keydown Event
 allKeys.forEach(key => {
 	key.addEventListener('click', event => {
+		textarea.blur();
 		// Add Active Class
 		key.classList.add('active');
 		// Add Click Sound
@@ -152,7 +153,6 @@ allKeys.forEach(key => {
 // Change Theme on Click
 for (let j = 0; j < themeButtons.length; j++) {
 	themeButtons[j].addEventListener('click', () => {
-		textarea.blur();
 		for (let i = 0; i < themeButtons.length; i++) {
 			document.body.classList.remove(`theme-${themes[i]}`);
 			document.body.classList.add(`theme-${themes[j]}`);
@@ -163,7 +163,6 @@ for (let j = 0; j < themeButtons.length; j++) {
 
 // Shuffle Theme Button (Click Only)
 document.getElementById('shuffle').addEventListener('click', () => {
-	textarea.blur();
 	for (let i = 0; i < themes.length; i++) {
 		document.body.classList.remove(`theme-${themes[i]}`);
 	}
