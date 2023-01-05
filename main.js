@@ -274,7 +274,7 @@ function animateF9() {
 		}, 1700);
 	}
 	const rowSix = document.querySelectorAll('.row-six .key');
-	for (let i = 0; i < rowFour.length; i++) {
+	for (let i = 0; i < rowSix.length; i++) {
 		setTimeout(() => {
 			rowSix[i].classList.add('active');
 			setTimeout(() => {
