@@ -1,6 +1,21 @@
 // Allow Touchstart Events (Mobile)
 document.addEventListener('touchstart', function () {}, true);
 
+// Add Toast Notification
+function renderToast() {
+	const notif = document.createElement('div');
+	notif.classList.add('toast');
+	notif.innerHTML = `Click <code>Escape</code> for info!`;
+	toasts.appendChild(notif);
+
+	setTimeout(() => {
+		notif.remove();
+	}, 4000);
+}
+
+// Render Toast Notifcation
+renderToast();
+
 // Initial Theme from Local Storage
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme) {
