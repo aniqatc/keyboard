@@ -114,7 +114,7 @@ allKeys.forEach(key => {
 		const keyCode = event.target.getAttribute('data-key');
 		let caretStart = textarea.selectionStart;
 		// Add Letter Clicks to Text Area
-		if (keyCode.length === 1) {
+		if (keyCode && keyCode.length === 1) {
 			textarea.value += keyCode;
 		} else if (keyCode === 'Space') {
 			textarea.value += ' ';
