@@ -606,11 +606,11 @@ a:hover {
 }
 
 .key.active {
-	-webkit-animation: fade 2s ease-in forwards;
-	animation: fade 2s ease-in forwards;
+	-webkit-animation: key-fade 2s ease-in forwards;
+	animation: key-fade 2s ease-in forwards;
 }
 
-@keyframes fade {
+@keyframes key-fade {
 	100% {
 		box-shadow: 0 0 0 transparent;
 		border: transparent;
