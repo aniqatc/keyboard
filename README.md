@@ -17,6 +17,11 @@ I originally built the keyboard to practice utilizing keyboard events. However, 
 - Modal pop-up that appears when the Escape button is clicked to provide context and instructions for visitors
 - Mobile responsive 
 
+
+# Animations
+<p align="center">
+<a href="https://keyboard.aniqa.dev" target="_blank"><img src="/themes/animation.gif" style="max-width: 100%;"></a></p>
+
 # Theme One
 <a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-1.png" style="max-width: 100%;"></a>
 
