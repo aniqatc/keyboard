@@ -264,6 +264,7 @@ body {
 	align-items: center;
 	height: 100vh;
 	transition: all 250ms ease-in;
+	overflow: hidden;
 }
 
 kbd {
@@ -813,7 +814,7 @@ footer a {
 
 /*****************/
 /* Media Queries */
-@media (max-width: 800px) {
+@media (max-width: 800px), (max-height: 800px) {
 	html {
 		font-size: 70%;
 		overflow: hidden;
@@ -839,19 +840,19 @@ footer a {
 	}
 
 	.m-key {
-		width: 70px;
+		width: 75px;
 	}
 
 	.lg-key {
-		width: 90px;
+		width: 98px;
 	}
 
 	.xl-key {
-		width: 125px;
+		width: 130px;
 	}
 
 	.space-key {
-		width: 225px;
+		width: 100%;
 	}
 
 	.x-key,
