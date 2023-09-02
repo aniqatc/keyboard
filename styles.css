@@ -350,7 +350,7 @@ a:hover {
 	display: flex;
 	flex-direction: column;
 	top: 50%;
-	right: 9%;
+	right: 6%;
 	transform: translateY(-50%);
 }
 
