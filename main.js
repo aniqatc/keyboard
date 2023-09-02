@@ -169,10 +169,12 @@ allKeys.forEach(key => {
 for (let j = 0; j < themeButtons.length; j++) {
 	themeButtons[j].addEventListener('click', () => {
 		for (let i = 0; i < themeButtons.length; i++) {
-			document.body.classList.remove(`theme-${themes[i]}`);
-			document.body.classList.add(`theme-${themes[j]}`);
-			localStorage.setItem('theme', themes[j]);
+			if (i !== j) {
+				document.body.classList.remove(`theme-${themes[i]}`);
+			}
 		}
+		document.body.classList.add(`theme-${themes[j]}`);
+		localStorage.setItem('theme', themes[j]);
 	});
 }
 
