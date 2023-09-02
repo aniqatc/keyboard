@@ -264,7 +264,7 @@ body {
 	align-items: center;
 	height: 100vh;
 	transition: all 250ms ease-in;
-	overflow: hidden;
+	overflow: clip;
 }
 
 kbd {
@@ -376,7 +376,7 @@ a:hover {
 
 .blob {
 	z-index: -1;
-	overflow: hidden;
+	overflow: clip;
 	position: absolute;
 	opacity: 0.45;
 	filter: blur(5px);
@@ -817,7 +817,6 @@ footer a {
 @media (max-width: 800px), (max-height: 800px) {
 	html {
 		font-size: 70%;
-		overflow: hidden;
 	}
 
 	.input-container textarea,
@@ -871,10 +870,6 @@ footer a {
 }
 
 @media (max-width: 550px) {
-	html {
-		overflow: hidden;
-	}
-
 	.row-one .key:nth-of-type(12),
 	.row-one .key:nth-of-type(13) {
 		display: none;
