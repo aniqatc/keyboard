@@ -255,7 +255,7 @@
 }
 
 html {
-	overflow: clip;
+	overflow: hidden;
 }
 
 body {
@@ -268,7 +268,7 @@ body {
 	align-items: center;
 	height: 100vh;
 	transition: all 250ms ease-in;
-	overflow: clip;
+	overflow: hidden;
 }
 
 kbd {
@@ -941,6 +941,10 @@ footer a {
 }
 
 @media (max-width: 380px) {
+	.input-buttons {
+		right: 9%;
+	}
+
 	.keyboard-container {
 		display: none;
 	}
