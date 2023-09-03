@@ -352,6 +352,7 @@ function closeModal() {
 }
 
 function openModal() {
+	textarea.blur();
 	modal.classList.remove('hidden');
 	overlay.classList.remove('hidden');
 }
