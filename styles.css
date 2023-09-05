@@ -801,6 +801,7 @@ b {
 footer {
 	margin: 1.4rem;
 	font-size: 0.9rem;
+	isolation: isolate;
 }
 
 footer a {
