@@ -449,6 +449,7 @@ a:hover {
 	display: flex;
 	align-items: center;
 	margin: 0.2rem 0;
+	transition: all 150ms ease-in;
 }
 
 .keyboard-container {
@@ -539,14 +540,13 @@ a:hover {
 	margin: 0;
 }
 
-.x-key {
-	justify-content: center;
-	height: auto;
-}
-
+.x-key,
 .y-key {
-	height: auto;
 	justify-content: center;
+	height: auto;
+	border: 2px ridge transparent;
+	padding: 0.3rem;
+	margin: 0.1rem;
 }
 
 .caps-key {
@@ -565,6 +565,7 @@ a:hover {
 
 /***************************/
 /* Active Classes for Keys */
+
 .row-one .key:active,
 .row-one .key.active {
 	box-shadow: var(--active-key-shadow) var(--active-row-one);
@@ -603,7 +604,7 @@ a:hover {
 
 .key:active,
 .key.active {
-	transform: translateY(2px) scale(0.98);
+	transform: translateY(1px) scale(0.99);
 	transition: all 250ms ease-in;
 }
 
@@ -614,7 +615,7 @@ a:hover {
 
 @keyframes key-fade {
 	100% {
-		box-shadow: 0 0 0 transparent;
+		box-shadow: var(--key-shadow);
 		border: transparent;
 	}
 }

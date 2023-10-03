@@ -259,7 +259,7 @@ function animateF9() {
 			setTimeout(() => {
 				rowOne[i].classList.remove('active');
 			}, 500);
-		}, 100);
+		}, 0);
 	}
 	const rowTwo = document.querySelectorAll('.row-two .key');
 	for (let i = 0; i < rowTwo.length; i++) {
@@ -268,7 +268,7 @@ function animateF9() {
 			setTimeout(() => {
 				rowTwo[i].classList.remove('active');
 			}, 1000);
-		}, 600);
+		}, 400);
 	}
 	const rowThree = document.querySelectorAll('.row-three .key');
 	for (let i = 0; i < rowThree.length; i++) {
@@ -277,7 +277,7 @@ function animateF9() {
 			setTimeout(() => {
 				rowThree[i].classList.remove('active');
 			}, 1500);
-		}, 1100);
+		}, 800);
 	}
 	const rowFour = document.querySelectorAll('.row-four .key');
 	for (let i = 0; i < rowFour.length; i++) {
@@ -286,7 +286,7 @@ function animateF9() {
 			setTimeout(() => {
 				rowFour[i].classList.remove('active');
 			}, 2000);
-		}, 1600);
+		}, 1200);
 	}
 	const rowFive = document.querySelectorAll('.row-five .key');
 	for (let i = 0; i < rowFive.length; i++) {
@@ -295,7 +295,7 @@ function animateF9() {
 			setTimeout(() => {
 				rowFive[i].classList.remove('active');
 			}, 2500);
-		}, 2100);
+		}, 1600);
 	}
 	const rowSix = document.querySelectorAll('.row-six .key');
 	for (let i = 0; i < rowSix.length; i++) {
@@ -304,7 +304,7 @@ function animateF9() {
 			setTimeout(() => {
 				rowSix[i].classList.remove('active');
 			}, 3000);
-		}, 2600);
+		}, 2000);
 	}
 }
 
