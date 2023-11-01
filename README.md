@@ -58,6 +58,11 @@
 - Animations done entirely through JavaScript by adding and removing classes at a delay — creating a sequential animation
 - Audio triggered on mouse-clicks
 
+## Future Features
+- ☐ Improve existing animations
+- ☐ Fix the 'callback hell' with the animation timeouts
+- ☐ Add additional lighting animations to `F11` and `F12` 
+
 ## Themes
 
 ### Animations
