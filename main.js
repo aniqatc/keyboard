@@ -1,7 +1,4 @@
-// Allow Touchstart Events (Mobile)
-document.addEventListener('touchstart', function () {}, true);
-
-// Add Toast Notification
+// Toast Notification
 function renderToast() {
 	const notif = document.createElement('div');
 	notif.classList.add('toast');
@@ -13,23 +10,21 @@ function renderToast() {
 	}, 5000);
 }
 
-// Render Toast Notifcation
 renderToast();
 
-// Initial Theme from Local Storage
+// Retrieve saved content
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme) {
 	document.body.classList.add(`theme-${savedTheme}`);
 }
 
-// Previously Saved Text from Local Storage
 const textarea = document.querySelector('textarea');
 const savedText = localStorage.getItem('note');
 if (savedText) {
 	textarea.value = `${savedText}`;
 }
 
-// Textarea Button Functionality
+// Textarea toolbar
 const clearButton = document.getElementById('clear-btn');
 const copyButton = document.getElementById('copy-btn');
 const saveButton = document.getElementById('save-btn');
@@ -38,61 +33,93 @@ const editButton = document.getElementById('edit-btn');
 const textPreview = document.querySelector('.textarea-preview');
 const previewLabel = document.querySelector('.preview-label');
 
+function toggleVisibility(element, displayChoice) {
+	element.style.display = displayChoice;
+}
+
+function displayTemporaryMessage(element, message, content, duration = 600) {
+	if (element === textarea) {
+		textarea.value = message;
+		setTimeout(() => (element.value = content), duration);
+	} else if (element === textPreview) {
+		textPreview.innerHTML = message;
+		setTimeout(() => (element.innerHTML = content), duration);
+	}
+}
+
 clearButton.addEventListener('click', () => {
 	textarea.value = '';
 	textPreview.innerHTML = '';
+
 	localStorage.setItem('note', `${textarea.value}`);
 });
 
 copyButton.addEventListener('click', () => {
-	let textValue = textarea.value;
-	let htmlValue = textPreview.innerHTML;
+	const textValue = textarea.value;
+	const htmlValue = textPreview.innerHTML;
 	if (textValue || htmlValue) {
 		navigator.clipboard.writeText(textValue);
-		textarea.value = 'Copied! ✔︎';
-		setTimeout(() => (textarea.value = textValue), 600);
-		textPreview.innerHTML = 'Copied! ✔︎';
-		setTimeout(() => (textPreview.innerHTML = htmlValue), 600);
+
+		displayTemporaryMessage(textarea, 'Copied! ✔︎', textValue);
+		displayTemporaryMessage(textPreview, 'Copied! ✔︎', htmlValue);
 	} else {
-		textarea.value = `Type Something! 📝`;
-		setTimeout(() => (textarea.value = ''), 600);
-		textPreview.innerHTML = `Type Something! 📝`;
-		setTimeout(() => (textPreview.innerHTML = ''), 600);
+		displayTemporaryMessage(textarea, `Type Something! 📝`, '');
+		displayTemporaryMessage(textPreview, `Type Something! 📝`, '');
 	}
 });
 
 saveButton.addEventListener('click', () => {
-	let textValue = textarea.value;
-	textarea.value = 'Saved! ✔︎';
-	setTimeout(() => (textarea.value = textValue), 600);
-	let htmlValue = textPreview.innerHTML;
-	textPreview.innerHTML = 'Saved! ✔';
-	setTimeout(() => (textPreview.innerHTML = htmlValue), 600);
+	const textValue = textarea.value;
+	const htmlValue = textPreview.innerHTML;
+
+	displayTemporaryMessage(textarea, 'Saved! ✔︎', textValue);
+	displayTemporaryMessage(textPreview, 'Saved! ✔︎', htmlValue);
+
 	localStorage.setItem('note', `${textValue}`);
 });
 
 previewButton.addEventListener('click', () => {
 	const markdown = marked(textarea.value);
 	textPreview.innerHTML = markdown;
-	previewLabel.style.display = 'block';
-	textPreview.style.display = 'block';
-	textarea.style.display = 'none';
+
+	toggleVisibility(previewLabel, 'block');
+	toggleVisibility(textPreview, 'block');
+	toggleVisibility(textarea, 'none');
 });
 
 editButton.addEventListener('click', () => {
-	previewLabel.style.display = 'none';
-	textPreview.style.display = 'none';
-	textarea.style.display = 'block';
+	toggleVisibility(previewLabel, 'none');
+	toggleVisibility(textPreview, 'none');
+	toggleVisibility(textarea, 'block');
 });
 
-// CLICK AND KEYPRESS EVENTS
-// Theme Declarations
+// Themes
 const themes = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
 const themeButtons = document.querySelectorAll('.theme-key');
-let themeKeyCode = [];
-themeButtons.forEach(button =>
-	themeKeyCode.push(button.getAttribute('data-key'))
-);
+
+function removeAllThemeClasses() {
+	themes.forEach(theme => document.body.classList.remove(`theme-${theme}`));
+}
+
+function changeTheme(theme) {
+	removeAllThemeClasses();
+	document.body.classList.add(`theme-${theme}`);
+	localStorage.setItem('theme', theme);
+}
+
+// Change Theme on Click
+themeButtons.forEach((button, index) => {
+	button.addEventListener('click', () => {
+		changeTheme(themes[index]);
+	});
+});
+
+// Shuffle Theme Button
+document.getElementById('shuffle').addEventListener('click', () => {
+	removeAllThemeClasses();
+	const randomTheme = themes[Math.floor(Math.random() * themes.length)];
+	changeTheme(randomTheme);
+});
 
 // KEY DECLARATIONS
 // All Keys
@@ -110,6 +137,12 @@ const allOperationalKeys = document.querySelectorAll('.operation-key');
 let operationKeyCodes = [];
 allOperationalKeys.forEach(key =>
 	operationKeyCodes.push(key.getAttribute('data-key'))
+);
+
+// Theme Keys
+let themeKeyCode = [];
+themeButtons.forEach(button =>
+	themeKeyCode.push(button.getAttribute('data-key'))
 );
 
 // All Letter Keys & Caps Lock Indicator (to change case)
@@ -163,29 +196,6 @@ allKeys.forEach(key => {
 		}
 		textarea.setSelectionRange(caretStart, caretStart);
 	});
-});
-
-// Change Theme on Click
-for (let j = 0; j < themeButtons.length; j++) {
-	themeButtons[j].addEventListener('click', () => {
-		for (let i = 0; i < themeButtons.length; i++) {
-			if (i !== j) {
-				document.body.classList.remove(`theme-${themes[i]}`);
-			}
-		}
-		document.body.classList.add(`theme-${themes[j]}`);
-		localStorage.setItem('theme', themes[j]);
-	});
-}
-
-// Shuffle Theme Button (Click Only)
-document.getElementById('shuffle').addEventListener('click', () => {
-	for (let i = 0; i < themes.length; i++) {
-		document.body.classList.remove(`theme-${themes[i]}`);
-	}
-	const randomTheme = themes[Math.floor(Math.random() * themes.length)];
-	document.body.classList.add(`theme-${randomTheme}`);
-	localStorage.setItem('theme', randomTheme);
 });
 
 // Keydown Events
