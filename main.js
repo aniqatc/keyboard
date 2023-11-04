@@ -122,6 +122,13 @@ document.getElementById('shuffle').addEventListener('click', () => {
 });
 
 // KEY DECLARATIONS
+
+// Theme Keys
+let themeKeyCode = [];
+themeButtons.forEach(button =>
+	themeKeyCode.push(button.getAttribute('data-key'))
+);
+
 // All Keys
 const allKeys = document.querySelectorAll('.key');
 let allKeyCodes = [];
@@ -139,12 +146,6 @@ allOperationalKeys.forEach(key =>
 	operationKeyCodes.push(key.getAttribute('data-key'))
 );
 
-// Theme Keys
-let themeKeyCode = [];
-themeButtons.forEach(button =>
-	themeKeyCode.push(button.getAttribute('data-key'))
-);
-
 // All Letter Keys & Caps Lock Indicator (to change case)
 const letterKeys = document.querySelectorAll('.letter-key');
 const capsIndicator = document.querySelector('.caps-indicator');
@@ -156,20 +157,16 @@ const clickAudio = document.getElementById('click-audio');
 allKeys.forEach(key => {
 	key.addEventListener('click', event => {
 		clearActiveOnKeys();
-		textarea.blur();
 
 		// Add Active Class
 		key.classList.add('active');
+
 		// Add Click Sound
 		clickAudio.play();
-		// Remove Class After 4s If It's Not Part of The Animation
-		setTimeout(() => {
-			if (!key.classList.contains('key-color-cycle')) {
-				key.classList.remove('active');
-			}
-		}, 1500);
+
 		const keyCode = event.target.getAttribute('data-key');
 		let caretStart = textarea.selectionStart;
+
 		// Add Letter Clicks to Text Area
 		if (keyCode && keyCode.length === 1) {
 			textarea.value += keyCode;
