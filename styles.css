@@ -620,11 +620,9 @@ a:hover {
 	}
 }
 
-.key.active.key-color-cycle {
+.key-color-cycle {
 	-webkit-animation: key-colors 4s ease-in;
-	-webkit-animation-iteration-count: 4;
-	animation: key-colors 4s ease-in;
-	animation-iteration-count: 4;
+	animation: key-colors 4s ease-in infinite;
 }
 
 @keyframes key-colors {

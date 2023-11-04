@@ -257,90 +257,58 @@ document.addEventListener('keydown', event => {
 	}
 });
 
-// Animations for F9 and F10
+// Animation helpers
+function clearActiveOnKeys() {
+	allKeys.forEach(el => el.classList.remove('active', 'key-color-cycle'));
+}
+
+function addAnimationClasses(key, delay, className) {
+	requestAnimationFrame(() =>
+		setTimeout(() => key.classList.add(className), delay)
+	);
+}
+
+function removeAnimationClasses(key, delay, className) {
+	requestAnimationFrame(() =>
+		setTimeout(() => key.classList.remove(className), delay)
+	);
+}
+
+// Animations
 function animateF9() {
-	allKeys.forEach(el => el.classList.remove('key-color-cycle', 'active'));
-	const rowOne = document.querySelectorAll('.row-one .key');
-	for (let i = 0; i < rowOne.length; i++) {
-		setTimeout(() => {
-			rowOne[i].classList.add('active');
-			setTimeout(() => {
-				rowOne[i].classList.remove('active');
-			}, 500);
-		}, 0);
-	}
-	const rowTwo = document.querySelectorAll('.row-two .key');
-	for (let i = 0; i < rowTwo.length; i++) {
-		setTimeout(() => {
-			rowTwo[i].classList.add('active');
-			setTimeout(() => {
-				rowTwo[i].classList.remove('active');
-			}, 1000);
-		}, 400);
-	}
-	const rowThree = document.querySelectorAll('.row-three .key');
-	for (let i = 0; i < rowThree.length; i++) {
-		setTimeout(() => {
-			rowThree[i].classList.add('active');
-			setTimeout(() => {
-				rowThree[i].classList.remove('active');
-			}, 1500);
-		}, 800);
-	}
-	const rowFour = document.querySelectorAll('.row-four .key');
-	for (let i = 0; i < rowFour.length; i++) {
-		setTimeout(() => {
-			rowFour[i].classList.add('active');
-			setTimeout(() => {
-				rowFour[i].classList.remove('active');
-			}, 2000);
-		}, 1200);
-	}
-	const rowFive = document.querySelectorAll('.row-five .key');
-	for (let i = 0; i < rowFive.length; i++) {
-		setTimeout(() => {
-			rowFive[i].classList.add('active');
-			setTimeout(() => {
-				rowFive[i].classList.remove('active');
-			}, 2500);
-		}, 1600);
-	}
-	const rowSix = document.querySelectorAll('.row-six .key');
-	for (let i = 0; i < rowSix.length; i++) {
-		setTimeout(() => {
-			rowSix[i].classList.add('active');
-			setTimeout(() => {
-				rowSix[i].classList.remove('active');
-			}, 3000);
-		}, 2000);
-	}
+	clearActiveOnKeys();
+
+	const rows = [
+		document.querySelectorAll('.row-one .key'),
+		document.querySelectorAll('.row-two .key'),
+		document.querySelectorAll('.row-three .key'),
+		document.querySelectorAll('.row-four .key'),
+		document.querySelectorAll('.row-five .key'),
+		document.querySelectorAll('.row-six .key'),
+	];
+
+	rows.forEach(row => {
+		row.forEach((key, i) => addAnimationClasses(key, 100 * i, 'active'));
+	});
+
+	setTimeout(clearActiveOnKeys, 3000);
 }
 
 function animateF10() {
-	allKeys.forEach(el => el.classList.remove('active', 'key-color-cycle'));
+	clearActiveOnKeys();
+
 	for (let i = 0; i < allKeys.length; i++) {
+		addAnimationClasses(allKeys[i], 50 * i, 'key-color-cycle');
+
 		setTimeout(() => {
-			allKeys[i].classList.add('active', 'key-color-cycle');
-		}, 50 * i);
+			removeAnimationClasses(allKeys[i], 50 * i, 'key-color-cycle');
+		}, 3000);
 	}
-	setTimeout(() => {
-		for (let i = 0; i < allKeys.length; i++) {
-			setTimeout(() => {
-				allKeys[i].classList.remove('active', 'key-color-cycle');
-			}, 50 * i);
-		}
-	}, 3000);
 }
 
 // Remove Active Classes on Keyup Events
 document.addEventListener('keyup', event => {
-	setTimeout(() => {
-		allKeys.forEach(el => {
-			if (!el.classList.contains('key-color-cycle')) {
-				el.classList.remove('active');
-			}
-		});
-	}, 1500);
+	setTimeout(clearActiveOnKeys, 3000);
 
 	if (!event.getModifierState('CapsLock')) {
 		capsIndicator.classList.remove('active');
