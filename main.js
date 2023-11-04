@@ -200,28 +200,25 @@ allKeys.forEach(key => {
 
 // Keydown Events
 document.addEventListener('keydown', event => {
+	textarea.focus();
+
 	// Change Theme
-	for (let j = 0; j < themeKeyCode.length; j++) {
-		if (event.key === themeKeyCode[j]) {
-			themeButtons.forEach(el => el.classList.remove('active'));
-			themeButtons[j].classList.add('active');
-			for (let i = 0; i < themeButtons.length; i++) {
-				document.body.classList.remove(`theme-${themes[i]}`);
-				document.body.classList.add(`theme-${themes[j]}`);
-				localStorage.setItem('theme', themes[j]);
-			}
+	for (let i = 0; i < themeKeyCode.length; i++) {
+		if (event.key === themeKeyCode[i]) {
+			themeButtons[i].classList.add('active');
+			removeAllThemeClasses();
+			changeTheme(themes[i]);
 			break;
-		} else {
-			textarea.focus();
 		}
 	}
 
 	// Add Active Class for Character Keys
-	for (let k = 0; k < allCharKeys.length; k++) {
-		if (event.key === charKeyCodes[k]) {
-			allCharKeys[k].classList.add('active');
-		} else if (event.key === charKeyCodes[k].toUpperCase()) {
-			allCharKeys[k].classList.add('active');
+	for (let i = 0; i < allCharKeys.length; i++) {
+		if (
+			event.key === charKeyCodes[i] ||
+			event.key === charKeyCodes[i].toUpperCase()
+		) {
+			allCharKeys[i].classList.add('active');
 		}
 	}
 
@@ -230,11 +227,12 @@ document.addEventListener('keydown', event => {
 		if (event.code === operationKeyCodes[i]) {
 			allOperationalKeys[i].classList.add('active');
 		}
-		// Handle CapsLock
-		if (event.code === 'CapsLock' && event.getModifierState('CapsLock')) {
-			capsIndicator.classList.add('active');
-			letterKeys.forEach(el => (el.style.textTransform = 'uppercase'));
-		}
+	}
+
+	// Handle CapsLock
+	if (event.code === 'CapsLock' && event.getModifierState('CapsLock')) {
+		capsIndicator.classList.add('active');
+		letterKeys.forEach(el => (el.style.textTransform = 'uppercase'));
 	}
 
 	// Shift Hold
