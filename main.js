@@ -155,7 +155,9 @@ const clickAudio = document.getElementById('click-audio');
 // Click Event Trigger Corresponding Keydown Event
 allKeys.forEach(key => {
 	key.addEventListener('click', event => {
+		clearActiveOnKeys();
 		textarea.blur();
+
 		// Add Active Class
 		key.classList.add('active');
 		// Add Click Sound
@@ -200,6 +202,7 @@ allKeys.forEach(key => {
 
 // Keydown Events
 document.addEventListener('keydown', event => {
+	clearActiveOnKeys();
 	textarea.focus();
 
 	// Change Theme
@@ -290,8 +293,6 @@ function animateF9() {
 	rows.forEach(row => {
 		row.forEach((key, i) => addAnimationClasses(key, 100 * i, 'active'));
 	});
-
-	setTimeout(clearActiveOnKeys, 3000);
 }
 
 function animateF10() {
@@ -302,13 +303,13 @@ function animateF10() {
 
 		setTimeout(() => {
 			removeAnimationClasses(allKeys[i], 50 * i, 'key-color-cycle');
-		}, 3000);
+		}, 4000);
 	}
 }
 
 // Remove Active Classes on Keyup Events
 document.addEventListener('keyup', event => {
-	setTimeout(clearActiveOnKeys, 3000);
+	setTimeout(clearActiveOnKeys, 2000);
 
 	if (!event.getModifierState('CapsLock')) {
 		capsIndicator.classList.remove('active');

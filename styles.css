@@ -473,6 +473,7 @@ a:hover {
 	cursor: pointer;
 	width: 70px;
 	height: 75px;
+	border: 1px solid transparent;
 	border-radius: var(--key-border);
 	transition: all 150ms ease-in;
 	background-image: var(--key-bg);
@@ -609,20 +610,20 @@ a:hover {
 }
 
 .key.active {
-	-webkit-animation: key-fade 2s ease-in forwards;
-	animation: key-fade 2s ease-in forwards;
+	-webkit-animation: key-fade 2s ease-in alternate infinite;
+	animation: key-fade 2s ease-in alternate infinite;
 }
 
 @keyframes key-fade {
 	100% {
 		box-shadow: var(--key-shadow);
-		border: transparent;
+		border: 1px solid transparent;
 	}
 }
 
 .key-color-cycle {
-	-webkit-animation: key-colors 4s ease-in;
-	animation: key-colors 4s ease-in infinite;
+	-webkit-animation: key-colors 3s ease-in infinite;
+	animation: key-colors 3s ease-in infinite;
 }
 
 @keyframes key-colors {
