@@ -32,8 +32,8 @@
 			content="Website Screen Capture of Keyboard"
 		/>
 		<title>Virtual Keyboard by Aniqa</title>
-		<link rel="stylesheet" href="styles.css" />
-		<link rel="icon" type="image/png" href="favicon.png" />
+		<link rel="stylesheet" href="/styles/styles.css" />
+		<link rel="icon" type="image/png" href="/assets/favicon.png" />
 		<script
 			src="https://kit.fontawesome.com/50cde61edc.js"
 			crossorigin="anonymous"
@@ -44,6 +44,8 @@
 			href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Hanken+Grotesk:wght@300;400;500;600;700;800;900&family=Source+Code+Pro:wght@300;400;500;600;700;800&display=swap"
 			rel="stylesheet"
 		/>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/1.2.2/marked.min.js"></script>
+		<script defer src="/scripts/main.js"></script>
 	</head>
 	<body>
 		<section class="blobs">
@@ -52,7 +54,7 @@
 			<div class="blob blob-three"></div>
 		</section>
 		<section id="toasts"></section>
-		<audio src="/click.mp3" id="click-audio"></audio>
+		<audio src="/assets/click.mp3" id="click-audio"></audio>
 		<section class="input-container">
 			<textarea></textarea>
 			<div class="textarea-preview hidden"></div>
@@ -315,7 +317,5 @@
 			<i class="fa-solid fa-code"></i> Designed & Coded by
 			<a href="https://github.com/aniqatc" target="_blank">Aniqa</a>
 		</footer>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/1.2.2/marked.min.js"></script>
-		<script src="main.js"></script>
 	</body>
 </html>
