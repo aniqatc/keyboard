@@ -610,8 +610,8 @@ a:hover {
 }
 
 .key.active {
-	-webkit-animation: key-fade 2s ease-in alternate infinite;
-	animation: key-fade 2s ease-in alternate infinite;
+	-webkit-animation: key-fade 3s ease-out forwards;
+	animation: key-fade 3s ease-out forwards;
 }
 
 @keyframes key-fade {

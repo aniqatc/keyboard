@@ -1,17 +1,3 @@
-// Toast Notification
-function renderToast() {
-	const notif = document.createElement('div');
-	notif.classList.add('toast');
-	notif.innerHTML = `Click <code>Escape</code> for info!`;
-	toasts.appendChild(notif);
-
-	setTimeout(() => {
-		notif.remove();
-	}, 5000);
-}
-
-renderToast();
-
 // Retrieve saved content
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme) {
@@ -24,6 +10,41 @@ if (savedText) {
 	textarea.value = `${savedText}`;
 }
 
+// Toast Notification
+function renderToast() {
+	const notif = document.createElement('div');
+	notif.classList.add('toast');
+	notif.innerHTML = `Click <code>Escape</code> for info!`;
+	toasts.appendChild(notif);
+
+	setTimeout(() => {
+		notif.remove();
+	}, 1000 * 5);
+}
+
+renderToast();
+
+// Modal Popup
+const modal = document.querySelector('.modal');
+const overlay = document.querySelector('.overlay');
+const closeModalButton = document.querySelector('.close-modal');
+const openModalButton = document.getElementById('esc');
+
+function closeModal() {
+	modal.classList.add('hidden');
+	overlay.classList.add('hidden');
+}
+
+function openModal() {
+	textarea.blur();
+	modal.classList.remove('hidden');
+	overlay.classList.remove('hidden');
+}
+
+openModalButton.addEventListener('click', openModal);
+closeModalButton.addEventListener('click', closeModal);
+overlay.addEventListener('click', closeModal);
+
 // Textarea toolbar
 const clearButton = document.getElementById('clear-btn');
 const copyButton = document.getElementById('copy-btn');
@@ -32,20 +53,6 @@ const previewButton = document.getElementById('preview-btn');
 const editButton = document.getElementById('edit-btn');
 const textPreview = document.querySelector('.textarea-preview');
 const previewLabel = document.querySelector('.preview-label');
-
-function toggleVisibility(element, displayChoice) {
-	element.style.display = displayChoice;
-}
-
-function displayTemporaryMessage(element, message, content, duration = 600) {
-	if (element === textarea) {
-		textarea.value = message;
-		setTimeout(() => (element.value = content), duration);
-	} else if (element === textPreview) {
-		textPreview.innerHTML = message;
-		setTimeout(() => (element.innerHTML = content), duration);
-	}
-}
 
 clearButton.addEventListener('click', () => {
 	textarea.value = '';
@@ -92,6 +99,21 @@ editButton.addEventListener('click', () => {
 	toggleVisibility(textPreview, 'none');
 	toggleVisibility(textarea, 'block');
 });
+
+// Textarea toolbar helpers
+function toggleVisibility(element, displayChoice) {
+	element.style.display = displayChoice;
+}
+
+function displayTemporaryMessage(element, message, content, duration = 600) {
+	if (element === textarea) {
+		textarea.value = message;
+		setTimeout(() => (element.value = content), duration);
+	} else if (element === textPreview) {
+		textPreview.innerHTML = message;
+		setTimeout(() => (element.innerHTML = content), duration);
+	}
+}
 
 // Themes
 const themes = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
@@ -146,7 +168,7 @@ allOperationalKeys.forEach(key =>
 	operationKeyCodes.push(key.getAttribute('data-key'))
 );
 
-// All Letter Keys & Caps Lock Indicator (to change case)
+// All 26 Letter Keys & Caps Lock Indicator (to change case)
 const letterKeys = document.querySelectorAll('.letter-key');
 const capsIndicator = document.querySelector('.caps-indicator');
 
@@ -157,41 +179,49 @@ const clickAudio = document.getElementById('click-audio');
 allKeys.forEach(key => {
 	key.addEventListener('click', event => {
 		clearActiveOnKeys();
-
-		// Add Active Class
 		key.classList.add('active');
-
-		// Add Click Sound
 		clickAudio.play();
 
 		const keyCode = event.target.getAttribute('data-key');
 		let caretStart = textarea.selectionStart;
 
-		// Add Letter Clicks to Text Area
-		if (keyCode && keyCode.length === 1) {
-			textarea.value += keyCode;
-		} else if (keyCode === 'Space') {
-			textarea.value += ' ';
-		} else if (keyCode === 'Backspace') {
-			textarea.value = textarea.value.substring(0, textarea.value.length - 1);
-		} else if (keyCode === 'Enter') {
-			textarea.value += '\n';
-		} else if (keyCode === 'Tab') {
-			textarea.value += '    ';
-		} else if (keyCode === 'F9') {
-			textarea.blur();
-			animateF9();
-		} else if (keyCode === 'F10') {
-			textarea.blur();
-			animateF10();
-		} else if (keyCode === 'ArrowLeft') {
-			caretStart--;
-		} else if (keyCode === 'ArrowRight') {
-			caretStart++;
-		} else if (keyCode === 'ArrowUp') {
-			caretStart = textarea.value.lastIndexOf('\n', caretStart - 1);
-		} else if (keyCode === 'ArrowDown') {
-			caretStart = textarea.value.indexOf('\n', caretStart) + 1;
+		switch (keyCode) {
+			case 'Space':
+				textarea.value += ' ';
+				break;
+			case 'Backspace':
+				textarea.value = textarea.value.substring(0, textarea.value.length - 1);
+				break;
+			case 'Enter':
+				textarea.value += '\n';
+				break;
+			case 'Tab':
+				textarea.value += '    ';
+				break;
+			case 'F9':
+				textarea.blur();
+				animateF9();
+				break;
+			case 'F10':
+				textarea.blur();
+				animateF10();
+				break;
+			case 'ArrowLeft':
+				caretStart--;
+				break;
+			case 'ArrowRight':
+				caretStart++;
+				break;
+			case 'ArrowUp':
+				caretStart = textarea.value.lastIndexOf('\n', caretStart - 1);
+				break;
+			case 'ArrowDown':
+				caretStart = textarea.value.indexOf('\n', caretStart) + 1;
+				break;
+			default:
+				if (keyCode && keyCode.length === 1) {
+					textarea.value += keyCode;
+				}
 		}
 		textarea.setSelectionRange(caretStart, caretStart);
 	});
@@ -200,7 +230,9 @@ allKeys.forEach(key => {
 // Keydown Events
 document.addEventListener('keydown', event => {
 	clearActiveOnKeys();
-	textarea.focus();
+	if (!textarea.matches(':focus')) {
+		textarea.focus();
+	}
 
 	// Change Theme
 	for (let i = 0; i < themeKeyCode.length; i++) {
@@ -313,24 +345,3 @@ document.addEventListener('keyup', event => {
 		letterKeys.forEach(el => (el.style.textTransform = 'lowercase'));
 	}
 });
-
-// Modal Popup
-const modal = document.querySelector('.modal');
-const overlay = document.querySelector('.overlay');
-const closeModalButton = document.querySelector('.close-modal');
-const openModalButton = document.getElementById('esc');
-
-function closeModal() {
-	modal.classList.add('hidden');
-	overlay.classList.add('hidden');
-}
-
-function openModal() {
-	textarea.blur();
-	modal.classList.remove('hidden');
-	overlay.classList.remove('hidden');
-}
-
-openModalButton.addEventListener('click', openModal);
-closeModalButton.addEventListener('click', closeModal);
-overlay.addEventListener('click', closeModal);
