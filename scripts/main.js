@@ -119,12 +119,8 @@ function displayTemporaryMessage(element, message, content, duration = 600) {
 const themes = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
 const themeButtons = document.querySelectorAll('.theme-key');
 
-function removeAllThemeClasses() {
-	themes.forEach(theme => document.body.classList.remove(`theme-${theme}`));
-}
-
 function changeTheme(theme) {
-	removeAllThemeClasses();
+	themes.forEach(theme => document.body.classList.remove(`theme-${theme}`));
 	document.body.classList.add(`theme-${theme}`);
 	localStorage.setItem('theme', theme);
 }
@@ -138,9 +134,7 @@ themeButtons.forEach((button, index) => {
 
 // Shuffle Theme Button
 document.getElementById('shuffle').addEventListener('click', () => {
-	removeAllThemeClasses();
-	const randomTheme = themes[Math.floor(Math.random() * themes.length)];
-	changeTheme(randomTheme);
+	changeTheme(themes[Math.floor(Math.random() * themes.length)]);
 });
 
 // KEY DECLARATIONS
@@ -295,15 +289,11 @@ function clearActiveOnKeys() {
 }
 
 function addAnimationClasses(key, delay, className) {
-	requestAnimationFrame(() =>
-		setTimeout(() => key.classList.add(className), delay)
-	);
+	setTimeout(() => key.classList.add(className), delay);
 }
 
 function removeAnimationClasses(key, delay, className) {
-	requestAnimationFrame(() =>
-		setTimeout(() => key.classList.remove(className), delay)
-	);
+	setTimeout(() => key.classList.remove(className), delay);
 }
 
 // Animations
@@ -332,7 +322,7 @@ function animateF10() {
 
 		setTimeout(() => {
 			removeAnimationClasses(allKeys[i], 50 * i, 'key-color-cycle');
-		}, 4000);
+		}, 3000);
 	}
 }
 
