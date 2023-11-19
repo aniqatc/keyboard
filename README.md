@@ -59,8 +59,8 @@
 - Audio triggered on mouse-clicks
 
 ## Future Features
-- ☐ Improve existing animations
-- ☐ Fix the 'callback hell' with the animation timeouts
+- ✅ Improve existing animations
+- ✅ Fix the 'callback hell' with the animation timeouts
 - ☐ Add additional lighting animations to `F11` and `F12` 
 
 ## Themes
