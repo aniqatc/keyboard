@@ -172,25 +172,44 @@ const clickAudio = document.getElementById('click-audio');
 // Click Event Trigger Corresponding Keydown Event
 allKeys.forEach(key => {
 	key.addEventListener('click', event => {
-		clearActiveOnKeys();
-		key.classList.add('active');
+		event.preventDefault();
+		
+		// Get the actual key element even if clicking on a child element
+		const keyElement = event.target.closest('.key');
+		if (!keyElement) return;
+		
+		// Ensure textarea is focused
+		if (!textarea.matches(':focus')) {
+			textarea.focus();
+		}
+		
+		keyElement.classList.add('active');
 		clickAudio.play();
 
-		const keyCode = event.target.getAttribute('data-key');
+		const keyCode = keyElement.getAttribute('data-key');
 		let caretStart = textarea.selectionStart;
+		let caretEnd = textarea.selectionEnd;
 
 		switch (keyCode) {
 			case 'Space':
-				textarea.value += ' ';
+				textarea.value = textarea.value.substring(0, caretStart) + ' ' + textarea.value.substring(caretEnd);
+				caretStart++;
 				break;
 			case 'Backspace':
-				textarea.value = textarea.value.substring(0, textarea.value.length - 1);
+				if (caretStart === caretEnd && caretStart > 0) {
+					textarea.value = textarea.value.substring(0, caretStart - 1) + textarea.value.substring(caretEnd);
+					caretStart--;
+				} else {
+					textarea.value = textarea.value.substring(0, caretStart) + textarea.value.substring(caretEnd);
+				}
 				break;
 			case 'Enter':
-				textarea.value += '\n';
+				textarea.value = textarea.value.substring(0, caretStart) + '\n' + textarea.value.substring(caretEnd);
+				caretStart++;
 				break;
 			case 'Tab':
-				textarea.value += '    ';
+				textarea.value = textarea.value.substring(0, caretStart) + '    ' + textarea.value.substring(caretEnd);
+				caretStart += 4;
 				break;
 			case 'F9':
 				textarea.blur();
@@ -200,24 +219,24 @@ allKeys.forEach(key => {
 				textarea.blur();
 				animateF10();
 				break;
-			case 'ArrowLeft':
-				caretStart--;
-				break;
-			case 'ArrowRight':
-				caretStart++;
-				break;
-			case 'ArrowUp':
-				caretStart = textarea.value.lastIndexOf('\n', caretStart - 1);
-				break;
-			case 'ArrowDown':
-				caretStart = textarea.value.indexOf('\n', caretStart) + 1;
+			case 'F11':
+				textarea.blur();
+				animateF11();
 				break;
 			default:
 				if (keyCode && keyCode.length === 1) {
-					textarea.value += keyCode;
+					textarea.value = textarea.value.substring(0, caretStart) + keyCode + textarea.value.substring(caretEnd);
+					caretStart++;
 				}
 		}
+
+		// Update caret position
 		textarea.setSelectionRange(caretStart, caretStart);
+		
+		// Remove active class after animation
+		setTimeout(() => {
+			keyElement.classList.remove('active');
+		}, 150);
 	});
 });
 
@@ -225,7 +244,7 @@ allKeys.forEach(key => {
 document.addEventListener('keydown', event => {
 	clearActiveOnKeys();
 	if (!textarea.matches(':focus')) {
-		textarea.focus();
+			textarea.focus();
 	}
 
 	// Change Theme
@@ -256,9 +275,14 @@ document.addEventListener('keydown', event => {
 	}
 
 	// Handle CapsLock
-	if (event.code === 'CapsLock' && event.getModifierState('CapsLock')) {
-		capsIndicator.classList.add('active');
-		letterKeys.forEach(el => (el.style.textTransform = 'uppercase'));
+	if (event.code === 'CapsLock') {
+		if (event.getModifierState('CapsLock')) {
+			capsIndicator.classList.add('active');
+			letterKeys.forEach(el => (el.style.textTransform = 'uppercase'));
+		} else {
+			capsIndicator.classList.remove('active');
+			letterKeys.forEach(el => (el.style.textTransform = 'lowercase'));
+		}
 	}
 
 	// Shift Hold
@@ -362,7 +386,16 @@ document.addEventListener('keyup', event => {
 		}, 150);
 	}
 
-	if (event.key === 'Shift' || event.key === 'CapsLock') {
-		updateLetterCase();
+	// Handle CapsLock state
+	if (event.code === 'CapsLock') {
+		if (!event.getModifierState('CapsLock')) {
+			capsIndicator.classList.remove('active');
+			letterKeys.forEach(el => (el.style.textTransform = 'lowercase'));
+		}
+	}
+
+	// Handle Shift release
+	if (event.key === 'Shift' && !event.getModifierState('CapsLock')) {
+		letterKeys.forEach(el => (el.style.textTransform = 'lowercase'));
 	}
 });
