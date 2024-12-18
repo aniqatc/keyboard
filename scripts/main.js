@@ -283,19 +283,6 @@ document.addEventListener('keydown', event => {
 	}
 });
 
-// Animation helpers
-function clearActiveOnKeys() {
-	allKeys.forEach(el => el.classList.remove('active', 'key-color-cycle'));
-}
-
-function addAnimationClasses(key, delay, className) {
-	setTimeout(() => key.classList.add(className), delay);
-}
-
-function removeAnimationClasses(key, delay, className) {
-	setTimeout(() => key.classList.remove(className), delay);
-}
-
 // Animations
 function animateF9() {
 	clearActiveOnKeys();
@@ -309,29 +296,73 @@ function animateF9() {
 		document.querySelectorAll('.row-six .key'),
 	];
 
-	rows.forEach(row => {
-		row.forEach((key, i) => addAnimationClasses(key, 100 * i, 'active'));
+	rows.forEach((row, rowIndex) => {
+		row.forEach((key, keyIndex) => {
+			setTimeout(() => {
+				key.classList.add('active');
+				// Remove active class after animation
+				setTimeout(() => {
+					key.classList.remove('active');
+				}, 800);
+			}, (rowIndex * 50) + (keyIndex * 30)); // Stagger the animations
+		});
 	});
 }
 
 function animateF10() {
 	clearActiveOnKeys();
 
-	for (let i = 0; i < allKeys.length; i++) {
-		addAnimationClasses(allKeys[i], 50 * i, 'key-color-cycle');
+	const keys = Array.from(allKeys);
+	const keyDelay = 20;
+	const duration = 1800;
 
+	// Create a ripple effect from the center
+	const centerX = window.innerWidth / 2;
+	const centerY = window.innerHeight / 2;
+
+	// Sort keys by distance from center for ripple effect
+	keys.sort((a, b) => {
+		const aRect = a.getBoundingClientRect();
+		const bRect = b.getBoundingClientRect();
+		const aDistance = Math.hypot(
+			centerX - (aRect.left + aRect.width/2),
+			centerY - (aRect.top + aRect.height/2)
+		);
+		const bDistance = Math.hypot(
+			centerX - (bRect.left + bRect.width/2),
+			centerY - (bRect.top + bRect.height/2)
+		);
+		return aDistance - bDistance;
+	});
+
+	keys.forEach((key, index) => {
 		setTimeout(() => {
-			removeAnimationClasses(allKeys[i], 50 * i, 'key-color-cycle');
-		}, 3000);
-	}
+			key.classList.add('key-color-cycle');
+			setTimeout(() => {
+				key.classList.remove('key-color-cycle');
+			}, duration);
+		}, index * keyDelay);
+	});
+}
+// Helper function to clear animations
+function clearActiveOnKeys() {
+	allKeys.forEach(el => {
+		el.classList.remove('active', 'key-color-cycle');
+		// Force DOM reflow to ensure clean animation state
+		void el.offsetWidth;
+	});
 }
 
-// Remove Active Classes on Keyup Events
+// Update the keyup handler for smoother transitions
 document.addEventListener('keyup', event => {
-	setTimeout(clearActiveOnKeys, 2000);
+	const keyElement = document.querySelector(`.key[data-key="${event.code}"]`);
+	if (keyElement && !keyElement.classList.contains('key-color-cycle')) {
+		setTimeout(() => {
+			keyElement.classList.remove('active');
+		}, 150);
+	}
 
-	if (!event.getModifierState('CapsLock')) {
-		capsIndicator.classList.remove('active');
-		letterKeys.forEach(el => (el.style.textTransform = 'lowercase'));
+	if (event.key === 'Shift' || event.key === 'CapsLock') {
+		updateLetterCase();
 	}
 });

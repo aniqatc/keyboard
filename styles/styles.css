@@ -8,8 +8,8 @@
 	--active-row-four: rgb(0, 255, 0);
 	--active-row-five: rgb(0, 0, 255);
 	--active-row-six: rgb(200, 0, 255);
-	--active-outline: 2px ridge;
-	--active-key-shadow: inset 0 1px 2px 0 #000, 0 1px 1px 0 #666, 0px 0px 8px 4px;
+	--active-outline: 1px solid;
+	--active-key-shadow: 0 0 15px 2px;
 	--blobs-display: initial;
 	--blob-color-one: #6516c5;
 	--blob-color-two: #6b1184;
@@ -475,11 +475,12 @@ a:hover {
 	height: 75px;
 	border: 1px solid transparent;
 	border-radius: var(--key-border);
-	transition: all 150ms ease-in;
+	transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 	background-image: var(--key-bg);
 	box-shadow: var(--key-shadow);
 	position: relative;
 	transition: all 250ms ease-out;
+	transform: translateY(0);
 }
 
 /****************************************/
@@ -605,51 +606,57 @@ a:hover {
 
 .key:active,
 .key.active {
-	transform: translateY(1px) scale(0.99);
-	transition: all 250ms ease-in;
+	transform: none;
+	transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .key.active {
-	-webkit-animation: key-fade 3s ease-out forwards;
-	animation: key-fade 3s ease-out forwards;
+	animation: key-fade 600ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @keyframes key-fade {
+	0% {
+		box-shadow: var(--active-key-shadow) rgba(255, 255, 255, 0.5);
+		border-color: rgba(255, 255, 255, 0.8);
+	}
+	50% {
+		box-shadow: var(--active-key-shadow) rgba(255, 255, 255, 0.8);
+		border-color: rgba(255, 255, 255, 1);
+	}
 	100% {
 		box-shadow: var(--key-shadow);
-		border: 1px solid transparent;
+		border-color: transparent;
 	}
 }
 
 .key-color-cycle {
-	-webkit-animation: key-colors 3s ease-in infinite;
-	animation: key-colors 3s ease-in infinite;
+	animation: key-colors 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 @keyframes key-colors {
 	0% {
 		box-shadow: var(--active-key-shadow) var(--active-row-one);
-		border: var(--active-outline) var(--active-row-one);
+		border-color: var(--active-row-one);
 	}
 	20% {
 		box-shadow: var(--active-key-shadow) var(--active-row-two);
-		border: var(--active-outline) var(--active-row-two);
+		border-color: var(--active-row-two);
 	}
 	40% {
 		box-shadow: var(--active-key-shadow) var(--active-row-three);
-		border: var(--active-outline) var(--active-row-three);
+		border-color: var(--active-row-three);
 	}
 	60% {
 		box-shadow: var(--active-key-shadow) var(--active-row-four);
-		border: var(--active-outline) var(--active-row-four);
+		border-color: var(--active-row-four);
 	}
 	80% {
 		box-shadow: var(--active-key-shadow) var(--active-row-five);
-		border: var(--active-outline) var(--active-row-five);
+		border-color: var(--active-row-five);
 	}
 	100% {
-		box-shadow: var(--active-key-shadow) var(--active-row-six);
-		border: var(--active-outline) var(--active-row-six);
+		box-shadow: var(--active-key-shadow) var(--active-row-one);
+		border-color: var(--active-row-one);
 	}
 }
 
@@ -963,4 +970,9 @@ footer a {
 		max-width: 100%;
 		line-height: 1.5;
 	}
+}
+
+.key:hover {
+	box-shadow: 0 0 8px rgba(255, 255, 255, 0.2);
+	transition: box-shadow 200ms ease-in-out;
 }
