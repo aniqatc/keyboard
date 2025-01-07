@@ -174,8 +174,10 @@ allKeys.forEach(key => {
 		const keyElement = event.target.closest('.key');
 		if (!keyElement) return;
 
-		// Ensure textarea is focused
-		if (!textarea.matches(':focus')) {
+		const dataKeyCode = keyElement.getAttribute('data-key');
+		const isAnimationKey = dataKeyCode === 'F9' || dataKeyCode === 'F10';
+
+		if (!isAnimationKey && !textarea.matches(':focus')) {
 			textarea.focus();
 		}
 
