@@ -141,9 +141,7 @@ document.getElementById('shuffle').addEventListener('click', () => {
 
 // Theme Keys
 let themeKeyCode = [];
-themeButtons.forEach(button =>
-	themeKeyCode.push(button.getAttribute('data-key'))
-);
+themeButtons.forEach(button => themeKeyCode.push(button.getAttribute('data-key')));
 
 // All Keys
 const allKeys = document.querySelectorAll('.key');
@@ -158,9 +156,7 @@ allCharKeys.forEach(key => charKeyCodes.push(key.getAttribute('data-key')));
 // All Operation-Based Keys
 const allOperationalKeys = document.querySelectorAll('.operation-key');
 let operationKeyCodes = [];
-allOperationalKeys.forEach(key =>
-	operationKeyCodes.push(key.getAttribute('data-key'))
-);
+allOperationalKeys.forEach(key => operationKeyCodes.push(key.getAttribute('data-key')));
 
 // All 26 Letter Keys & Caps Lock Indicator (to change case)
 const letterKeys = document.querySelectorAll('.letter-key');
@@ -173,16 +169,16 @@ const clickAudio = document.getElementById('click-audio');
 allKeys.forEach(key => {
 	key.addEventListener('click', event => {
 		event.preventDefault();
-		
+
 		// Get the actual key element even if clicking on a child element
 		const keyElement = event.target.closest('.key');
 		if (!keyElement) return;
-		
+
 		// Ensure textarea is focused
 		if (!textarea.matches(':focus')) {
 			textarea.focus();
 		}
-		
+
 		keyElement.classList.add('active');
 		clickAudio.play();
 
@@ -192,23 +188,28 @@ allKeys.forEach(key => {
 
 		switch (keyCode) {
 			case 'Space':
-				textarea.value = textarea.value.substring(0, caretStart) + ' ' + textarea.value.substring(caretEnd);
+				textarea.value =
+					textarea.value.substring(0, caretStart) + ' ' + textarea.value.substring(caretEnd);
 				caretStart++;
 				break;
 			case 'Backspace':
 				if (caretStart === caretEnd && caretStart > 0) {
-					textarea.value = textarea.value.substring(0, caretStart - 1) + textarea.value.substring(caretEnd);
+					textarea.value =
+						textarea.value.substring(0, caretStart - 1) + textarea.value.substring(caretEnd);
 					caretStart--;
 				} else {
-					textarea.value = textarea.value.substring(0, caretStart) + textarea.value.substring(caretEnd);
+					textarea.value =
+						textarea.value.substring(0, caretStart) + textarea.value.substring(caretEnd);
 				}
 				break;
 			case 'Enter':
-				textarea.value = textarea.value.substring(0, caretStart) + '\n' + textarea.value.substring(caretEnd);
+				textarea.value =
+					textarea.value.substring(0, caretStart) + '\n' + textarea.value.substring(caretEnd);
 				caretStart++;
 				break;
 			case 'Tab':
-				textarea.value = textarea.value.substring(0, caretStart) + '    ' + textarea.value.substring(caretEnd);
+				textarea.value =
+					textarea.value.substring(0, caretStart) + '    ' + textarea.value.substring(caretEnd);
 				caretStart += 4;
 				break;
 			case 'F9':
@@ -219,20 +220,17 @@ allKeys.forEach(key => {
 				textarea.blur();
 				animateF10();
 				break;
-			case 'F11':
-				textarea.blur();
-				animateF11();
-				break;
 			default:
 				if (keyCode && keyCode.length === 1) {
-					textarea.value = textarea.value.substring(0, caretStart) + keyCode + textarea.value.substring(caretEnd);
+					textarea.value =
+						textarea.value.substring(0, caretStart) + keyCode + textarea.value.substring(caretEnd);
 					caretStart++;
 				}
 		}
 
 		// Update caret position
 		textarea.setSelectionRange(caretStart, caretStart);
-		
+
 		// Remove active class after animation
 		setTimeout(() => {
 			keyElement.classList.remove('active');
@@ -244,7 +242,7 @@ allKeys.forEach(key => {
 document.addEventListener('keydown', event => {
 	clearActiveOnKeys();
 	if (!textarea.matches(':focus')) {
-			textarea.focus();
+		textarea.focus();
 	}
 
 	// Change Theme
@@ -259,10 +257,7 @@ document.addEventListener('keydown', event => {
 
 	// Add Active Class for Character Keys
 	for (let i = 0; i < allCharKeys.length; i++) {
-		if (
-			event.key === charKeyCodes[i] ||
-			event.key === charKeyCodes[i].toUpperCase()
-		) {
+		if (event.key === charKeyCodes[i] || event.key === charKeyCodes[i].toUpperCase()) {
 			allCharKeys[i].classList.add('active');
 		}
 	}
@@ -298,11 +293,13 @@ document.addEventListener('keydown', event => {
 
 	// F9 Animation
 	if (event.key === 'F9') {
+		textarea.blur();
 		animateF9();
 	}
 
 	// F10 Animation
 	if (event.key === 'F10') {
+		textarea.blur();
 		animateF10();
 	}
 });
@@ -324,11 +321,10 @@ function animateF9() {
 		row.forEach((key, keyIndex) => {
 			setTimeout(() => {
 				key.classList.add('active');
-				// Remove active class after animation
 				setTimeout(() => {
 					key.classList.remove('active');
 				}, 800);
-			}, (rowIndex * 50) + (keyIndex * 30)); // Stagger the animations
+			}, rowIndex * 50 + keyIndex * 30);
 		});
 	});
 }
@@ -340,21 +336,19 @@ function animateF10() {
 	const keyDelay = 20;
 	const duration = 1800;
 
-	// Create a ripple effect from the center
 	const centerX = window.innerWidth / 2;
 	const centerY = window.innerHeight / 2;
 
-	// Sort keys by distance from center for ripple effect
 	keys.sort((a, b) => {
 		const aRect = a.getBoundingClientRect();
 		const bRect = b.getBoundingClientRect();
 		const aDistance = Math.hypot(
-			centerX - (aRect.left + aRect.width/2),
-			centerY - (aRect.top + aRect.height/2)
+			centerX - (aRect.left + aRect.width / 2),
+			centerY - (aRect.top + aRect.height / 2)
 		);
 		const bDistance = Math.hypot(
-			centerX - (bRect.left + bRect.width/2),
-			centerY - (bRect.top + bRect.height/2)
+			centerX - (bRect.left + bRect.width / 2),
+			centerY - (bRect.top + bRect.height / 2)
 		);
 		return aDistance - bDistance;
 	});
@@ -368,7 +362,7 @@ function animateF10() {
 		}, index * keyDelay);
 	});
 }
-// Helper function to clear animations
+
 function clearActiveOnKeys() {
 	allKeys.forEach(el => {
 		el.classList.remove('active', 'key-color-cycle');
@@ -377,7 +371,6 @@ function clearActiveOnKeys() {
 	});
 }
 
-// Update the keyup handler for smoother transitions
 document.addEventListener('keyup', event => {
 	const keyElement = document.querySelector(`.key[data-key="${event.code}"]`);
 	if (keyElement && !keyElement.classList.contains('key-color-cycle')) {
@@ -386,7 +379,6 @@ document.addEventListener('keyup', event => {
 		}, 150);
 	}
 
-	// Handle CapsLock state
 	if (event.code === 'CapsLock') {
 		if (!event.getModifierState('CapsLock')) {
 			capsIndicator.classList.remove('active');
@@ -394,7 +386,6 @@ document.addEventListener('keyup', event => {
 		}
 	}
 
-	// Handle Shift release
 	if (event.key === 'Shift' && !event.getModifierState('CapsLock')) {
 		letterKeys.forEach(el => (el.style.textTransform = 'lowercase'));
 	}
