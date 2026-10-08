@@ -1,21 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-kb="1">
 	<head>
 		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta
-			name="viewport"
-			content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no"
-		/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 		<meta name="author" content="Aniqa" />
 		<meta
 			name="description"
-			content="A virtual keyboard with eight different themes to type into the custom Markdown-support input field."
+			content="A virtual keyboard with eight themes, four light shows and a Markdown editor."
 		/>
 		<meta property="og:title" content="Keyboard by Aniqa" />
 		<meta
 			property="og:description"
-			content="A virtual keyboard with eight different themes to type into the custom Markdown-support input field."
+			content="A virtual keyboard with eight themes, four light shows and a Markdown editor."
 		/>
 		<meta
 			property="og:image"
@@ -27,295 +23,155 @@
 			name="twitter:image"
 			content="https://raw.githubusercontent.com/aniqatc/keyboard/main/assets/keyboard.png"
 		/>
-		<meta
-			name="twitter:image:alt"
-			content="Website Screen Capture of Keyboard"
-		/>
+		<meta name="twitter:image:alt" content="Website Screen Capture of Keyboard" />
 		<title>Virtual Keyboard by Aniqa</title>
-		<link rel="stylesheet" href="/styles/styles.css" />
-		<link rel="icon" type="image/png" href="/assets/favicon.png" />
-		<script
-			src="https://kit.fontawesome.com/50cde61edc.js"
-			crossorigin="anonymous"
-		></script>
+		<link rel="icon" type="image/png" href="assets/favicon.png" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
-			href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Hanken+Grotesk:wght@300;400;500;600;700;800;900&family=Source+Code+Pro:wght@300;400;500;600;700;800&display=swap"
 			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Hanken+Grotesk:wght@400;500;700&family=Source+Code+Pro:wght@400;500;600&display=swap"
 		/>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/1.2.2/marked.min.js"></script>
-		<script defer src="/scripts/main.js"></script>
+		<link rel="stylesheet" href="styles/styles.css" />
+		<!-- Apply the saved theme before first paint to avoid a flash -->
+		<script>
+			try {
+				const names = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
+				const i = names.indexOf(localStorage.getItem('theme'));
+				document.documentElement.dataset.kb = String(
+					i >= 0 ? i + 1 : matchMedia('(prefers-color-scheme: dark)').matches ? 1 : 2
+				);
+			} catch (e) {}
+		</script>
+		<script defer src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+		<script defer src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+		<script type="module" src="scripts/main.js"></script>
 	</head>
 	<body>
-		<section class="blobs">
-			<div class="blob blob-one"></div>
-			<div class="blob blob-two"></div>
-			<div class="blob blob-three"></div>
-		</section>
-		<section id="toasts"></section>
-		<audio src="/assets/click.mp3" id="click-audio"></audio>
-		<section class="input-container">
-			<textarea></textarea>
-			<div class="textarea-preview hidden"></div>
-			<span class="preview-label hidden">Markdown Preview</span>
-			<div class="input-buttons">
-				<button id="edit-btn"><i class="fa-solid fa-pen-to-square"></i></button>
-				<button id="copy-btn"><i class="fa-solid fa-clipboard"></i></button>
-				<button id="preview-btn"><i class="fa-solid fa-eye"></i></button>
-				<button id="save-btn"><i class="fa-solid fa-floppy-disk"></i></button>
+		<div class="blobs" aria-hidden="true">
+			<div class="blob"></div>
+			<div class="blob"></div>
+			<div class="blob"></div>
+		</div>
+		<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
 
-				<button id="clear-btn"><i class="fa-solid fa-trash-can"></i></button>
-			</div>
-		</section>
-		<section class="keyboard-container">
-			<div class="row row-one">
-				<kbd class="key operation-key" data-key="Escape" id="esc">
-					<span class="left-align">esc</span></kbd
-				>
-				<kbd class="key theme-key" data-key="F1">F1</kbd>
-				<kbd class="key theme-key" data-key="F2">F2</kbd>
-				<kbd class="key theme-key" data-key="F3">F3</kbd>
-				<kbd class="key theme-key" data-key="F4">F4</kbd>
-				<kbd class="key theme-key" data-key="F5">F5</kbd>
-				<kbd class="key theme-key" data-key="F6">F6</kbd>
-				<kbd class="key theme-key" data-key="F7">F7</kbd>
-				<kbd class="key theme-key" data-key="F8">F8</kbd>
-				<kbd class="key" data-key="F9">F9</kbd>
-				<kbd class="key" data-key="F10">F10</kbd>
-				<kbd class="key" data-key="F11">F11</kbd>
-				<kbd class="key" data-key="F12">F12</kbd>
-				<kbd class="key m-key operation-key" id="shuffle"
-					><span class="right-align"><i class="fa-solid fa-shuffle"></i></span
-				></kbd>
-			</div>
-			<div class="row row-two">
-				<kbd class="key" data-key="`"
-					><span class="secondary-key">~</span><span>`</span></kbd
-				>
-				<kbd class="key" data-key="1"
-					><span class="secondary-key">!</span><span>1</span></kbd
-				>
-				<kbd class="key" data-key="2"
-					><span class="secondary-key">@</span><span>2</span></kbd
-				>
-				<kbd class="key" data-key="3"
-					><span class="secondary-key">#</span><span>3</span></kbd
-				>
-				<kbd class="key" data-key="4"
-					><span class="secondary-key">$</span><span>4</span></kbd
-				>
-				<kbd class="key" data-key="5"
-					><span class="secondary-key">%</span><span>5</span></kbd
-				>
-				<kbd class="key" data-key="6"
-					><span class="secondary-key">^</span><span>6</span></kbd
-				>
-				<kbd class="key" data-key="7"
-					><span class="secondary-key">&</span><span>7</span></kbd
-				>
-				<kbd class="key" data-key="8"
-					><span class="secondary-key">*</span><span>8</span></kbd
-				>
-				<kbd class="key" data-key="9"
-					><span class="secondary-key">(</span><span>9</span></kbd
-				>
-				<kbd class="key" data-key="0"
-					><span class="secondary-key">)</span><span>0</span></kbd
-				>
-				<kbd class="key" data-key="-"
-					><span class="secondary-key">_</span><span>-</span></kbd
-				>
-				<kbd class="key" data-key="="
-					><span class="secondary-key">+</span><span>=</span></kbd
-				>
-				<kbd class="key m-key operation-key" data-key="Backspace"
-					><span class="right-align">delete</span></kbd
-				>
-			</div>
-			<div class="row row-three">
-				<kbd class="key m-key operation-key" data-key="Tab"
-					><span class="left-align">tab</span></kbd
-				>
-				<kbd class="key letter-key" data-key="q"><span>q</span></kbd>
-				<kbd class="key letter-key" data-key="w"><span>w</span></kbd>
-				<kbd class="key letter-key" data-key="e"><span>e</span></kbd>
-				<kbd class="key letter-key" data-key="r"><span>r</span></kbd>
-				<kbd class="key letter-key" data-key="t"><span>t</span></kbd>
-				<kbd class="key letter-key" data-key="y"><span>y</span></kbd>
-				<kbd class="key letter-key" data-key="u"><span>u</span></kbd>
-				<kbd class="key letter-key" data-key="i"><span>i</span></kbd>
-				<kbd class="key letter-key" data-key="o"><span>o</span></kbd>
-				<kbd class="key letter-key" data-key="p"><span>p</span></kbd>
-				<kbd class="key" data-key="["
-					><span class="secondary-key">{</span><span>[</span></kbd
-				>
-				<kbd class="key" data-key="]"
-					><span class="secondary-key">}</span><span>]</span></kbd
-				>
-				<kbd class="key" data-key="\"
-					><span class="secondary-key">|</span><span>\</span></kbd
-				>
-			</div>
-			<div class="row row-four">
-				<kbd class="key lg-key caps-key operation-key" data-key="CapsLock"
-					><span class="caps-indicator">&nbsp;</span
-					><span class="left-align">caps lock</span></kbd
-				>
-				<kbd class="key letter-key" data-key="a"><span>a</span></kbd>
-				<kbd class="key letter-key" data-key="s"><span>s</span></kbd>
-				<kbd class="key letter-key" data-key="d"><span>d</span></kbd>
-				<kbd class="key letter-key" data-key="f"><span>f</span></kbd>
-				<kbd class="key letter-key" data-key="g"><span>g</span></kbd>
-				<kbd class="key letter-key" data-key="h"><span>h</span></kbd>
-				<kbd class="key letter-key" data-key="j"><span>j</span></kbd>
-				<kbd class="key letter-key" data-key="k"><span>k</span></kbd>
-				<kbd class="key letter-key" data-key="l"><span>l</span></kbd>
-				<kbd class="key" data-key=";"
-					><span class="secondary-key">:</span><span>;</span></kbd
-				>
-				<kbd class="key" data-key="'"
-					><span class="secondary-key">"</span><span>'</span></kbd
-				>
-				<kbd class="key lg-key operation-key" data-key="Enter"
-					><span class="secondary-key right-align">enter</span
-					><span class="right-align">return</span></kbd
-				>
-			</div>
-			<div class="row row-five">
-				<kbd class="key xl-key operation-key" data-key="ShiftLeft"
-					><span class="left-align">shift</span></kbd
-				>
-				<kbd class="key letter-key" data-key="z"><span>z</span></kbd>
-				<kbd class="key letter-key" data-key="x"><span>x</span></kbd>
-				<kbd class="key letter-key" data-key="c"><span>c</span></kbd>
-				<kbd class="key letter-key" data-key="v"><span>v</span></kbd>
-				<kbd class="key letter-key" data-key="b"><span>b</span></kbd>
-				<kbd class="key letter-key" data-key="n"><span>n</span></kbd>
-				<kbd class="key letter-key" data-key="m"><span>m</span></kbd>
-				<kbd class="key" data-key=","><span><</span><span>,</span></kbd>
-				<kbd class="key" data-key="."><span>></span><span>.</span></kbd>
-				<kbd class="key" data-key="/"><span>?</span><span>/</span></kbd>
-				<kbd class="key xl-key operation-key" data-key="ShiftRight"
-					><span class="right-align">shift</span></kbd
-				>
-			</div>
-			<div class="row row-six">
-				<kbd class="key operation-key" data-key="ControlLeft"
-					><span>ctrl</span></kbd
-				>
-				<kbd class="key operation-key" data-key="AltLeft"
-					><span class="secondary-key right-align">alt</span
-					><span class="right-align">option</span></kbd
-				>
-				<kbd class="key m-key operation-key" data-key="MetaLeft"
-					><span class="secondary-key right-align">⌘</span
-					><span class="right-align">command</span></kbd
-				>
-				<kbd class="key space-key operation-key" data-key="Space"
-					><span>space</span></kbd
-				>
-				<kbd class="key m-key operation-key" data-key="MetaRight"
-					><span class="secondary-key left-align">⌘</span
-					><span class="left-align">command</span></kbd
-				>
-				<kbd class="key operation-key" data-key="AltRight"
-					><span class="secondary-key left-align">alt</span
-					><span class="left-align">option</span></kbd
-				>
-				<div class="direction-keys">
-					<kbd class="key x-key" data-key="ArrowLeft"
-						><i class="fa-solid fa-caret-left"></i
-					></kbd>
-					<div class="y-keys">
-						<kbd class="key y-key" data-key="ArrowUp"
-							><i class="fa-solid fa-caret-up"></i
-						></kbd>
-						<kbd class="key y-key" data-key="ArrowDown"
-							><i class="fa-solid fa-caret-down"></i
-						></kbd>
-					</div>
-
-					<kbd class="key x-key" data-key="ArrowRight"
-						><i class="fa-solid fa-caret-right"></i
-					></kbd>
+		<div class="wrap">
+			<header>
+				<div class="brand">
+					<h1>Virtual Keyboard</h1>
+					<span>Eight themes, four light shows, one Markdown editor</span>
 				</div>
+				<div class="hdr-right">
+					<span class="pill" data-testid="theme-pill">
+						<i class="swatch"></i>Theme <b id="theme-num">1</b> · <b id="theme-name">Nebula</b>
+					</span>
+					<button class="btn" id="sound" type="button" aria-pressed="false">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z" /><path d="M15.5 8.5a5 5 0 0 1 0 7" /><path d="M19 5a10 10 0 0 1 0 14" /></svg>
+						<span class="t">Sound</span>
+					</button>
+					<button class="btn" id="info" type="button">
+						<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10" /><path d="M12 16v-4M12 8h.01" /></svg>
+						<span class="t">Info</span>
+					</button>
+				</div>
+			</header>
+
+			<section class="editor" id="ed" data-view="split" aria-label="Markdown editor">
+				<div class="toolbar">
+					<div class="seg" role="group" aria-label="View">
+						<button class="btn" id="v-write" type="button" aria-pressed="false">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" /></svg>Write
+						</button>
+						<button class="btn" id="v-split" type="button" aria-pressed="true">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M12 4v16" /></svg>Split
+						</button>
+						<button class="btn" id="v-preview" type="button" aria-pressed="false">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></svg>Preview
+						</button>
+					</div>
+					<div class="tools">
+						<button class="btn" id="copy" type="button">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="13" height="13" rx="2" /><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3" /></svg>
+							<span class="t">Copy</span>
+						</button>
+						<button class="btn" id="save" type="button">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z" /><path d="M17 21v-8H7v8M7 3v5h8" /></svg>
+							<span class="t">Save</span>
+						</button>
+						<button class="btn" id="clear" type="button">
+							<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" /></svg>
+							<span class="t">Clear</span>
+						</button>
+					</div>
+				</div>
+				<div class="panes">
+					<div class="pane write">
+						<textarea id="editor" spellcheck="false" aria-label="Markdown" placeholder="Start typing, or tap the keys below…"></textarea>
+					</div>
+					<div class="pane preview"><div id="preview" data-testid="preview"></div></div>
+				</div>
+				<div class="status">
+					<span><b id="s-words">0</b> words</span>
+					<span><b id="s-chars">0</b> chars</span>
+					<span><b id="s-keys">0</b> keystrokes</span>
+					<span class="saved" id="s-saved">Saved</span>
+				</div>
+			</section>
+
+			<section class="plate" aria-label="On-screen keyboard">
+				<div class="rows" id="rows"></div>
+			</section>
+
+			<p class="hint">
+				<kbd>F1</kbd>–<kbd>F8</kbd> switch themes · <kbd>F9</kbd>–<kbd>F12</kbd> start a light show ·
+				<kbd>esc</kbd> for info · <kbd>fn</kbd> turns on Markdown shortcuts
+			</p>
+			<footer>
+				Built by <a href="https://aniqa.dev" target="_blank" rel="noopener">Aniqa</a> ·
+				<a href="https://github.com/aniqatc/keyboard" target="_blank" rel="noopener">Source on GitHub</a>
+			</footer>
+		</div>
+
+		<div class="overlay" id="overlay" hidden>
+			<div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-title">
+				<button class="btn close" id="close" type="button" aria-label="Close">
+					<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12" /></svg>
+				</button>
+				<h2 id="m-title">Did you know…</h2>
+				<p>
+					There are <b>eight</b> keyboard themes. Press <kbd>F1</kbd> to <kbd>F8</kbd>, tap the
+					matching keys, or pick one here. The shuffle key at the top right picks one at random.
+				</p>
+				<div class="themes" id="theme-grid"></div>
+				<p>For a colorful surprise, press one of the light-show keys:</p>
+				<ul>
+					<li><kbd>F9</kbd> Wave: lights travel across each row</li>
+					<li><kbd>F10</kbd> Ripple: a rainbow spreads out from the center</li>
+					<li><kbd>F11</kbd> Sweep: a band of light crosses left to right</li>
+					<li><kbd>F12</kbd> Twinkle: random keys sparkle</li>
+				</ul>
+				<p>
+					The text field supports full Markdown. Switch between Write, Split and Preview, then copy,
+					save or clear your note. Turn on <kbd>fn</kbd> and tap a key with a small label for a
+					shortcut, like <kbd>B</kbd> for bold or <kbd>1</kbd> for a heading. <kbd>Ctrl</kbd>/<kbd>⌘</kbd>
+					+ <kbd>B</kbd>, <kbd>I</kbd> and <kbd>K</kbd> work too.
+				</p>
+				<p class="muted">
+					Your browser may keep <kbd>F11</kbd> and <kbd>F12</kbd> for itself. Tapping the keys always
+					works.
+				</p>
+				<p class="links">
+					If you enjoyed this website, I'd love to know!
+					<span>
+						<a href="https://aniqa.dev" target="_blank" rel="noopener noreferrer">Website</a>
+						<a href="https://github.com/aniqatc" target="_blank" rel="noopener noreferrer">GitHub</a>
+						<a href="https://linkedin.com/in/aniqaio" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+						<a href="https://codepen.io/aniqatc" target="_blank" rel="noopener noreferrer">CodePen</a>
+						<a href="https://twitter.com/aniqatc" target="_blank" rel="noopener noreferrer">X</a>
+						<a href="mailto:hello@aniqa.io">hello@aniqa.io</a>
+					</span>
+				</p>
 			</div>
-		</section>
-		<div class="modal hidden">
-			<button class="close-modal"><i class="fa-solid fa-xmark"></i></button>
-			<h1>Did you know...</h1>
-			<p>
-				There's <b>eight</b> different keyboard themes that you can access on
-				here?! Either <b>press</b> through the <code>F1</code> to
-				<code>F8</code> buttons on your keyboard or <b>click</b> through the
-				corresponding buttons on the screen with your mouse to change the theme!
-			</p>
-			<p>
-				If you're feeling particularly adventurous, then click the
-				<i class="fa-solid fa-shuffle"></i> button at the top-right of the
-				keyboard for a random theme!
-			</p>
-			<p>
-				For a <em>colorful</em> surprise, click <code>F9</code> or
-				<code>F10</code>.
-			</p>
-			<p>
-				As for the text field, it has full Markdown support with options to
-				<b>preview, copy, save</b> or <b>delete</b> your Markdown content.
-			</p>
-
-			<p>
-				<small>If you enjoyed this website, I'd <b>love</b> to know! </small>
-
-				<span>
-					<a href="https://aniqa.dev" target="_blank" rel="noopener noreferrer">
-						<i class="fa-solid fa-laptop-code fa-shake"></i>
-					</a>
-					<a
-						href="https://twitter.com/aniqatc"
-						target="_blank"
-						rel="noopener noreferrer"
-						><i class="fa-brands fa-twitter fa-shake"></i
-					></a>
-					<a
-						href="https://github.com/aniqatc"
-						target="_blank"
-						rel="noopener noreferrer"
-						><i class="fa-brands fa-github fa-shake"></i
-					></a>
-					<a
-						href="https://linkedin.com/in/aniqaio"
-						target="_blank"
-						rel="noopener noreferrer"
-						><i class="fa-brands fa-linkedin-in fa-shake"></i
-					></a>
-					<a
-						href="https://codepen.io/aniqatc"
-						target="_blank"
-						rel="noopener noreferrer"
-						><i class="fa-brands fa-codepen fa-shake"></i>
-					</a>
-					<a
-						href="mailto:hello@aniqa.io"
-						target="_blank"
-						rel="noopener noreferrer"
-						><i class="fa-solid fa-envelope fa-shake"></i></a
-				></span>
-			</p>
 		</div>
-		<div class="overlay hidden"></div>
-		<div class="small-device-msg">
-			<p>
-				<b>Thank you for visiting!</b><br />
-				Unfortunately, this device is too small for the keyboard to be rendered
-				in its entirety. Please visit this website on a larger screen for a
-				better experience!
-			</p>
-		</div>
-		<footer>
-			<i class="fa-solid fa-code"></i> Designed & Coded by
-			<a href="https://github.com/aniqatc" target="_blank">Aniqa</a>
-		</footer>
 	</body>
 </html>

@@ -1,394 +1,296 @@
-// Retrieve saved content
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme) {
-	document.body.classList.add(`theme-${savedTheme}`);
-}
+import { storage, KEYS } from './storage.js';
+import { toast } from './toast.js';
+import { createSound } from './sound.js';
+import { initThemes, setTheme, shuffleTheme } from './themes.js';
+import { buildKeyboard, flash } from './keyboard.js';
+import { createEditor, LIST_RE } from './editor.js';
+import { createShows } from './shows.js';
+import { createModal } from './modal.js';
 
-const textarea = document.querySelector('textarea');
-const savedText = localStorage.getItem('note');
-if (savedText) {
-	textarea.value = `${savedText}`;
-}
+const $ = id => document.getElementById(id);
+const rowsEl = $('rows');
+const finePointer = matchMedia('(pointer: fine)').matches;
+const narrow = () => matchMedia('(max-width: 760px)').matches;
 
-// Toast Notification
-function renderToast() {
-	const notif = document.createElement('div');
-	notif.classList.add('toast');
-	notif.innerHTML = `Click <code>Escape</code> for info!`;
-	toasts.appendChild(notif);
-
-	setTimeout(() => {
-		notif.remove();
-	}, 1000 * 5);
-}
-
-renderToast();
-
-// Modal Popup
-const modal = document.querySelector('.modal');
-const overlay = document.querySelector('.overlay');
-const closeModalButton = document.querySelector('.close-modal');
-const openModalButton = document.getElementById('esc');
-
-function closeModal() {
-	modal.classList.add('hidden');
-	overlay.classList.add('hidden');
-}
-
-function openModal() {
-	textarea.blur();
-	modal.classList.remove('hidden');
-	overlay.classList.remove('hidden');
-}
-
-openModalButton.addEventListener('click', openModal);
-closeModalButton.addEventListener('click', closeModal);
-overlay.addEventListener('click', closeModal);
-
-// Textarea toolbar
-const clearButton = document.getElementById('clear-btn');
-const copyButton = document.getElementById('copy-btn');
-const saveButton = document.getElementById('save-btn');
-const previewButton = document.getElementById('preview-btn');
-const editButton = document.getElementById('edit-btn');
-const textPreview = document.querySelector('.textarea-preview');
-const previewLabel = document.querySelector('.preview-label');
-
-clearButton.addEventListener('click', () => {
-	textarea.value = '';
-	textPreview.innerHTML = '';
-
-	localStorage.setItem('note', `${textarea.value}`);
+const { byCode, defs, allKeys } = buildKeyboard(rowsEl);
+initThemes($('theme-grid'));
+const sound = createSound($('sound'));
+const shows = createShows(rowsEl, allKeys);
+const modal = createModal($('overlay'), $('close'));
+const editor = createEditor({
+	textarea: $('editor'),
+	preview: $('preview'),
+	stats: { words: $('s-words'), chars: $('s-chars'), keys: $('s-keys'), saved: $('s-saved') },
 });
+const ta = editor.textarea;
 
-copyButton.addEventListener('click', () => {
-	const textValue = textarea.value;
-	const htmlValue = textPreview.innerHTML;
-	if (textValue || htmlValue) {
-		navigator.clipboard.writeText(textValue);
+// ---- Modifier state ------------------------------------------------------
+// On-screen shift, fn and control are "sticky": tap once, then tap the next key.
+const state = { shift: false, caps: false, fn: false, ctrl: false, physicalShift: false };
 
-		displayTemporaryMessage(textarea, 'Copied! ✔︎', textValue);
-		displayTemporaryMessage(textPreview, 'Copied! ✔︎', htmlValue);
-	} else {
-		displayTemporaryMessage(textarea, `Type Something! 📝`, '');
-		displayTemporaryMessage(textPreview, `Type Something! 📝`, '');
+function renderModifiers() {
+	const shifted = state.shift || state.physicalShift;
+	rowsEl.classList.toggle('upper', shifted !== state.caps);
+	rowsEl.classList.toggle('shifted', shifted);
+	rowsEl.classList.toggle('fn', state.fn);
+	byCode.CapsLock.classList.toggle('caps-on', state.caps);
+	byCode.ShiftLeft.classList.toggle('latched', state.shift);
+	byCode.ShiftRight.classList.toggle('latched', state.shift);
+	byCode.ControlLeft.classList.toggle('latched', state.ctrl);
+	byCode.Fn.classList.toggle('latched', state.fn);
+}
+
+const THEME_KEY = /^F([1-8])$/;
+const SHOW_KEY = /^F(9|1[0-2])$/;
+const isHeavy = code => ['Space', 'Enter', 'Backspace'].includes(code) || defs[code]?.type === 'm';
+
+// Keep focus in the editor on desktop. On touch screens, focusing the
+// textarea would pop up the phone's own keyboard on top of ours.
+function afterEdit() {
+	editor.update();
+	if (finePointer) ta.focus();
+}
+
+// ---- On-screen key presses ----------------------------------------------
+function pressKey(el) {
+	const code = el.dataset.code;
+	const def = defs[code];
+	sound.play(isHeavy(code));
+
+	if (THEME_KEY.test(code)) {
+		flash(el);
+		setTheme(Number(code.slice(1)) - 1, { announce: true });
+		return;
 	}
-});
-
-saveButton.addEventListener('click', () => {
-	const textValue = textarea.value;
-	const htmlValue = textPreview.innerHTML;
-
-	displayTemporaryMessage(textarea, 'Saved! ✔︎', textValue);
-	displayTemporaryMessage(textPreview, 'Saved! ✔︎', htmlValue);
-
-	localStorage.setItem('note', `${textValue}`);
-});
-
-previewButton.addEventListener('click', () => {
-	const markdown = marked(textarea.value);
-	textPreview.innerHTML = markdown;
-
-	toggleVisibility(previewLabel, 'block');
-	toggleVisibility(textPreview, 'block');
-	toggleVisibility(textarea, 'none');
-});
-
-editButton.addEventListener('click', () => {
-	toggleVisibility(previewLabel, 'none');
-	toggleVisibility(textPreview, 'none');
-	toggleVisibility(textarea, 'block');
-});
-
-// Textarea toolbar helpers
-function toggleVisibility(element, displayChoice) {
-	element.style.display = displayChoice;
-}
-
-function displayTemporaryMessage(element, message, content, duration = 600) {
-	if (element === textarea) {
-		textarea.value = message;
-		setTimeout(() => (element.value = content), duration);
-	} else if (element === textPreview) {
-		textPreview.innerHTML = message;
-		setTimeout(() => (element.innerHTML = content), duration);
+	if (SHOW_KEY.test(code)) {
+		shows.play(code);
+		return;
 	}
-}
+	flash(el);
 
-// Themes
-const themes = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight'];
-const themeButtons = document.querySelectorAll('.theme-key');
-
-function changeTheme(theme) {
-	themes.forEach(theme => document.body.classList.remove(`theme-${theme}`));
-	document.body.classList.add(`theme-${theme}`);
-	localStorage.setItem('theme', theme);
-}
-
-// Change Theme on Click
-themeButtons.forEach((button, index) => {
-	button.addEventListener('click', () => {
-		changeTheme(themes[index]);
-	});
-});
-
-// Shuffle Theme Button
-document.getElementById('shuffle').addEventListener('click', () => {
-	changeTheme(themes[Math.floor(Math.random() * themes.length)]);
-});
-
-// KEY DECLARATIONS
-
-// Theme Keys
-let themeKeyCode = [];
-themeButtons.forEach(button => themeKeyCode.push(button.getAttribute('data-key')));
-
-// All Keys
-const allKeys = document.querySelectorAll('.key');
-let allKeyCodes = [];
-allKeys.forEach(key => allKeyCodes.push(key.getAttribute('data-key')));
-
-// All Letter, Character and Number Keys
-const allCharKeys = document.querySelectorAll('.key:not(.operation-key)');
-let charKeyCodes = [];
-allCharKeys.forEach(key => charKeyCodes.push(key.getAttribute('data-key')));
-
-// All Operation-Based Keys
-const allOperationalKeys = document.querySelectorAll('.operation-key');
-let operationKeyCodes = [];
-allOperationalKeys.forEach(key => operationKeyCodes.push(key.getAttribute('data-key')));
-
-// All 26 Letter Keys & Caps Lock Indicator (to change case)
-const letterKeys = document.querySelectorAll('.letter-key');
-const capsIndicator = document.querySelector('.caps-indicator');
-
-// Click Sound
-const clickAudio = document.getElementById('click-audio');
-
-// Click Event Trigger Corresponding Keydown Event
-allKeys.forEach(key => {
-	key.addEventListener('click', event => {
-		event.preventDefault();
-
-		// Get the actual key element even if clicking on a child element
-		const keyElement = event.target.closest('.key');
-		if (!keyElement) return;
-
-		const dataKeyCode = keyElement.getAttribute('data-key');
-		const isAnimationKey = dataKeyCode === 'F9' || dataKeyCode === 'F10';
-
-		if (!isAnimationKey && !textarea.matches(':focus')) {
-			textarea.focus();
-		}
-
-		keyElement.classList.add('active');
-		clickAudio.play();
-
-		const keyCode = keyElement.getAttribute('data-key');
-		let caretStart = textarea.selectionStart;
-		let caretEnd = textarea.selectionEnd;
-
-		switch (keyCode) {
-			case 'Space':
-				textarea.value =
-					textarea.value.substring(0, caretStart) + ' ' + textarea.value.substring(caretEnd);
-				caretStart++;
-				break;
-			case 'Backspace':
-				if (caretStart === caretEnd && caretStart > 0) {
-					textarea.value =
-						textarea.value.substring(0, caretStart - 1) + textarea.value.substring(caretEnd);
-					caretStart--;
-				} else {
-					textarea.value =
-						textarea.value.substring(0, caretStart) + textarea.value.substring(caretEnd);
-				}
-				break;
-			case 'Enter':
-				textarea.value =
-					textarea.value.substring(0, caretStart) + '\n' + textarea.value.substring(caretEnd);
-				caretStart++;
-				break;
-			case 'Tab':
-				textarea.value =
-					textarea.value.substring(0, caretStart) + '    ' + textarea.value.substring(caretEnd);
-				caretStart += 4;
-				break;
-			case 'F9':
-				textarea.blur();
-				animateF9();
-				break;
-			case 'F10':
-				textarea.blur();
-				animateF10();
-				break;
-			default:
-				if (keyCode && keyCode.length === 1) {
-					textarea.value =
-						textarea.value.substring(0, caretStart) + keyCode + textarea.value.substring(caretEnd);
-					caretStart++;
-				}
-		}
-
-		// Update caret position
-		textarea.setSelectionRange(caretStart, caretStart);
-
-		// Remove active class after animation
-		setTimeout(() => {
-			keyElement.classList.remove('active');
-		}, 150);
-	});
-});
-
-// Keydown Events
-document.addEventListener('keydown', event => {
-	clearActiveOnKeys();
-	if (!textarea.matches(':focus')) {
-		textarea.focus();
+	switch (code) {
+		case 'Shuffle':
+			return shuffleTheme();
+		case 'Escape':
+			return modal.open();
+		case 'Fn':
+			state.fn = !state.fn;
+			renderModifiers();
+			return toast(state.fn ? 'Markdown shortcuts on' : 'Markdown shortcuts off', 1400);
+		case 'CapsLock':
+			state.caps = !state.caps;
+			return renderModifiers();
+		case 'ShiftLeft':
+		case 'ShiftRight':
+			state.shift = !state.shift;
+			return renderModifiers();
+		case 'ControlLeft':
+		case 'MetaLeft':
+		case 'MetaRight':
+			state.ctrl = !state.ctrl;
+			return renderModifiers();
+		case 'AltLeft':
+		case 'AltRight':
+			return;
 	}
 
-	// Change Theme
-	for (let i = 0; i < themeKeyCode.length; i++) {
-		if (event.key === themeKeyCode[i]) {
-			themeButtons[i].classList.add('active');
-			removeAllThemeClasses();
-			changeTheme(themes[i]);
-			break;
+	editor.countKeystroke();
+
+	if ((state.fn || state.ctrl) && def.md) {
+		editor.markdown[def.md]();
+		state.ctrl = false;
+		renderModifiers();
+		return afterEdit();
+	}
+	if (state.ctrl) {
+		state.ctrl = false;
+		renderModifiers();
+	}
+
+	switch (code) {
+		case 'Backspace': editor.backspace(); break;
+		case 'Enter': editor.newline(); break;
+		case 'Tab': editor.insert('    '); break;
+		case 'Space': editor.insert(' '); break;
+		case 'ArrowLeft': editor.moveHorizontal(-1); break;
+		case 'ArrowRight': editor.moveHorizontal(1); break;
+		case 'ArrowUp': editor.moveVertical(-1); break;
+		case 'ArrowDown': editor.moveVertical(1); break;
+		default: {
+			let ch = def.legend;
+			if (def.letter) ch = state.shift !== state.caps ? ch.toUpperCase() : ch;
+			else if (state.shift && def.shifted) ch = def.shifted;
+			editor.insert(ch);
 		}
 	}
 
-	// Add Active Class for Character Keys
-	for (let i = 0; i < allCharKeys.length; i++) {
-		if (event.key === charKeyCodes[i] || event.key === charKeyCodes[i].toUpperCase()) {
-			allCharKeys[i].classList.add('active');
+	if (state.shift) {
+		state.shift = false;
+		renderModifiers();
+	}
+	afterEdit();
+}
+
+// preventDefault on pointerdown keeps the textarea's focus and selection.
+rowsEl.addEventListener('pointerdown', e => {
+	if (e.target.closest('.key')) e.preventDefault();
+});
+rowsEl.addEventListener('click', e => {
+	const el = e.target.closest('.key');
+	if (el) pressKey(el);
+});
+
+// ---- Physical keyboard ---------------------------------------------------
+const held = new Set();
+
+document.addEventListener('keydown', e => {
+	if (modal.isOpen()) {
+		if (e.key === 'Escape') {
+			e.preventDefault();
+			modal.close();
 		}
+		return;
 	}
 
-	// Add Active Class for Operation Keys
-	for (let i = 0; i < allOperationalKeys.length; i++) {
-		if (event.code === operationKeyCodes[i]) {
-			allOperationalKeys[i].classList.add('active');
+	state.physicalShift = e.shiftKey;
+	if (e.getModifierState) state.caps = e.getModifierState('CapsLock');
+	renderModifiers();
+
+	const el = byCode[e.code];
+
+	if (e.code === 'Escape') {
+		e.preventDefault();
+		if (el) flash(el);
+		modal.open();
+		return;
+	}
+	if (THEME_KEY.test(e.code)) {
+		e.preventDefault();
+		if (!e.repeat) {
+			flash(el);
+			sound.play();
+			setTheme(Number(e.code.slice(1)) - 1, { announce: true });
 		}
+		return;
+	}
+	if (SHOW_KEY.test(e.code)) {
+		e.preventDefault();
+		if (!e.repeat) shows.play(e.code);
+		return;
 	}
 
-	// Handle CapsLock
-	if (event.code === 'CapsLock') {
-		if (event.getModifierState('CapsLock')) {
-			capsIndicator.classList.add('active');
-			letterKeys.forEach(el => (el.style.textTransform = 'uppercase'));
-		} else {
-			capsIndicator.classList.remove('active');
-			letterKeys.forEach(el => (el.style.textTransform = 'lowercase'));
+	if (el) {
+		el.classList.add('down');
+		held.add(el);
+	}
+	if (!e.repeat) sound.play(isHeavy(e.code));
+
+	if (e.target === ta) {
+		if (!e.repeat) editor.countKeystroke();
+		const mod = e.ctrlKey || e.metaKey;
+
+		if (mod && !e.altKey && !e.shiftKey) {
+			const action = { b: 'bold', i: 'italic', k: 'link' }[e.key.toLowerCase()];
+			if (action) {
+				e.preventDefault();
+				editor.markdown[action]();
+				editor.update();
+				return;
+			}
 		}
+		if (e.key === 'Enter' && !mod && !e.shiftKey && !e.altKey) {
+			const [s] = editor.selection();
+			const line = ta.value.slice(ta.value.lastIndexOf('\n', s - 1) + 1, s);
+			if (LIST_RE.test(line)) {
+				e.preventDefault();
+				editor.newline();
+				editor.update();
+			}
+		}
+		return;
 	}
 
-	// Shift Hold
-	if (event.key === 'Shift') {
-		letterKeys.forEach(el => (el.style.textTransform = 'uppercase'));
-	}
+	// Typing a character while nothing else has focus sends it to the editor.
+	const busy = /^(INPUT|TEXTAREA|BUTTON|SELECT|A)$/.test(e.target.tagName);
+	if (!busy && e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) ta.focus();
+});
 
-	// Escape: Open Modal
-	if (event.key === 'Escape') {
-		textarea.blur();
-		openModal();
-	}
-
-	// F9 Animation
-	if (event.key === 'F9') {
-		textarea.blur();
-		animateF9();
-	}
-
-	// F10 Animation
-	if (event.key === 'F10') {
-		textarea.blur();
-		animateF10();
+document.addEventListener('keyup', e => {
+	state.physicalShift = e.shiftKey;
+	if (e.getModifierState) state.caps = e.getModifierState('CapsLock');
+	renderModifiers();
+	const el = byCode[e.code];
+	if (el) {
+		setTimeout(() => el.classList.remove('down'), 120);
+		held.delete(el);
 	}
 });
 
-// Animations
-function animateF9() {
-	clearActiveOnKeys();
+// Releasing keys while the window is in the background never fires keyup.
+window.addEventListener('blur', () => {
+	held.forEach(el => el.classList.remove('down'));
+	held.clear();
+	state.physicalShift = false;
+	renderModifiers();
+});
 
-	const rows = [
-		document.querySelectorAll('.row-one .key'),
-		document.querySelectorAll('.row-two .key'),
-		document.querySelectorAll('.row-three .key'),
-		document.querySelectorAll('.row-four .key'),
-		document.querySelectorAll('.row-five .key'),
-		document.querySelectorAll('.row-six .key'),
-	];
+// ---- Toolbar --------------------------------------------------------------
+const views = { write: $('v-write'), split: $('v-split'), preview: $('v-preview') };
 
-	rows.forEach((row, rowIndex) => {
-		row.forEach((key, keyIndex) => {
-			setTimeout(() => {
-				key.classList.add('active');
-				setTimeout(() => {
-					key.classList.remove('active');
-				}, 800);
-			}, rowIndex * 50 + keyIndex * 30);
-		});
-	});
+function setView(view) {
+	$('ed').dataset.view = view;
+	Object.entries(views).forEach(([name, b]) => b.setAttribute('aria-pressed', String(name === view)));
+	storage.set(KEYS.view, view);
 }
+Object.entries(views).forEach(([name, b]) => b.addEventListener('click', () => setView(name)));
+if (views[storage.get(KEYS.view)]) setView(storage.get(KEYS.view));
 
-function animateF10() {
-	clearActiveOnKeys();
-
-	const keys = Array.from(allKeys);
-	const keyDelay = 20;
-	const duration = 1800;
-
-	const centerX = window.innerWidth / 2;
-	const centerY = window.innerHeight / 2;
-
-	keys.sort((a, b) => {
-		const aRect = a.getBoundingClientRect();
-		const bRect = b.getBoundingClientRect();
-		const aDistance = Math.hypot(
-			centerX - (aRect.left + aRect.width / 2),
-			centerY - (aRect.top + aRect.height / 2)
-		);
-		const bDistance = Math.hypot(
-			centerX - (bRect.left + bRect.width / 2),
-			centerY - (bRect.top + bRect.height / 2)
-		);
-		return aDistance - bDistance;
-	});
-
-	keys.forEach((key, index) => {
-		setTimeout(() => {
-			key.classList.add('key-color-cycle');
-			setTimeout(() => {
-				key.classList.remove('key-color-cycle');
-			}, duration);
-		}, index * keyDelay);
-	});
-}
-
-function clearActiveOnKeys() {
-	allKeys.forEach(el => {
-		el.classList.remove('active', 'key-color-cycle');
-		// Force DOM reflow to ensure clean animation state
-		void el.offsetWidth;
-	});
-}
-
-document.addEventListener('keyup', event => {
-	const keyElement = document.querySelector(`.key[data-key="${event.code}"]`);
-	if (keyElement && !keyElement.classList.contains('key-color-cycle')) {
-		setTimeout(() => {
-			keyElement.classList.remove('active');
-		}, 150);
-	}
-
-	if (event.code === 'CapsLock') {
-		if (!event.getModifierState('CapsLock')) {
-			capsIndicator.classList.remove('active');
-			letterKeys.forEach(el => (el.style.textTransform = 'lowercase'));
-		}
-	}
-
-	if (event.key === 'Shift' && !event.getModifierState('CapsLock')) {
-		letterKeys.forEach(el => (el.style.textTransform = 'lowercase'));
+$('copy').addEventListener('click', async () => {
+	if (!ta.value.trim()) return toast('Type something first 📝');
+	try {
+		await navigator.clipboard.writeText(ta.value);
+		toast('Copied ✓');
+	} catch {
+		if ($('ed').dataset.view === 'preview') setView(narrow() ? 'write' : 'split');
+		ta.focus();
+		ta.select();
+		toast('Text selected. Press Ctrl+C or ⌘C to copy');
 	}
 });
+
+$('save').addEventListener('click', () => {
+	toast(editor.save() ? 'Saved ✓' : "Couldn't save: this browser blocks storage");
+});
+
+// Clear asks for a second tap within 3 seconds.
+let clearArmedUntil = 0;
+let clearTimer;
+$('clear').addEventListener('click', e => {
+	const button = e.currentTarget;
+	const label = button.querySelector('.t');
+	const reset = () => {
+		clearArmedUntil = 0;
+		button.classList.remove('warn');
+		label.textContent = 'Clear';
+	};
+
+	if (Date.now() < clearArmedUntil) {
+		clearTimeout(clearTimer);
+		reset();
+		editor.clear();
+		toast('Cleared');
+		if (finePointer) ta.focus();
+		return;
+	}
+	clearArmedUntil = Date.now() + 3000;
+	button.classList.add('warn');
+	label.textContent = 'Tap again to clear';
+	if (narrow()) toast('Tap the trash again to clear everything');
+	clearTimeout(clearTimer);
+	clearTimer = setTimeout(reset, 3000);
+});
+
+$('info').addEventListener('click', modal.open);
+
+renderModifiers();
+setTimeout(() => toast('Press <kbd>esc</kbd> for info', 5000), 400);
