@@ -2,7 +2,7 @@ import { storage, KEYS } from './storage.js';
 import { toast } from './toast.js';
 import { createSound } from './sound.js';
 import { initThemes, setTheme, shuffleTheme } from './themes.js';
-import { buildKeyboard, flash } from './keyboard.js';
+import { buildKeyboard, flash, ping } from './keyboard.js';
 import { createEditor, LIST_RE } from './editor.js';
 import { createShows } from './shows.js';
 import { createModal } from './modal.js';
@@ -59,10 +59,11 @@ function pressKey(el) {
 
 	if (THEME_KEY.test(code)) {
 		flash(el);
-		setTheme(Number(code.slice(1)) - 1, { announce: true });
+		setTheme(Number(code.slice(1)) - 1, { announce: true, origin: el });
 		return;
 	}
 	if (SHOW_KEY.test(code)) {
+		flash(el);
 		shows.play(code);
 		return;
 	}
@@ -70,7 +71,7 @@ function pressKey(el) {
 
 	switch (code) {
 		case 'Shuffle':
-			return shuffleTheme();
+			return shuffleTheme(el);
 		case 'Escape':
 			return modal.open();
 		case 'Fn':
@@ -169,7 +170,7 @@ document.addEventListener('keydown', e => {
 		if (!e.repeat) {
 			flash(el);
 			sound.play();
-			setTheme(Number(e.code.slice(1)) - 1, { announce: true });
+			setTheme(Number(e.code.slice(1)) - 1, { announce: true, origin: el });
 		}
 		return;
 	}
@@ -181,6 +182,7 @@ document.addEventListener('keydown', e => {
 
 	if (el) {
 		el.classList.add('down');
+		if (!e.repeat) ping(el);
 		held.add(el);
 	}
 	if (!e.repeat) sound.play(isHeavy(e.code));

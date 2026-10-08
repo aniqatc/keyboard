@@ -11,7 +11,7 @@ function legendHTML(def) {
 		const dot = theme
 			? `<i class="dot" style="background:linear-gradient(135deg,${theme.face},${theme.glow});box-shadow:0 0 0 1px rgba(127,127,127,.5)"></i>`
 			: `<i class="dot" style="background:${RAINBOW}"></i>`;
-		return `<span class="ftop"><span class="lg w">${def.legend}</span>${dot}</span>`;
+		return `<span class="ftop"><span class="lg fk">${def.legend}</span>${dot}</span>`;
 	}
 	if (def.shifted) {
 		return `<span class="dual"><span class="lg up${w}">${def.shifted}</span><span class="lg${w}">${def.legend}</span></span>`;
@@ -22,6 +22,8 @@ function legendHTML(def) {
 
 function ariaLabel(def) {
 	if (def.label) return def.label;
+	if (def.fkey != null && THEMES[def.fkey]) return `${def.legend}: ${THEMES[def.fkey].name} theme`;
+	if (LIGHT_SHOWS[def.code]) return `${def.legend}: ${LIGHT_SHOWS[def.code]} light show`;
 	if (def.letter) return def.legend.toUpperCase();
 	return def.legend;
 }
@@ -78,7 +80,20 @@ export function buildKeyboard(container) {
 	return { byCode, defs, allKeys: [...container.querySelectorAll('.key')] };
 }
 
-export function flash(el, ms = 150) {
+// Restarts the ring that ripples out from a key.
+export function ping(el) {
+	el.classList.remove('ping');
+	void el.offsetWidth; // restart the CSS animation
+	el.classList.add('ping');
+}
+
+// A quick press-and-release for on-screen taps.
+export function flash(el, ms = 120) {
 	el.classList.add('down');
+	ping(el);
 	setTimeout(() => el.classList.remove('down'), ms);
 }
+
+document.addEventListener('animationend', e => {
+	if (e.animationName === 'ping') e.target.classList.remove('ping');
+});

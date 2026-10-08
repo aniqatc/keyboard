@@ -768,24 +768,80 @@ header {
 	padding: .65cqi .85cqi;
 	border-radius: var(--r);
 	background: linear-gradient(175deg, var(--f1), var(--f2));
-	transition: transform 70ms ease-out, filter .15s;
+	/* Release springs back with a slight overshoot */
+	transition: transform 260ms cubic-bezier(.34, 1.56, .64, 1), filter .15s;
 	overflow: hidden;
+}
+
+/* Light-show overlay: its opacity follows --heat, set per frame by shows.js */
+.top::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	background: radial-gradient(120% 120% at 50% 30%, var(--gc, var(--g)), transparent 75%);
+	opacity: 0;
+	pointer-events: none;
 }
 
 .key:hover .top {
 	filter: brightness(1.08);
 }
 
+/* Press goes down fast, comes back with the spring above */
 .key.down .top {
 	transform: translateY(.4cqi);
+	transition-duration: 45ms;
+	transition-timing-function: ease-out;
 }
 
-.key.down, .key.lit {
+.key.down {
 	box-shadow: 0 0 1.5cqi .25cqi var(--g), 0 0 0 .14cqi var(--g);
+	transition-duration: 40ms;
 }
 
-.key.lit .top {
-	filter: brightness(1.12);
+/* A ring that ripples out from a pressed key */
+.key::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	pointer-events: none;
+	opacity: 0;
+}
+
+.key.ping::before {
+	animation: ping 520ms cubic-bezier(.2, .7, .3, 1);
+}
+
+@keyframes ping {
+	0% {
+		opacity: .9;
+		box-shadow: 0 0 0 0 var(--g);
+	}
+	100% {
+		opacity: 0;
+		box-shadow: 0 0 0 1.4cqi var(--g);
+	}
+}
+
+/* Light shows drive --heat (0–1), --lift (0–1) and optionally --gc (color) */
+.key.showing {
+	box-shadow:
+		0 0 calc(var(--heat, 0) * 2.2cqi) calc(var(--heat, 0) * .35cqi) color-mix(in srgb, var(--gc, var(--g)) calc(var(--heat, 0) * 100%), transparent),
+		0 0 0 calc(var(--heat, 0) * .14cqi) var(--gc, var(--g)),
+		var(--shadow);
+	transition: none;
+}
+
+.key.showing .top {
+	transform: translateY(calc(var(--lift, 0) * -.45cqi)) scale(calc(1 + var(--lift, 0) * .03));
+	filter: brightness(calc(1 + var(--heat, 0) * .3)) saturate(calc(1 + var(--heat, 0) * .4));
+	transition: none;
+}
+
+.key.showing .top::after {
+	opacity: calc(var(--heat, 0) * .6);
 }
 
 .r1 {
@@ -812,59 +868,23 @@ header {
 	--g: var(--g6);
 }
 
-.key.cycle {
-	animation: cyc 1.8s cubic-bezier(.4, 0, .2, 1);
+/* Theme change: the new theme spreads out in a circle from the key that was pressed */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation: none;
+	mix-blend-mode: normal;
 }
 
-.key.cycle .top::after {
-	content: "";
-	position: absolute;
-	inset: 0;
-	border-radius: inherit;
-	animation: cycf 1.8s cubic-bezier(.4, 0, .2, 1);
-	opacity: .55;
-	pointer-events: none;
+::view-transition-new(root) {
+	animation: theme-reveal 700ms cubic-bezier(.22, .8, .25, 1);
 }
 
-@keyframes cyc {
-	0% {
-		box-shadow: 0 0 1.6cqi .3cqi #ff3b3b;
+@keyframes theme-reveal {
+	from {
+		clip-path: circle(0 at var(--vt-x, 50%) var(--vt-y, 50%));
 	}
-	20% {
-		box-shadow: 0 0 1.6cqi .3cqi #ffb800;
-	}
-	40% {
-		box-shadow: 0 0 1.6cqi .3cqi #3dff6e;
-	}
-	60% {
-		box-shadow: 0 0 1.6cqi .3cqi #00c8ff;
-	}
-	80% {
-		box-shadow: 0 0 1.6cqi .3cqi #8a4dff;
-	}
-	100% {
-		box-shadow: var(--shadow);
-	}
-}
-
-@keyframes cycf {
-	0% {
-		background: #ff3b3b;
-	}
-	20% {
-		background: #ffb800;
-	}
-	40% {
-		background: #3dff6e;
-	}
-	60% {
-		background: #00c8ff;
-	}
-	80% {
-		background: #8a4dff;
-	}
-	100% {
-		background: transparent;
+	to {
+		clip-path: circle(150vmax at var(--vt-x, 50%) var(--vt-y, 50%));
 	}
 }
 
@@ -880,6 +900,11 @@ header {
 
 .lg.w {
 	font-size: max(7px, 1.05cqi);
+	letter-spacing: .02em;
+}
+
+.lg.fk {
+	font-size: max(8px, 1.1cqi);
 	letter-spacing: .02em;
 }
 
@@ -1027,8 +1052,23 @@ header {
 	.ftop {
 		justify-content: center;
 	}
+	.row.fnrow {
+		height: 5.4cqi;
+	}
+	.lg.fk {
+		font-size: max(7px, 1.7cqi);
+	}
+	/* The theme swatch becomes a thin bar under the label */
 	.ftop .dot {
-		display: none;
+		position: absolute;
+		left: 28%;
+		right: 28%;
+		bottom: .5cqi;
+		width: auto;
+		height: 2px;
+		min-width: 0;
+		min-height: 2px;
+		border-radius: 2px;
 	}
 }
 
@@ -1084,7 +1124,6 @@ footer a {
 	padding: 8px 16px;
 	font-size: 13px;
 	box-shadow: 0 8px 24px -10px rgba(0, 0, 0, .5);
-	animation: tin .3s ease-out;
 }
 
 .toast.out {
@@ -1096,7 +1135,7 @@ footer a {
 @keyframes tin {
 	from {
 		opacity: 0;
-		transform: translateY(-8px);
+		transform: translateY(-14px) scale(.94);
 	}
 }
 
@@ -1207,13 +1246,44 @@ footer a {
 	}
 }
 
-@media (prefers-reduced-motion:reduce) {
-	.blob {
+/* Dialog and toast entrances */
+.overlay:not([hidden]) {
+	animation: fade-in 200ms ease-out;
+}
+
+.overlay:not([hidden]) .modal {
+	animation: pop-in 340ms cubic-bezier(.34, 1.4, .64, 1);
+}
+
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+}
+
+@keyframes pop-in {
+	from {
+		opacity: 0;
+		transform: translateY(12px) scale(.96);
+	}
+}
+
+.toast {
+	animation: tin 380ms cubic-bezier(.34, 1.5, .64, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.blob,
+	.toast,
+	.key.ping::before,
+	.overlay:not([hidden]),
+	.overlay:not([hidden]) .modal,
+	::view-transition-new(root) {
 		animation: none;
 	}
-	.top, .toast {
+	.top,
+	.toast {
 		transition: none;
-		animation: none;
 	}
 }
 

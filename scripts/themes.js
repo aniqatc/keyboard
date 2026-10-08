@@ -20,9 +20,27 @@ let grid = null;
 
 export const currentTheme = () => current;
 
-export function setTheme(index, { announce = false } = {}) {
+// With an origin element, the new theme spreads out in a circle from it
+// (View Transitions API, where supported).
+export function setTheme(index, { announce = false, origin = null } = {}) {
 	const theme = THEMES[index];
-	if (!theme) return;
+	if (!theme || (index === current && root.dataset.kb === String(index + 1) && grid?.dataset.ready)) {
+		if (theme && announce) toast(`Theme ${index + 1} · ${theme.name}`);
+		return;
+	}
+	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+	if (origin && document.startViewTransition && !reduce) {
+		const r = origin.getBoundingClientRect();
+		root.style.setProperty('--vt-x', `${r.left + r.width / 2}px`);
+		root.style.setProperty('--vt-y', `${r.top + r.height / 2}px`);
+		document.startViewTransition(() => applyTheme(index, announce));
+	} else {
+		applyTheme(index, announce);
+	}
+}
+
+function applyTheme(index, announce) {
+	const theme = THEMES[index];
 	current = index;
 	root.dataset.kb = String(index + 1);
 	document.getElementById('theme-num').textContent = index + 1;
@@ -32,11 +50,11 @@ export function setTheme(index, { announce = false } = {}) {
 	if (announce) toast(`Theme ${index + 1} · ${theme.name}`);
 }
 
-export function shuffleTheme() {
+export function shuffleTheme(origin) {
 	let next;
 	do next = Math.floor(Math.random() * THEMES.length);
 	while (next === current);
-	setTheme(next, { announce: true });
+	setTheme(next, { announce: true, origin });
 }
 
 export function initThemes(gridEl) {
@@ -45,7 +63,7 @@ export function initThemes(gridEl) {
 		const b = document.createElement('button');
 		b.type = 'button';
 		b.innerHTML = `<i style="background:linear-gradient(90deg,${theme.face} 0 55%,${theme.glow} 55%)"></i>F${i + 1} ${theme.name}`;
-		b.addEventListener('click', () => setTheme(i));
+		b.addEventListener('click', () => setTheme(i, { origin: b }));
 		grid.appendChild(b);
 	});
 
@@ -53,4 +71,5 @@ export function initThemes(gridEl) {
 	const saved = THEMES.findIndex(t => t.id === storage.get(KEYS.theme));
 	const fallback = matchMedia('(prefers-color-scheme: dark)').matches ? 0 : 1;
 	setTheme(saved >= 0 ? saved : fallback);
+	grid.dataset.ready = '1';
 }
