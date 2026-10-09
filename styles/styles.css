@@ -63,8 +63,8 @@ html[data-kb="2"] {
 	--mod-lo: #bb9be3;
 	--mod-side: #8a66b7;
 	--mod-ink: #2a1347;
-	--fn-hi: #a77fd9;
-	--fn-lo: #8d5ec9;
+	--fn-hi: #7d52b8;
+	--fn-lo: #6a3fa6;
 	--fn-side: #5f3796;
 	--fn-ink: #fff;
 	--g1: #ca60cc;
@@ -82,7 +82,7 @@ html[data-kb="3"] {
 	--bg: #000;
 	--blobs: 0;
 	--ink: #e8e8e8;
-	--muted: #8f8f8f;
+	--muted: #ababab;
 	--panel: rgba(40, 40, 40, .8);
 	--line: rgba(255, 255, 255, .1);
 	--blur: none;
@@ -154,7 +154,7 @@ html[data-kb="5"] {
 	--bg: linear-gradient(to bottom left, #232323, #2c2727);
 	--blobs: 0;
 	--ink: #efefef;
-	--muted: #9c9696;
+	--muted: #c2bcbc;
 	--panel: rgba(90, 86, 86, .55);
 	--line: rgba(255, 255, 255, .1);
 	--blur: none;
@@ -190,12 +190,12 @@ html[data-kb="6"] {
 	--bg: linear-gradient(to bottom left, #fff, #dedede);
 	--blobs: 0;
 	--ink: #151515;
-	--muted: #5a5a5a;
+	--muted: #444;
 	--panel: rgba(214, 214, 214, .7);
 	--line: rgba(0, 0, 0, .12);
 	--blur: none;
 	--code: rgba(0, 0, 0, .06);
-	--accent: #e8563a;
+	--accent: #b8381f;
 	--accent-ink: #fff;
 	--key-hi: #d6d6d6;
 	--key-lo: #c2c2c2;
@@ -266,7 +266,7 @@ html[data-kb="8"] {
 	--b2: #9c2222;
 	--b3: #c0602c;
 	--ink: #1c1717;
-	--muted: #5f5450;
+	--muted: #483e3a;
 	--panel: rgba(214, 212, 210, .82);
 	--line: rgba(80, 40, 30, .15);
 	--blur: blur(8px);
@@ -281,8 +281,8 @@ html[data-kb="8"] {
 	--mod-lo: #ba7c66;
 	--mod-side: #8a5543;
 	--mod-ink: #2b120a;
-	--fn-hi: #68997c;
-	--fn-lo: #5a8a6c;
+	--fn-hi: #4c7a5f;
+	--fn-lo: #416b52;
 	--fn-side: #3c624c;
 	--fn-ink: #f2f8f3;
 	--g1: #00f404;
@@ -783,12 +783,16 @@ header {
 	opacity: 0;
 }
 
+/* Three layers: a wide halo, a tight bright core and a crisp edge */
 .glow {
-	box-shadow: 0 0 1.8cqi .3cqi var(--gc, var(--g)), 0 0 0 .14cqi var(--gc, var(--g));
+	box-shadow:
+		0 0 3cqi .7cqi color-mix(in srgb, var(--gc, var(--g)) 70%, transparent),
+		0 0 1cqi .25cqi var(--gc, var(--g)),
+		0 0 0 .18cqi var(--gc, var(--g));
 }
 
 .tint {
-	background: radial-gradient(120% 120% at 50% 30%, var(--gc, var(--g)), transparent 75%);
+	background: radial-gradient(130% 120% at 50% 20%, var(--gc, var(--g)), transparent 80%);
 }
 
 .ring {
@@ -916,13 +920,17 @@ header {
 }
 
 .dual .up {
-	opacity: .6;
-	font-size: max(8px, 1.25cqi);
+	font-size: max(8px, 1.2cqi);
+	font-weight: 400;
 }
 
+/* When shift is on, the shifted legend gets an underline (not just a color change) */
 .rows.shifted .dual .up {
-	opacity: 1;
-	color: var(--g);
+	font-weight: 700;
+	text-decoration: underline;
+	text-decoration-color: var(--g);
+	text-decoration-thickness: .2cqi;
+	text-underline-offset: .3cqi;
 }
 
 .right {
@@ -974,8 +982,8 @@ header {
 }
 
 .sub {
-	font: 600 max(7px, .85cqi)/1 var(--mono);
-	color: var(--accent);
+	font: 700 max(7px, .85cqi)/1 var(--mono);
+	color: var(--ki);
 	align-self: flex-end;
 	opacity: 0;
 	transform: translateY(.3cqi);
@@ -987,8 +995,10 @@ header {
 	transform: none;
 }
 
-.rows.fn .key:not([data-md]):not([data-code="Fn"]) .top {
-	opacity: .45;
+/* fn layer: keys with a Markdown shortcut get an accent ring instead of the
+   other keys being faded out, so every legend keeps full contrast */
+.rows.fn .key[data-md] .top {
+	box-shadow: inset 0 0 0 .22cqi var(--accent);
 }
 
 .key svg {
@@ -1216,10 +1226,8 @@ footer a {
 	width: 100%;
 	max-height: 85vh;
 	overflow: auto;
-	background: var(--panel);
-	background-color: color-mix(in srgb, var(--mod-lo) 70%, transparent);
-	backdrop-filter: blur(16px);
-	-webkit-backdrop-filter: blur(16px);
+	/* Solid card: a see-through one went grey in light themes and hurt contrast */
+	background: var(--key-hi);
 	border: 1px solid var(--line);
 	border-radius: 14px;
 	padding: 24px 26px;
@@ -1299,7 +1307,12 @@ footer a {
 		display: none;
 	}
 	.btn .t {
-		display: none;
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
 	}
 	.themes {
 		grid-template-columns: repeat(2, 1fr);
@@ -1390,4 +1403,73 @@ footer a {
 
 .ftop.end {
 	justify-content: flex-end;
+}
+
+/* Visible keyboard focus on keys, drawn outside the keycap so it never hides the legend */
+.key:focus-visible {
+	outline: 3px solid var(--accent);
+	outline-offset: 3px;
+	z-index: 1;
+}
+
+.visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/* Windows High Contrast and other forced-color modes: give keys real edges and
+   show latched modifiers with the system highlight color */
+@media (forced-colors: active) {
+	.key .top {
+		border: 1px solid ButtonText;
+	}
+	.key.latched .top,
+	.key.caps-on .top {
+		outline: 2px solid Highlight;
+		outline-offset: -4px;
+	}
+	.glow,
+	.tint,
+	.ring,
+	.blobs {
+		display: none;
+	}
+}
+
+/* More contrast when the system asks for it */
+@media (prefers-contrast: more) {
+	:root {
+		--line: currentColor;
+	}
+	.lg.short,
+	.lg,
+	.sub {
+		font-weight: 700;
+	}
+}
+
+.skip-link {
+	position: absolute;
+	left: 16px;
+	top: calc(env(safe-area-inset-top, 0px) + 8px);
+	z-index: 40;
+	padding: 8px 14px;
+	border-radius: 8px;
+	background: var(--accent);
+	color: var(--accent-ink);
+	font-weight: 600;
+	text-decoration: none;
+	transform: translateY(-200%);
+}
+
+.skip-link:focus {
+	transform: none;
+}
+
+main {
+	display: contents;
 }

@@ -160,7 +160,7 @@ export function createShows(rowsEl, allKeys) {
 			const f = buildKeyframes(pulses);
 			const timing = { delay: f.start, duration: f.duration };
 			running.push(glow.animate(f.glow.map(v => ({ opacity: v })), timing));
-			if (color) running.push(tint.animate(f.glow.map(v => ({ opacity: v * 0.6 })), timing));
+			running.push(tint.animate(f.glow.map(v => ({ opacity: v * 0.55 })), timing));
 			if (f.lifts) {
 				const frames = f.lift.map(v => ({
 					transform: `translateY(${(-v * 14).toFixed(2)}%) scale(${(1 + v * 0.03).toFixed(4)})`,

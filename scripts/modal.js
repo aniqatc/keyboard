@@ -1,7 +1,11 @@
 // Info dialog: esc or the backdrop closes it, Tab stays inside it, and focus
 // returns to where it was when it closes.
+// While it's open, the rest of the page is made inert so screen readers and
+// Tab can't reach what's behind it.
 export function createModal(overlay, closeButton) {
 	let returnFocus = null;
+	const page = document.getElementById('page');
+	const skip = document.querySelector('.skip-link');
 
 	const focusable = () =>
 		[...overlay.querySelectorAll('button, a[href], [tabindex]:not([tabindex="-1"])')].filter(el => !el.hidden);
@@ -9,11 +13,15 @@ export function createModal(overlay, closeButton) {
 	function open() {
 		returnFocus = document.activeElement;
 		overlay.hidden = false;
+		page.inert = true;
+		if (skip) skip.inert = true;
 		closeButton.focus();
 	}
 
 	function close() {
 		overlay.hidden = true;
+		page.inert = false;
+		if (skip) skip.inert = false;
 		if (returnFocus && document.contains(returnFocus)) returnFocus.focus();
 	}
 

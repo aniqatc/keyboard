@@ -2,7 +2,8 @@ import { storage, KEYS } from './storage.js';
 import { toast } from './toast.js';
 import { createSound } from './sound.js';
 import { initThemes, setTheme, shuffleTheme } from './themes.js';
-import { buildKeyboard, flash, ping } from './keyboard.js';
+import { buildKeyboard, flash, ping, enableKeyNavigation } from './keyboard.js';
+import { MD_LABELS } from './layout.js';
 import { createEditor, LIST_RE } from './editor.js';
 import { createShows } from './shows.js';
 import { createModal } from './modal.js';
@@ -13,6 +14,7 @@ const finePointer = matchMedia('(pointer: fine)').matches;
 const narrow = () => matchMedia('(max-width: 760px)').matches;
 
 const { byCode, defs, allKeys } = buildKeyboard(rowsEl);
+enableKeyNavigation(rowsEl, allKeys);
 initThemes($('theme-grid'));
 const sound = createSound($('sound'));
 const shows = createShows(rowsEl, allKeys);
@@ -38,7 +40,26 @@ function renderModifiers() {
 	byCode.ShiftRight.classList.toggle('latched', state.shift);
 	byCode.ControlLeft.classList.toggle('latched', state.ctrl);
 	byCode.Fn.classList.toggle('latched', state.fn);
+
+	// Toggle keys report their on/off state to screen readers
+	byCode.CapsLock.setAttribute('aria-pressed', String(state.caps));
+	byCode.ShiftLeft.setAttribute('aria-pressed', String(state.shift));
+	byCode.ShiftRight.setAttribute('aria-pressed', String(state.shift));
+	byCode.ControlLeft.setAttribute('aria-pressed', String(state.ctrl));
+	byCode.Fn.setAttribute('aria-pressed', String(state.fn));
+
+	// With fn on, keys with a Markdown shortcut announce it, e.g. "B, bold"
+	if (fnLabelsShown !== state.fn) {
+		fnLabelsShown = state.fn;
+		for (const el of mdKeys) {
+			el.setAttribute('aria-label', state.fn ? `${el.dataset.label}, ${MD_LABELS[el.dataset.md]}` : el.dataset.label);
+		}
+	}
 }
+
+const mdKeys = allKeys.filter(el => el.dataset.md);
+mdKeys.forEach(el => (el.dataset.label = el.getAttribute('aria-label')));
+let fnLabelsShown = false;
 
 const THEME_KEY = /^F([1-8])$/;
 const SHOW_KEY = /^F(9|1[0-2])$/;
@@ -287,7 +308,7 @@ $('clear').addEventListener('click', e => {
 	clearArmedUntil = Date.now() + 3000;
 	button.classList.add('warn');
 	label.textContent = 'Tap again to clear';
-	if (narrow()) toast('Tap the trash again to clear everything');
+	toast('Press Clear again to delete everything');
 	clearTimeout(clearTimer);
 	clearTimer = setTimeout(reset, 3000);
 });

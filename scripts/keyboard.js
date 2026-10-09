@@ -101,3 +101,69 @@ export function flash(el, ms = 120) {
 document.addEventListener('animationend', e => {
 	if (e.animationName === 'ping') e.target.classList.remove('ping');
 });
+
+// The keyboard is one Tab stop. Inside it, the arrow keys move focus to the
+// nearest key in that direction, Home and End jump to the ends of a row.
+// (A "roving tabindex": only the focused key has tabindex="0".)
+export function enableKeyNavigation(container, keys) {
+	let current = keys.find(k => k.dataset.code === 'KeyF') || keys[0];
+	keys.forEach(k => (k.tabIndex = k === current ? 0 : -1));
+
+	const center = el => {
+		const r = el.getBoundingClientRect();
+		return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+	};
+
+	function moveTo(next) {
+		if (!next) return;
+		current.tabIndex = -1;
+		next.tabIndex = 0;
+		current = next;
+		next.focus();
+	}
+
+	function nearest(from, dir) {
+		const a = center(from);
+		let best = null;
+		let bestScore = Infinity;
+		for (const k of keys) {
+			if (k === from) continue;
+			const b = center(k);
+			const dx = b.x - a.x;
+			const dy = b.y - a.y;
+			const ahead = { left: -dx, right: dx, up: -dy, down: dy }[dir];
+			if (ahead <= 1) continue;
+			const sideways = dir === 'left' || dir === 'right' ? Math.abs(dy) : Math.abs(dx);
+			// Strongly prefer keys in the same row (or column) over closer ones elsewhere
+			const score = ahead + sideways * 4;
+			if (score < bestScore) {
+				bestScore = score;
+				best = k;
+			}
+		}
+		return best;
+	}
+
+	container.addEventListener('focusin', e => {
+		const key = e.target.closest('.key');
+		if (key && key !== current) {
+			current.tabIndex = -1;
+			key.tabIndex = 0;
+			current = key;
+		}
+	});
+
+	container.addEventListener('keydown', e => {
+		const key = e.target.closest('.key');
+		if (!key || e.altKey || e.ctrlKey || e.metaKey) return;
+		const dir = { ArrowLeft: 'left', ArrowRight: 'right', ArrowUp: 'up', ArrowDown: 'down' }[e.key];
+		if (dir) {
+			e.preventDefault();
+			moveTo(nearest(key, dir));
+		} else if (e.key === 'Home' || e.key === 'End') {
+			e.preventDefault();
+			const row = [...key.closest('.row').querySelectorAll('.key')];
+			moveTo(e.key === 'Home' ? row[0] : row[row.length - 1]);
+		}
+	});
+}
