@@ -12,7 +12,7 @@
 	--b3: #232280;
 	--ink: #f1f1f4;
 	--muted: #a9a7c4;
-	--panel: rgba(24, 23, 47, .55);
+	--panel: rgba(24, 23, 47, .78);
 	--line: rgba(255, 255, 255, .12);
 	--blur: blur(8px);
 	--code: rgba(255, 255, 255, .08);
@@ -49,7 +49,7 @@ html[data-kb="2"] {
 	--blobs: 0;
 	--ink: #1d1428;
 	--muted: #5e4f73;
-	--panel: rgba(255, 255, 255, .55);
+	--panel: rgba(255, 255, 255, .7);
 	--line: rgba(70, 40, 110, .18);
 	--blur: blur(6px);
 	--code: rgba(101, 49, 190, .09);
@@ -230,7 +230,7 @@ html[data-kb="7"] {
 	--b3: #049f95;
 	--ink: #e6f2ea;
 	--muted: #8fb5a4;
-	--panel: rgba(16, 39, 39, .75);
+	--panel: rgba(16, 39, 39, .86);
 	--line: rgba(160, 230, 200, .14);
 	--blur: blur(8px);
 	--code: rgba(160, 230, 200, .09);
@@ -267,7 +267,7 @@ html[data-kb="8"] {
 	--b3: #c0602c;
 	--ink: #1c1717;
 	--muted: #5f5450;
-	--panel: rgba(214, 212, 210, .7);
+	--panel: rgba(214, 212, 210, .82);
 	--line: rgba(80, 40, 30, .15);
 	--blur: blur(8px);
 	--code: rgba(156, 34, 34, .08);
@@ -313,14 +313,29 @@ body {
 }
 
 body {
-	background: var(--bg);
-	background-attachment: fixed;
+	background: var(--key-lo);
 	color: var(--ink);
 	font-family: var(--font);
 	font-size: 15px;
 	line-height: 1.55;
 	transition: color .25s;
 	overflow-x: hidden;
+}
+
+/* The page gradient lives on its own fixed layer. background-attachment: fixed
+   would repaint the whole page on every scroll frame on phones. */
+body::before {
+	content: "";
+	position: fixed;
+	inset: 0;
+	z-index: -1;
+	background: var(--bg);
+	pointer-events: none;
+}
+
+/* Only Nebula, Forest and Terracotta show blobs; elsewhere they don't run at all */
+html:not([data-kb="1"]):not([data-kb="7"]):not([data-kb="8"]) .blobs {
+	display: none;
 }
 
 .blobs {
@@ -333,60 +348,48 @@ body {
 	z-index: 0;
 }
 
+/* Soft glows drawn with radial gradients and moved only with transform,
+   so the browser can animate them on the GPU without repainting. */
 .blob {
 	position: absolute;
-	filter: blur(40px);
-	border-radius: 35% 50% 40% 65%;
-	animation: morph 10s ease-in infinite alternate, drift 20s ease-in infinite alternate;
+	border-radius: 50%;
+	will-change: transform;
+	animation: drift 22s ease-in-out infinite alternate;
 }
 
 .blob:nth-child(1) {
-	background: var(--b1);
-	width: 46vw;
-	height: 46vw;
-	left: 2vw;
-	bottom: -14vw;
+	background: radial-gradient(closest-side, var(--b1), transparent);
+	width: 70vw;
+	height: 60vw;
+	left: -12vw;
+	bottom: -26vw;
 }
 
 .blob:nth-child(2) {
-	background: var(--b2);
-	width: 40vw;
-	height: 26vw;
-	right: -8vw;
-	top: -8vw;
-	animation-duration: 12s, 24s;
+	background: radial-gradient(closest-side, var(--b2), transparent);
+	width: 60vw;
+	height: 40vw;
+	right: -18vw;
+	top: -16vw;
+	animation-duration: 26s;
+	animation-direction: alternate-reverse;
 }
 
 .blob:nth-child(3) {
-	background: var(--b3);
-	width: 34vw;
-	height: 30vw;
-	left: 40vw;
-	top: 22vh;
-	animation-duration: 9s, 18s;
-}
-
-@keyframes morph {
-	0% {
-		border-radius: 35% 50% 40% 65%/40% 60% 30% 50%;
-	}
-	33% {
-		border-radius: 45% 55% 35% 55%/40% 65% 70% 35%;
-	}
-	66% {
-		border-radius: 30% 45% 30% 60%/55% 50% 35% 40%;
-	}
-	100% {
-		border-radius: 45% 65% 40% 55%/25% 40% 35% 50%;
-	}
+	background: radial-gradient(closest-side, var(--b3), transparent);
+	width: 50vw;
+	height: 44vw;
+	left: 32vw;
+	top: 14vh;
+	animation-duration: 19s;
 }
 
 @keyframes drift {
 	from {
-		transform: translate(0, 0) rotate(15deg);
+		transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
 	}
 	to {
-		transform: translate(-6%, -8%) rotate(5deg) scale(1.1);
+		transform: translate3d(-8%, -10%, 0) rotate(18deg) scale(1.12);
 	}
 }
 
@@ -447,7 +450,6 @@ header {
 	border: 1px solid var(--line);
 	border-radius: 999px;
 	padding: 6px 12px;
-	backdrop-filter: var(--blur);
 }
 
 .pill b {
@@ -471,7 +473,6 @@ header {
 	border-radius: 8px;
 	padding: 8px 12px;
 	cursor: pointer;
-	backdrop-filter: var(--blur);
 	display: inline-flex;
 	gap: 6px;
 	align-items: center;
@@ -510,8 +511,6 @@ header {
 	background: var(--panel);
 	border: 1px solid var(--line);
 	border-radius: 12px;
-	backdrop-filter: var(--blur);
-	-webkit-backdrop-filter: var(--blur);
 	box-shadow: 0 10px 30px -14px rgba(0, 0, 0, .45);
 	overflow: hidden;
 }
@@ -741,7 +740,6 @@ header {
 	font-family: var(--font);
 	-webkit-tap-highlight-color: transparent;
 	box-shadow: var(--shadow);
-	transition: box-shadow .18s;
 }
 
 .key.m {
@@ -773,75 +771,69 @@ header {
 	overflow: hidden;
 }
 
-/* Light-show overlay: its opacity follows --heat, set per frame by shows.js */
-.top::after {
-	content: "";
+/* Glow, tint and ring are separate layers that only ever change opacity or
+   transform, which the browser animates on the GPU without repainting. */
+.glow,
+.ring,
+.tint {
 	position: absolute;
 	inset: 0;
 	border-radius: inherit;
-	background: radial-gradient(120% 120% at 50% 30%, var(--gc, var(--g)), transparent 75%);
-	opacity: 0;
 	pointer-events: none;
+	opacity: 0;
 }
 
-.key:hover .top {
-	filter: brightness(1.08);
+.glow {
+	box-shadow: 0 0 1.8cqi .3cqi var(--gc, var(--g)), 0 0 0 .14cqi var(--gc, var(--g));
 }
 
-/* Press goes down fast, comes back with the spring above */
+.tint {
+	background: radial-gradient(120% 120% at 50% 30%, var(--gc, var(--g)), transparent 75%);
+}
+
+.ring {
+	border: .18cqi solid var(--g);
+}
+
+@media (hover: hover) {
+	.key:hover .top {
+		filter: brightness(1.08);
+	}
+}
+
+/* Press goes down fast, comes back with the spring on .top */
 .key.down .top {
 	transform: translateY(.4cqi);
 	transition-duration: 45ms;
 	transition-timing-function: ease-out;
 }
 
-.key.down {
-	box-shadow: 0 0 1.5cqi .25cqi var(--g), 0 0 0 .14cqi var(--g);
+.key.down .glow {
+	opacity: 1;
+}
+
+.key .glow {
+	transition: opacity 220ms ease-out;
+}
+
+.key.down .glow {
 	transition-duration: 40ms;
 }
 
 /* A ring that ripples out from a pressed key */
-.key::before {
-	content: "";
-	position: absolute;
-	inset: 0;
-	border-radius: inherit;
-	pointer-events: none;
-	opacity: 0;
-}
-
-.key.ping::before {
-	animation: ping 520ms cubic-bezier(.2, .7, .3, 1);
+.key.ping .ring {
+	animation: ping 460ms cubic-bezier(.2, .7, .3, 1);
 }
 
 @keyframes ping {
 	0% {
 		opacity: .9;
-		box-shadow: 0 0 0 0 var(--g);
+		transform: scale(1);
 	}
 	100% {
 		opacity: 0;
-		box-shadow: 0 0 0 1.4cqi var(--g);
+		transform: scale(1.12, 1.4);
 	}
-}
-
-/* Light shows drive --heat (0–1), --lift (0–1) and optionally --gc (color) */
-.key.showing {
-	box-shadow:
-		0 0 calc(var(--heat, 0) * 2.2cqi) calc(var(--heat, 0) * .35cqi) color-mix(in srgb, var(--gc, var(--g)) calc(var(--heat, 0) * 100%), transparent),
-		0 0 0 calc(var(--heat, 0) * .14cqi) var(--gc, var(--g)),
-		var(--shadow);
-	transition: none;
-}
-
-.key.showing .top {
-	transform: translateY(calc(var(--lift, 0) * -.45cqi)) scale(calc(1 + var(--lift, 0) * .03));
-	filter: brightness(calc(1 + var(--heat, 0) * .3)) saturate(calc(1 + var(--heat, 0) * .4));
-	transition: none;
-}
-
-.key.showing .top::after {
-	opacity: calc(var(--heat, 0) * .6);
 }
 
 .r1 {
@@ -945,6 +937,15 @@ header {
 .center {
 	align-items: center;
 	justify-content: center;
+}
+
+/* Compact legends (ctrl, ⌥, ⌘) replace long words on narrow keyboards */
+.lg.short {
+	display: none;
+}
+
+.full {
+	display: contents;
 }
 
 .ftop {
@@ -1055,6 +1056,18 @@ header {
 	.row.fnrow {
 		height: 5.4cqi;
 	}
+	.full {
+		display: none;
+	}
+	.lg.short {
+		display: block;
+		font-size: max(8px, 1.9cqi);
+	}
+	.caps-led {
+		position: absolute;
+		top: .8cqi;
+		left: .9cqi;
+	}
 	.lg.fk {
 		font-size: max(7px, 1.7cqi);
 	}
@@ -1072,15 +1085,64 @@ header {
 	}
 }
 
-.hint {
-	margin: 0;
-	color: var(--muted);
+/* Shortcut legend. The 1px gap shows the --line color behind the items,
+   so every item gets a hairline divider whether they sit in a row or a grid. */
+.shortcuts {
+	list-style: none;
+	margin: 0 auto;
+	padding: 0;
+	display: grid;
+	grid-template-columns: repeat(4, auto);
+	gap: 1px;
+	background: var(--line);
+	border: 1px solid var(--line);
+	border-radius: 10px;
+	overflow: hidden;
+	width: fit-content;
+	max-width: 100%;
 	font-size: 13px;
-	text-align: center;
-	text-wrap: balance;
+	color: var(--muted);
 }
 
-.hint kbd, .modal kbd, .toast kbd {
+.shortcuts li {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 8px 16px;
+	background: var(--panel);
+	white-space: nowrap;
+}
+
+.shortcuts .keys {
+	display: inline-flex;
+	align-items: center;
+	gap: 3px;
+	color: var(--muted);
+}
+
+.shortcuts .what {
+	color: var(--ink);
+}
+
+@media (max-width: 760px) {
+	.shortcuts {
+		grid-template-columns: repeat(2, 1fr);
+		width: 100%;
+	}
+	.shortcuts li {
+		justify-content: flex-start;
+		padding: 9px 12px;
+	}
+}
+
+@media (max-width: 360px) {
+	.shortcuts {
+		grid-template-columns: 1fr;
+	}
+}
+
+.shortcuts kbd, .modal kbd, .toast kbd {
 	font: 500 12px var(--mono);
 	border: 1px solid var(--line);
 	border-bottom-width: 2px;
@@ -1116,8 +1178,6 @@ footer a {
 
 .toast {
 	background: var(--panel);
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
 	border: 1px solid var(--line);
 	color: var(--ink);
 	border-radius: 999px;
@@ -1275,7 +1335,7 @@ footer a {
 @media (prefers-reduced-motion: reduce) {
 	.blob,
 	.toast,
-	.key.ping::before,
+	.key.ping .ring,
 	.overlay:not([hidden]),
 	.overlay:not([hidden]) .modal,
 	::view-transition-new(root) {
@@ -1302,12 +1362,30 @@ footer a {
 .modal .links span {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 6px 14px;
-	margin-top: 6px;
+	gap: 8px;
+	margin-top: 8px;
 }
 
 .modal .links a {
-	color: var(--accent);
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 7px 12px;
+	border: 1px solid var(--line);
+	border-radius: 8px;
+	background: var(--code);
+	color: var(--ink);
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.modal .links a:hover {
+	border-color: var(--accent);
+}
+
+.modal .links svg {
+	width: 15px;
+	height: 15px;
 }
 
 .ftop.end {

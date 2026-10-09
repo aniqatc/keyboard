@@ -48,7 +48,7 @@
 - Themes are CSS custom-property sets on `html[data-kb]`, applied before first paint
 - `localStorage` reads and writes are guarded so the site works in private browsing
 - Click sound plays through the Web Audio API so fast typing doesn't cut it off
-- Light show timers are tracked and cancelled, and the shows respect reduced-motion settings
+- Light shows run on the Web Animations API and only animate opacity and transform, so they stay smooth on phones; they respect reduced-motion settings
 - Real `<button>` keys with labels, a focus-trapped dialog, and zoom left enabled
 
 ## Running locally

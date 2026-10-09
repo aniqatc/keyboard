@@ -16,7 +16,6 @@ function legendHTML(def) {
 	if (def.shifted) {
 		return `<span class="dual"><span class="lg up${w}">${def.shifted}</span><span class="lg${w}">${def.legend}</span></span>`;
 	}
-	if (def.caps) return `<i class="dot caps-led"></i><span class="lg w">${def.legend}</span>`;
 	return `<span class="lg${w}">${def.legend}</span>`;
 }
 
@@ -37,9 +36,14 @@ function createKey(def, byCode, defs) {
 	if (def.md) el.dataset.md = def.md;
 	if (def.word) el.dataset.w = '1';
 
-	let inner = legendHTML(def);
+	let inner = def.short
+		? `<span class="full">${legendHTML(def)}</span><span class="lg short">${def.short}</span>`
+		: legendHTML(def);
+	if (def.caps) inner = `<i class="dot caps-led"></i>${inner}`;
 	if (def.md) inner += `<span class="sub">${MD_LABELS[def.md]}</span>`;
-	el.innerHTML = `<span class="top${def.right ? ' right' : ''}">${inner}</span>`;
+	// .glow and .ring sit behind the keycap; .tint sits on its face. Animations only
+	// change their opacity and transform, so they stay smooth.
+	el.innerHTML = `<span class="glow"></span><span class="ring"></span><span class="top${def.right ? ' right' : ''}"><span class="tint"></span>${inner}</span>`;
 	el.setAttribute('aria-label', ariaLabel(def));
 
 	if (def.fkey != null && THEMES[def.fkey]) el.title = `Theme ${def.fkey + 1}: ${THEMES[def.fkey].name}`;
@@ -57,7 +61,7 @@ function createArrows(codes, byCode, defs) {
 		const def = { code, legend: '', width: 1, type: 'x', label: code.replace('Arrow', 'arrow ').toLowerCase() };
 		const el = createKey(def, byCode, defs);
 		el.style.gridColumn = '';
-		el.querySelector('.top').innerHTML = ICONS[code];
+		el.querySelector('.top').insertAdjacentHTML('beforeend', ICONS[code]);
 		cluster.appendChild(el);
 	});
 	return cluster;

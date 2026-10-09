@@ -19,6 +19,7 @@ export const MD_LABELS = {
 export const LIGHT_SHOWS = { F9: 'Wave', F10: 'Ripple', F11: 'Sweep', F12: 'Twinkle' };
 
 // key(code, legend, width, type, shifted legend, markdown action, extra options)
+// short: a compact legend used when the keyboard is narrow (phones)
 // type: '' = letter/number key, 'm' = modifier, 'x' = function row, fn and arrows
 const key = (code, legend, width = 1, type = '', shifted = null, md = null, opts = {}) => ({
 	code, legend, width, type, shifted, md, ...opts,
@@ -68,7 +69,7 @@ export const ROWS = [
 	{
 		className: 'r4',
 		keys: [
-			word('CapsLock', 'caps lock', 1.75, 'm', { caps: true }),
+			word('CapsLock', 'caps lock', 1.75, 'm', { caps: true, short: 'caps' }),
 			...letters('asdfghjkl', { s: 'strike', g: 'image', k: 'link', l: 'ul' }),
 			key('Semicolon', ';', 1, '', ':'),
 			key('Quote', "'", 1, '', '"'),
@@ -90,12 +91,12 @@ export const ROWS = [
 		className: 'r6',
 		keys: [
 			word('Fn', 'fn', 1, 'x'),
-			word('ControlLeft', 'control', 1, 'm'),
-			word('AltLeft', 'option', 1, 'm', { shifted: 'alt', right: true }),
-			word('MetaLeft', 'command', 1.25, 'm', { shifted: '⌘', right: true }),
+			word('ControlLeft', 'control', 1, 'm', { short: 'ctrl' }),
+			word('AltLeft', 'option', 1, 'm', { shifted: 'alt', right: true, short: '⌥' }),
+			word('MetaLeft', 'command', 1.25, 'm', { shifted: '⌘', right: true, short: '⌘' }),
 			key('Space', '', 5.5, '', null, null, { label: 'space' }),
-			word('MetaRight', 'command', 1.25, 'm', { shifted: '⌘' }),
-			word('AltRight', 'option', 1, 'm', { shifted: 'alt' }),
+			word('MetaRight', 'command', 1.25, 'm', { shifted: '⌘', short: '⌘' }),
+			word('AltRight', 'option', 1, 'm', { shifted: 'alt', short: '⌥' }),
 			{ arrows: ['ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight'] },
 		],
 	},
