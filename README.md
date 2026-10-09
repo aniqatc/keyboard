@@ -1,97 +1,112 @@
-## Themed Keyboard w/ Markdown Preview
+# Virtual Keyboard
 
-[https://keyboard.aniqa.dev/](https://keyboard.aniqa.dev/)
+**[keyboard.aniqa.dev](https://keyboard.aniqa.dev/)**
 
-⌨️ A responsive virtual keyboard with 8 themes and 4 lighting animations that responds to mouse clicks, taps and key presses, paired with a Markdown editor with a live preview. Your theme and note are saved in `localStorage`.
+⌨️ A virtual keyboard with eight themes and four light shows, paired with a Markdown editor that previews as you type. It responds to clicks, taps and your real keyboard, works on phones, and remembers your theme and note.
 
-
-### Themes
 <p align="center">
-<a href="https://keyboard.aniqa.dev" target="_blank"><img src="/themes/themes.gif" style="max-width: 100%;"></a></p>
+	<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/animation.gif" alt="The keyboard running its four light shows: wave, ripple, sweep and twinkle" width="800"></a>
+</p>
 
+## Features
+
+**Keyboard**
+
+- Eight themes, each with its own colors, fonts, keycap style and glow
+- Four light shows: a diagonal wave, a rainbow ripple from the center, a scanner sweep and random twinkles
+- Mac-style layout with a function row, inverted-T arrow keys and a caps lock light
+- Keys press down, spring back and glow in their row's color as you type
+- Scales to any screen width, with short labels (`ctrl`, `⌥`, `⌘`) on small screens
+
+**Shortcuts**
+
+| Keys | What it does |
+| --- | --- |
+| `F1` – `F8` | Switch theme (the shuffle key picks one at random) |
+| `F9` – `F12` | Start a light show |
+| `esc` | Open the info card |
+| `fn` | Turn on Markdown shortcuts: tap a labeled key for headings, bold, italic, links, lists, code and more |
+| `Ctrl`/`⌘` + `B`, `I`, `K` | Bold, italic, link |
+| `Enter` in a list | Continue the list; press it on an empty item to end the list |
+
+**Editor**
+
+- Write, Split and Preview views with a live Markdown preview
+- Copy, save and clear (clear asks for a second press)
+- Word, character and keystroke counts, autosave and an optional click sound
+
+## Accessibility
+
+- All text meets WCAG AA contrast (4.5:1) in every theme, including inside the info card and with the `fn` layer on
+- The on-screen keyboard is a single Tab stop: arrow keys move between keys, `Home`/`End` jump to the ends of a row, and `Enter` or `Space` presses a key
+- Every key has a screen reader name (`F1: Nebula theme`, `B, bold` when `fn` is on), and shift, caps lock, control and `fn` announce whether they're on
+- Shift is shown with bold, underlined legends, not color alone
+- Skip link, main landmark, and a scrollable preview you can reach with the keyboard
+- The info card traps focus, closes with `esc`, makes the page behind it inert, and returns focus to where you were
+- Icon-only buttons on phones keep their names for screen readers
+- Light shows, theme changes and background motion respect the reduced-motion setting
+- Supports Windows High Contrast and other forced-color modes, plus the system "increase contrast" setting
+- Zoom is allowed
 
 ## Tech
 
-- HTML5, CSS3 and JavaScript (ES modules, no build step)
-- [Marked](https://marked.js.org/) for Markdown and [DOMPurify](https://github.com/cure53/DOMPurify) to sanitize the preview
-- [Playwright](https://playwright.dev/) for end-to-end tests, run on GitHub Actions
+- HTML, CSS and JavaScript (ES modules, no build step)
+- [Marked](https://marked.js.org/) for Markdown and [DOMPurify](https://github.com/cure53/DOMPurify) to keep the preview safe
 
-## Key Features
+**Behind the scenes**
 
-**Design**
-
-- Eight keyboard themes (Nebula, Lilac, Terminal, Paper, Graphite, Chalk, Forest, Terracotta), each with its own palette, fonts, key style and glow colors
-- Four keyboard light shows: wave, ripple, sweep and twinkle
-- Moving blob background on select themes
-- 3D keycaps that press down and glow in their row's color
-- Mac-style layout with a function row, inverted-T arrow keys and a caps lock light
-- Scales to any screen width using container query units
-
-**Interactive Elements**
-
-- `F1` to `F8` (click or keypress) switch the theme; the shuffle key picks a random one
-- `F9` to `F12` start a light show
-- `Escape` opens an info card with a theme picker; `Escape` or the backdrop closes it
-- Write, Split and Preview views with a live Markdown preview
-- Copy, save and clear (clear asks for a second tap)
-- `fn` layer: tap a key with a small label for a Markdown shortcut (headings, bold, italic, links, lists, code and more)
-- `Ctrl`/`⌘` + `B`, `I` and `K` for bold, italic and links
-- `Enter` continues bullet, numbered and task lists
-- Shift and caps lock change the letter legends; on-screen shift applies to the next key only
-- Word, character and keystroke counts, autosave, and an optional click sound
-
-**Behind-the-Scenes**
-
-- Code split into ES modules: `layout`, `keyboard`, `themes`, `editor`, `shows`, `modal`, `sound`, `toast`, `storage`
+- Code is split into modules: `layout`, `keyboard`, `themes`, `editor`, `shows`, `modal`, `sound`, `toast` and `storage`
 - Keys are generated from layout data and matched to presses with `KeyboardEvent.code`
-- On-screen typing uses `execCommand('insertText')` so `Ctrl`/`⌘` + `Z` still works
-- Themes are CSS custom-property sets on `html[data-kb]`, applied before first paint
-- `localStorage` reads and writes are guarded so the site works in private browsing
-- Click sound plays through the Web Audio API so fast typing doesn't cut it off
-- Light shows run on the Web Animations API and only animate opacity and transform, so they stay smooth on phones; they respect reduced-motion settings
-- Real `<button>` keys with labels, a focus-trapped dialog, and zoom left enabled
+- Themes are sets of CSS custom properties on `html[data-kb]`, applied before the first paint so there's no flash
+- On-screen typing goes through `execCommand('insertText')`, so `Ctrl`/`⌘` + `Z` still undoes it
+- Light shows use the Web Animations API and only animate opacity and transform, so they stay smooth on phones
+- New themes spread out in a circle from the key you pressed (View Transitions API, where supported)
+- The click sound plays through the Web Audio API, so fast typing doesn't cut it off
+- `localStorage` access is guarded, so the site still works in private browsing
 
 ## Running locally
 
+The scripts are ES modules, so open the site through a local server rather than the file directly:
+
 ```bash
-npm install
-npm start          # http://localhost:4173
-npx playwright install
-npm test
+npx serve .
+# or
+python3 -m http.server
 ```
 
 ## Future Features
+
 - ✅ Improve existing animations
 - ✅ Fix the 'callback hell' with the animation timeouts
-- ✅ Add additional lighting animations to `F11` and `F12`
-- ☐ Update the theme screenshots below for the redesign
+- ✅ Add lighting animations to `F11` and `F12`
 
 ## Themes
 
-### Animations
+### Theme 1 · Nebula
+<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-1.png" alt="Nebula theme: black keycaps on a purple gradient with drifting glows" width="100%"></a>
+
+### Theme 2 · Lilac
+<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-2.png" alt="Lilac theme: white and lavender keycaps with purple modifier keys" width="100%"></a>
+
+### Theme 3 · Terminal
+<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-3.png" alt="Terminal theme: soft grey keycaps on black in a monospace font" width="100%"></a>
+
+### Theme 4 · Paper
+<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-4.png" alt="Paper theme: light grey rounded keycaps on an off-white background" width="100%"></a>
+
+### Theme 5 · Graphite
+<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-5.png" alt="Graphite theme: dark charcoal keycaps with amber accents" width="100%"></a>
+
+### Theme 6 · Chalk
+<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-6.png" alt="Chalk theme: pale grey keycaps on white with orange accents" width="100%"></a>
+
+### Theme 7 · Forest
+<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-7.png" alt="Forest theme: deep green keycaps on a teal gradient" width="100%"></a>
+
+### Theme 8 · Terracotta
+<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-8.png" alt="Terracotta theme: grey keycaps with terracotta modifiers and green function keys" width="100%"></a>
+
+### On a phone
 <p align="center">
-<a href="https://keyboard.aniqa.dev" target="_blank"><img src="/themes/animation.gif" style="max-width: 100%;"></a></p>
-
-### Theme 1
-<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-1.png" style="max-width: 100%;"></a>
-
-### Theme 2
-<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-2.png" style="max-width: 100%;"></a>
-
-### Theme 3
-<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-3.png" style="max-width: 100%;"></a>
-
-### Theme 4
-<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-4.png" style="max-width: 100%;"></a>
-
-### Theme 5
-<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-5.png" style="max-width: 100%;"></a>
-
-### Theme 6
-<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-6.png" style="max-width: 100%;"></a>
-
-### Theme 7
-<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-7.png" style="max-width: 100%;"></a>
-
-### Theme 8
-<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/theme-8.png" style="max-width: 100%;"></a>
+	<a href="https://keyboard.aniqa.dev" target="_blank"><img src="themes/mobile.png" alt="The Lilac theme on a phone, with the editor above a full keyboard and a two-column shortcut list" width="320"></a>
+</p>
