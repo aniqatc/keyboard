@@ -2,37 +2,11 @@
 
 A virtual keyboard with eight themes and four light shows, paired with a Markdown editor that previews as you type.
 
-**[Live site](https://keyboard.aniqa.dev)**
+**[Live site](https://keyboard.aniqa.dev)** · [See all eight themes](#themes)
 
 <p align="center">
 	<a href="https://keyboard.aniqa.dev"><img src="themes/animation.gif" alt="The keyboard running its four light shows: wave, ripple, sweep and twinkle" width="800"></a>
 </p>
-
-<details>
-<summary>All eight themes and the phone layout</summary>
-
-<table>
-	<tr>
-		<td width="50%"><img src="themes/theme-1.png" alt="Nebula theme: black keycaps on a purple gradient with drifting glows" width="100%"></td>
-		<td width="50%"><img src="themes/theme-2.png" alt="Lilac theme: white and lavender keycaps with purple modifier keys" width="100%"></td>
-	</tr>
-	<tr>
-		<td><img src="themes/theme-3.png" alt="Terminal theme: soft grey keycaps on black in a monospace font" width="100%"></td>
-		<td><img src="themes/theme-4.png" alt="Paper theme: light grey rounded keycaps on an off-white background" width="100%"></td>
-	</tr>
-	<tr>
-		<td><img src="themes/theme-5.png" alt="Graphite theme: dark charcoal keycaps with amber accents" width="100%"></td>
-		<td><img src="themes/theme-6.png" alt="Chalk theme: pale grey keycaps on white with orange accents" width="100%"></td>
-	</tr>
-	<tr>
-		<td><img src="themes/theme-7.png" alt="Forest theme: deep green keycaps on a teal gradient" width="100%"></td>
-		<td><img src="themes/theme-8.png" alt="Terracotta theme: grey keycaps with terracotta modifiers and green function keys" width="100%"></td>
-	</tr>
-</table>
-
-<p align="center"><img src="themes/mobile.png" alt="The Lilac theme on a phone, with the editor above a full keyboard and a two-column shortcut list" width="320"></p>
-
-</details>
 
 ## Tech
 
@@ -104,3 +78,26 @@ python3 -m http.server
 ### January 2023
 
 - Initial release: eight themes, `F9` and `F10` light shows, the Markdown editor with preview, click sounds and saved themes
+
+## Themes
+
+<table>
+	<tr>
+		<td width="50%"><img src="themes/theme-1.png" alt="Nebula theme: black keycaps on a purple gradient with drifting glows" width="100%"><br><sub>F1 · Nebula</sub></td>
+		<td width="50%"><img src="themes/theme-2.png" alt="Lilac theme: white and lavender keycaps with purple modifier keys" width="100%"><br><sub>F2 · Lilac</sub></td>
+	</tr>
+	<tr>
+		<td><img src="themes/theme-3.png" alt="Terminal theme: soft grey keycaps on black in a monospace font" width="100%"><br><sub>F3 · Terminal</sub></td>
+		<td><img src="themes/theme-4.png" alt="Paper theme: light grey rounded keycaps on an off-white background" width="100%"><br><sub>F4 · Paper</sub></td>
+	</tr>
+	<tr>
+		<td><img src="themes/theme-5.png" alt="Graphite theme: dark charcoal keycaps with amber accents" width="100%"><br><sub>F5 · Graphite</sub></td>
+		<td><img src="themes/theme-6.png" alt="Chalk theme: pale grey keycaps on white with orange accents" width="100%"><br><sub>F6 · Chalk</sub></td>
+	</tr>
+	<tr>
+		<td><img src="themes/theme-7.png" alt="Forest theme: deep green keycaps on a teal gradient" width="100%"><br><sub>F7 · Forest</sub></td>
+		<td><img src="themes/theme-8.png" alt="Terracotta theme: grey keycaps with terracotta modifiers and green function keys" width="100%"><br><sub>F8 · Terracotta</sub></td>
+	</tr>
+</table>
+
+<p align="center"><img src="themes/mobile.png" alt="The Lilac theme on a phone, with the editor above a full keyboard and a two-column shortcut list" width="320"></p>
